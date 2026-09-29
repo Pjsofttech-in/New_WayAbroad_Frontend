@@ -1,0 +1,108 @@
+name: Deploy WayAbroad Next.js Frontend
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # --------------------------------------------------
+      # 1. Checkout source code
+      # --------------------------------------------------
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # --------------------------------------------------
+      # 2. Setup Node.js
+      # --------------------------------------------------
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      # --------------------------------------------------
+      # 3. Install dependencies
+      # --------------------------------------------------
+      - name: Install dependencies
+        run: npm ci
+
+      # --------------------------------------------------
+      # 4. Build Next.js application
+      # --------------------------------------------------
+      - name: Build Next.js application
+        run: npm run build
+
+      # --------------------------------------------------
+      # 5. Create deployment archive
+      # --------------------------------------------------
+      - name: Create deployment archive
+        run: |
+          tar -czf wayabroad-nextjs-build.tar.gz \
+            .next \
+            public \
+            package.json \
+            package-lock.json
+
+      # --------------------------------------------------
+      # 6. Upload build to EC2
+      # --------------------------------------------------
+      - name: Upload build to EC2
+        uses: appleboy/scp-action@v1
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "wayabroad-nextjs-build.tar.gz"
+          target: "/home/ec2-user/"
+
+      # --------------------------------------------------
+      # 7. Deploy on EC2
+      # --------------------------------------------------
+      - name: Deploy Next.js application
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+
+          script: |
+            set -e
+
+            echo "Starting WayAbroad Next.js deployment..."
+
+            # Create application directory
+            sudo mkdir -p /var/www/wayabroad-nextjs
+
+            # Remove previous application files
+            sudo rm -rf /var/www/wayabroad-nextjs/.next
+            sudo rm -rf /var/www/wayabroad-nextjs/public
+
+            # Extract new build
+            sudo tar -xzf /home/ec2-user/wayabroad-nextjs-build.tar.gz \
+              -C /var/www/wayabroad-nextjs
+
+            # Set ownership
+            sudo chown -R ec2-user:ec2-user /var/www/wayabroad-nextjs
+
+            # Install production dependencies
+            cd /var/www/wayabroad-nextjs
+
+            npm ci --omit=dev
+
+            # Restart Next.js
+            sudo systemctl daemon-reload
+            sudo systemctl restart wayabroad-nextjs
+
+            # Wait a few seconds
+            sleep 5
+
+            # Check Next.js service
+            sudo systemctl status wayabroad-nextjs --no-pager
+
+            echo "WayAbroad Next.js deployment completed."
