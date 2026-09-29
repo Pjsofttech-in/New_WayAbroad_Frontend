@@ -11,7 +11,7 @@ import {
   submitScholarshipLead,
 } from "../../../services/api";
 
-import styles from "../../../scholarships/Scholarships.module.css";
+import styles from "../../../scholarships/scholarships.module.css";
 
 export default function ScholarshipDetails() {
   const params = useParams();
