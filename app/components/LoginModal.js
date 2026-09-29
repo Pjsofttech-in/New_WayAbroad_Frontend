@@ -28,11 +28,9 @@ export default function LoginModal({
   /* ================= SIGNUP FORM STATE ================= */
 
   const [signupForm, setSignupForm] = useState({
-    firstName: "",
-    lastName: "",
-    countryCode: "+91",
-    phone: "",
+    name: "",
     email: "",
+    phone: "",
     password: "",
     continentId: "",
     courseId: "",
@@ -81,8 +79,13 @@ export default function LoginModal({
           getAllCourseNames(),
         ]);
 
-        setContinents(Array.isArray(continentsData) ? continentsData : []);
-        setCourses(Array.isArray(coursesData) ? coursesData : []);
+        setContinents(
+          Array.isArray(continentsData) ? continentsData : []
+        );
+
+        setCourses(
+          Array.isArray(coursesData) ? coursesData : []
+        );
       } catch (err) {
         console.error(
           "Failed to load signup dropdown data:",
@@ -195,20 +198,14 @@ export default function LoginModal({
     setLoading(true);
 
     try {
-      /* Combine First Name + Last Name */
-
-      const fullName =
-        `${signupForm.firstName} ${signupForm.lastName}`.trim();
-
       await submitFormSubmission({
         formType: "SIGNUP",
 
-        name: fullName,
+        name: signupForm.name,
 
         email: signupForm.email,
 
-        phoneNumber:
-          `${signupForm.countryCode}${signupForm.phone}`,
+        phoneNumber: signupForm.phone,
 
         continentId: Number(
           signupForm.continentId
@@ -236,11 +233,9 @@ export default function LoginModal({
       /* Clear Signup Form */
 
       setSignupForm({
-        firstName: "",
-        lastName: "",
-        countryCode: "+91",
-        phone: "",
+        name: "",
         email: "",
+        phone: "",
         password: "",
         continentId: "",
         courseId: "",
@@ -474,80 +469,29 @@ export default function LoginModal({
             >
               {/* ================= NAME ================= */}
 
-              <div
-                className={styles.nameRow}
-              >
-                <input
-                  type="text"
-                  name="firstName"
-                  placeholder="First Name"
-                  value={
-                    signupForm.firstName
-                  }
-                  onChange={
-                    handleSignupChange
-                  }
-                  required
-                />
-
-                <input
-                  type="text"
-                  name="lastName"
-                  placeholder="Last Name"
-                  value={
-                    signupForm.lastName
-                  }
-                  onChange={
-                    handleSignupChange
-                  }
-                  required
-                />
-              </div>
+              <input
+                type="text"
+                name="name"
+                placeholder="Enter your Name"
+                value={signupForm.name}
+                onChange={
+                  handleSignupChange
+                }
+                required
+              />
 
               {/* ================= PHONE ================= */}
 
-              <div
-                className={styles.phoneRow}
-              >
-                <select
-                  name="countryCode"
-                  value={
-                    signupForm.countryCode
-                  }
-                  onChange={
-                    handleSignupChange
-                  }
-                >
-                  <option value="+91">
-                    +91
-                  </option>
-
-                  <option value="+1">
-                    +1
-                  </option>
-
-                  <option value="+44">
-                    +44
-                  </option>
-
-                  <option value="+61">
-                    +61
-                  </option>
-                </select>
-
-                <input
-                  type="tel"
-                  name="phone"
-                  placeholder="Mobile Number"
-                  value={
-                    signupForm.phone
-                  }
-                  onChange={
-                    handleSignupChange
-                  }
-                  required
-                />
-              </div>
+              <input
+                type="tel"
+                name="phone"
+                placeholder="Mobile Number"
+                value={signupForm.phone}
+                onChange={
+                  handleSignupChange
+                }
+                required
+              />
 
               {/* ================= EMAIL ================= */}
 
