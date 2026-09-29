@@ -1,0 +1,129 @@
+.contactPage {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  min-height: 620px;
+  background: #f3f3f3;
+}
+
+.left {
+  padding: 80px 40px;
+  background: linear-gradient(135deg, #6f8fbd, #7897c3);
+  color: white;
+}
+
+.left h1 {
+  font-size: 42px;
+  line-height: 1.4;
+  margin-bottom: 45px;
+  font-weight: 700;
+}
+
+.left h1 span {
+  display: block;
+  color: #294f8c;
+  letter-spacing: 2px;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.icon {
+  font-size: 25px;
+  min-width: 30px;
+}
+
+.item p {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.6;
+  font-weight: 600;
+}
+
+.right {
+  background: #eeeeee;
+  border-radius: 0 0 24px 24px;
+  overflow: hidden;
+}
+
+.right h2 {
+  background: #4d6da8;
+  color: white;
+  text-align: center;
+  padding: 18px;
+  margin: 0;
+  font-size: 30px;
+}
+
+.right form {
+  padding: 20px 30px 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.right input,
+.right select {
+  height: 54px;
+  border: 1px solid #c8cdd5;
+  border-radius: 12px;
+  padding: 0 16px;
+  font-size: 16px;
+  background: #f1f1f1;
+  outline: none;
+}
+
+.right input:focus,
+.right select:focus {
+  border-color: #4d6da8;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #555;
+  font-size: 16px;
+}
+
+.checkbox input {
+  width: 16px;
+  height: 16px;
+}
+
+.right button {
+  height: 56px;
+  border: none;
+  border-radius: 12px;
+  background: #5f7fb9;
+  color: white;
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.right button:hover {
+  background: #4d6da8;
+}
+
+@media (max-width: 900px) {
+  .contactPage {
+    grid-template-columns: 1fr;
+  }
+
+  .left {
+    padding: 50px 25px;
+  }
+
+  .left h1 {
+    font-size: 34px;
+  }
+}

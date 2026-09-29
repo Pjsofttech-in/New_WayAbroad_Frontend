@@ -1,0 +1,768 @@
+/* ================================
+   HERO SECTION
+================================ */
+
+.hero {
+  min-height: 600px;
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  padding: 0 8%;
+  align-items: center;
+  background: linear-gradient(90deg, #ffffff, #f2f5fa);
+  overflow: hidden;
+}
+
+.heroText {
+  max-width: 650px;
+}
+
+.heroText h1 {
+  font-size: clamp(38px, 4vw, 58px);
+  line-height: 1.15;
+  margin: 0 0 20px;
+  letter-spacing: 0.5px;
+  color: #1d2b45;
+}
+
+.heroText h1 span {
+  color: #41639b;
+}
+
+.heroText p {
+  max-width: 600px;
+  font-size: 18px;
+  line-height: 1.7;
+  color: #59667a;
+  margin-bottom: 20px;
+}
+
+.heroText a {
+  display: inline-block;
+  border: 1px solid #486595;
+  border-radius: 8px;
+  padding: 14px 28px;
+  margin-top: 12px;
+  color: #486595;
+  font-size: 16px;
+  font-weight: 600;
+  transition: 0.3s ease;
+  text-decoration: none;
+}
+
+.heroText a:hover {
+  background: #486595;
+  color: #ffffff;
+}
+
+/* ================================
+   STUDENT IMAGE
+================================ */
+
+.art {
+  position: relative;
+  width: 100%;
+  height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.student {
+  width: 100%;
+  max-width: 650px;
+  height: auto;
+  position: relative;
+  z-index: 2;
+}
+
+.student img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+/* ================================
+   JOURNEY
+================================ */
+
+.journey {
+  text-align: center;
+  padding: 50px 5%;
+}
+
+.journey h3 {
+  font-size: 20px;
+  margin-bottom: 30px;
+  color: #263654;
+}
+
+.journey h3 span {
+  color: #4b84ae;
+  font-weight: 500;
+  margin-left: 6px;
+}
+
+.journey > div {
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+}
+
+.journey article {
+  display: grid;
+  gap: 6px;
+}
+
+.journey b {
+  font-size: 30px;
+  color: #1f3153;
+}
+
+.journey small {
+  font-size: 14px;
+  color: #666;
+}
+
+/* ================================
+   SECTION HEADINGS
+================================ */
+
+.universities h2,
+.why h2,
+.services h2,
+.continents h2,
+.essentials h2 {
+  font-size: clamp(28px, 3vw, 40px);
+  line-height: 1.2;
+  margin-bottom: 12px;
+  color: #1d2b45;
+}
+
+/* ================================
+   UNIVERSITIES
+================================ */
+
+.universities {
+  text-align: center;
+  padding: 60px 6% 80px;
+  max-width: 1500px;
+  margin: auto;
+}
+
+.universities p {
+  font-size: 15px;
+  color: #666;
+  line-height: 1.6;
+  max-width: 700px;
+  margin: 0 auto 12px;
+}
+
+.universities h3 {
+  font-size: 18px;
+  font-weight: 500;
+  color: #4682aa;
+  margin-bottom: 30px;
+}
+
+/* ================================
+   MOVING UNIVERSITY LOGOS
+================================ */
+
+.logoSlider {
+  width: 100%;
+  overflow: hidden;
+  margin-top: 35px;
+  position: relative;
+}
+
+.logoTrack {
+  display: flex;
+  gap: 20px;
+  width: max-content;
+
+  animation: logoScroll 25s linear infinite;
+}
+
+.logoTrack article {
+  width: 220px;
+  min-width: 220px;
+  height: 150px;
+
+  background: #ffffff;
+
+  border-radius: 12px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 25px;
+
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+
+  transition: transform 0.3s ease;
+}
+
+.logoTrack article:hover {
+  transform: translateY(-5px);
+}
+
+.logoTrack img {
+  width: 100%;
+  max-width: 170px;
+
+  height: 80px;
+
+  object-fit: contain;
+
+  display: block;
+}
+
+/* CONTINUOUS MOVEMENT */
+
+@keyframes logoScroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* PAUSE WHEN USER HOVERS */
+
+.logoSlider:hover .logoTrack {
+  animation-play-state: paused;
+}
+
+/* ================================
+   WHY SECTION
+================================ */
+
+.why {
+  padding: 70px 8%;
+  max-width: 1500px;
+  margin: auto;
+}
+
+.why h2,
+.services h2,
+.continents h2,
+.essentials h2 {
+  text-align: center;
+}
+
+.whygrid,
+.servicegrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 35px;
+}
+
+.whygrid article {
+  padding: 24px;
+  min-height: 210px;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 6px 20px #0000000d;
+  transition: 0.3s ease;
+}
+
+.whygrid article:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px #00000016;
+}
+
+.whygrid h3 {
+  font-size: 20px;
+  color: #48628c;
+  font-weight: 600;
+  margin: 0 0 12px;
+}
+
+.whygrid h3 span {
+  margin-right: 8px;
+}
+
+.whygrid p,
+.servicegrid p {
+  font-size: 15px;
+  line-height: 1.7;
+  color: #6a7280;
+  margin-bottom: 20px;
+}
+
+.whygrid button,
+.servicegrid button {
+  border: 1px solid #4b6594;
+  background: #ffffff;
+  border-radius: 6px;
+  padding: 8px 16px;
+  color: #45608f;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.whygrid button {
+  float: right;
+}
+
+.whygrid button:hover,
+.servicegrid button:hover {
+  background: #45608f;
+  color: #ffffff;
+}
+
+/* ================================
+   SERVICES
+================================ */
+
+.services {
+  padding: 70px 8%;
+  max-width: 1500px;
+  margin: auto;
+}
+
+.servicegrid article {
+  border: 1px solid #e0e4e9;
+  border-radius: 12px;
+  padding: 28px 22px;
+  text-align: center;
+  min-height: 230px;
+  background: #ffffff;
+  box-shadow: 0 5px 18px #0000000b;
+  transition: 0.3s ease;
+}
+
+.servicegrid article:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 28px #00000016;
+}
+
+.servicegrid h3 {
+  font-size: 20px;
+  margin-bottom: 12px;
+  color: #263654;
+}
+
+.servicegrid button {
+  margin-top: 8px;
+}
+
+/* ================================
+   CONTINENTS
+================================ */
+
+.continents {
+  padding: 60px 8%;
+  background: #f8f9fb;
+}
+
+.tabs {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 30px;
+  flex-wrap: wrap;
+}
+
+.tabs button {
+  min-width: 120px;
+  border: 1px solid #cfd6df;
+  border-radius: 20px;
+  background: #ffffff;
+  padding: 10px 18px;
+  font-size: 14px;
+  color: #33445f;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.tabs button:hover {
+  background: #eaf0f7;
+}
+
+.selected {
+  background: #41639b !important;
+  color: #ffffff !important;
+  border-color: #41639b !important;
+}
+
+/* ================================
+   ESSENTIALS
+================================ */
+
+.essentials {
+  padding: 70px 8%;
+  background: #f8f9fb;
+}
+
+.essentials > div {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+  margin-top: 35px;
+  max-width: 1500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.essentials article {
+  border: 1px solid #dce2e9;
+  border-radius: 10px;
+  padding: 22px;
+  background: #ffffff;
+  min-height: 170px;
+  box-shadow: 0 4px 14px #00000008;
+  transition: 0.3s ease;
+}
+
+.essentials article:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px #00000014;
+}
+
+.essentials h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 18px;
+  margin-top: 0;
+  color: #263654;
+}
+
+.essentials h3 svg {
+  color: #426599;
+}
+
+.essentials p {
+  font-size: 14px;
+  color: #777;
+  line-height: 1.7;
+  margin-bottom: 15px;
+}
+
+.essentials a {
+  font-size: 14px;
+  color: #41689d;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* ================================
+   CONSULTATION
+================================ */
+
+.consult {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  padding: 80px 10%;
+  background: #7897c8;
+}
+
+.consult h2 {
+  font-size: clamp(30px, 3vw, 42px);
+  text-transform: uppercase;
+  color: #27477e;
+  margin-top: 0;
+}
+
+.consult h2 span {
+  font-size: 22px;
+}
+
+.consult ul {
+  padding: 0;
+  list-style: none;
+}
+
+.consult li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #ffffff;
+  font-size: 16px;
+  margin: 16px 0;
+}
+
+.consult li svg {
+  background: #1fa31d;
+  color: #ffffff;
+  border-radius: 50%;
+  padding: 2px;
+}
+
+.consult form {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 10px 30px #00000025;
+}
+
+.consult form h3 {
+  text-align: center;
+  background: #49689d;
+  color: #ffffff;
+  margin: -25px -25px 20px;
+  padding: 16px;
+  border-radius: 12px 12px 0 0;
+  font-size: 18px;
+}
+
+.consult input,
+.consult select {
+  width: 100%;
+  border: 1px solid #cfd6df;
+  border-radius: 6px;
+  padding: 12px;
+  margin: 6px 0 12px;
+  font-size: 14px;
+  outline: none;
+}
+
+.consult input:focus,
+.consult select:focus {
+  border-color: #49689d;
+}
+
+.consult label {
+  font-size: 14px;
+  color: #657080;
+  display: block;
+  margin: 10px 0;
+}
+
+.consult label input {
+  width: auto;
+  margin-right: 6px;
+}
+
+.consult form button {
+  width: 100%;
+  border: 0;
+  background: #4b6ba2;
+  color: #ffffff;
+  padding: 13px;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.consult form button:hover {
+  background: #355786;
+}
+
+.success {
+  text-align: center;
+  color: green;
+  font-size: 14px;
+}
+
+/* ================================
+   TABLET
+================================ */
+
+@media (max-width: 900px) {
+  .hero {
+    grid-template-columns: 1fr;
+    min-height: auto;
+    padding: 70px 8%;
+    text-align: center;
+  }
+
+  .heroText {
+    margin: auto;
+  }
+
+  .heroText p {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .art {
+    display: none;
+  }
+
+  .whygrid,
+  .servicegrid,
+  .essentials > div {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .consult {
+    gap: 40px;
+    padding: 60px 8%;
+  }
+
+  .journey > div {
+    gap: 35px;
+  }
+}
+
+/* ================================
+   MOBILE
+================================ */
+
+@media (max-width: 600px) {
+  .hero {
+    padding: 60px 7%;
+    min-height: 500px;
+  }
+
+  .heroText h1 {
+    font-size: 36px;
+  }
+
+  .heroText p {
+    font-size: 16px;
+  }
+
+  .heroText a {
+    padding: 12px 22px;
+    font-size: 15px;
+  }
+
+  .journey {
+    padding: 40px 6%;
+  }
+
+  .journey > div {
+    flex-wrap: wrap;
+    gap: 25px;
+  }
+
+  .journey b {
+    font-size: 25px;
+  }
+
+  .universities {
+    padding: 45px 6%;
+  }
+
+  .whygrid,
+  .servicegrid,
+  .essentials > div {
+    grid-template-columns: 1fr;
+  }
+
+  .why,
+  .services,
+  .essentials {
+    padding: 50px 6%;
+  }
+
+  .whygrid,
+  .servicegrid {
+    gap: 18px;
+  }
+
+  .tabs {
+    gap: 10px;
+  }
+
+  .tabs button {
+    min-width: 105px;
+    font-size: 13px;
+  }
+
+  .consult {
+    grid-template-columns: 1fr;
+    padding: 50px 7%;
+    gap: 40px;
+  }
+
+  .consult h2 {
+    font-size: 30px;
+  }
+
+  .consult li {
+    font-size: 15px;
+  }
+
+  .consult form {
+    padding: 20px;
+  }
+
+  .consult form h3 {
+    margin: -20px -20px 20px;
+  }
+}
+
+/* ================================
+   MOVING UNIVERSITY LOGOS
+================================ */
+
+.logoSlider {
+  width: 100%;
+  overflow: hidden;
+  margin: 35px auto 0;
+  position: relative;
+}
+
+.logoTrack {
+  display: flex;
+  gap: 20px;
+  width: max-content;
+  animation: logoScroll 25s linear infinite;
+  will-change: transform;
+}
+
+.logoTrack article {
+  width: 220px;
+  min-width: 220px;
+  height: 150px;
+
+  background: #ffffff;
+  border-radius: 12px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 25px;
+
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease;
+}
+
+.logoTrack article:hover {
+  transform: translateY(-5px);
+}
+
+.logoTrack img {
+  width: 100%;
+  max-width: 170px;
+  height: 80px;
+
+  object-fit: contain;
+  display: block;
+}
+
+/* CONTINUOUS SLIDING ANIMATION */
+
+@keyframes logoScroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Pause animation when mouse is over logos */
+
+.logoSlider:hover .logoTrack {
+  animation-play-state: paused;
+}
+/* free counsling took part*/
+#free-counselling {
+  scroll-margin-top: 100px;
+}

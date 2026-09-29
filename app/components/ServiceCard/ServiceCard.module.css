@@ -1,0 +1,148 @@
+.card {
+  background: #ffffff;
+  border: 1px solid #e1e5eb;
+  border-top: 4px solid #dcecff;
+  border-radius: 9px;
+
+  min-height: 315px;
+
+  padding: 30px 28px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+}
+
+/* Different top-border colors */
+
+.blue {
+  border-top-color: #d9edff;
+}
+
+.green {
+  border-top-color: #e0f4e3;
+}
+
+.red {
+  border-top-color: #ffe1e5;
+}
+
+.purple {
+  border-top-color: #f0e3f7;
+}
+
+.orange {
+  border-top-color: #ffefd9;
+}
+
+/* ICON */
+
+.iconWrapper {
+  width: 80px;
+  height: 80px;
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 25px;
+
+  background: #e5f4ff;
+}
+
+.iconWrapper svg {
+  width: 42px;
+  height: 42px;
+}
+
+/* Icon backgrounds */
+
+.blue .iconWrapper {
+  background: #e5f4ff;
+  color: #4168b5;
+}
+
+.green .iconWrapper {
+  background: #eff9f1;
+  color: #2e7d32;
+}
+
+.red .iconWrapper {
+  background: #fff0f2;
+  color: #d92f38;
+}
+
+.purple .iconWrapper {
+  background: #f8effb;
+  color: #6335b5;
+}
+
+.orange .iconWrapper {
+  background: #fff7eb;
+  color: #ef6c00;
+}
+
+/* TITLE */
+
+.card h3 {
+  margin: 0 0 18px;
+
+  color: #4168b5;
+
+  font-size: 21px;
+  line-height: 1.35;
+
+  font-weight: 600;
+}
+
+/* DESCRIPTION */
+
+.card p {
+  margin: 0;
+
+  color: #52627a;
+
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+/* MOBILE */
+
+@media (max-width: 768px) {
+  .card {
+    min-height: 280px;
+    padding: 28px 22px;
+  }
+
+  .iconWrapper {
+    width: 72px;
+    height: 72px;
+  }
+
+  .iconWrapper svg {
+    width: 36px;
+    height: 36px;
+  }
+
+  .card h3 {
+    font-size: 20px;
+  }
+
+  .card p {
+    font-size: 15px;
+  }
+}

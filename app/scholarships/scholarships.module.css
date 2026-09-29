@@ -1,0 +1,1209 @@
+/* ==========================================
+   SCHOLARSHIP LIST PAGE
+========================================== */
+
+.scholarshipsContainer {
+  margin-top: 0;
+  width: 100%;
+  background: #f5f7fb;
+  min-height: 100vh;
+  margin-bottom: 70px;
+}
+
+.loadingText,
+.noDataText {
+  text-align: center;
+  font-size: 18px;
+  color: gray;
+}
+
+/* ==========================================
+   GRID
+========================================== */
+
+.scholarshipsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 35px;
+  width: 100%;
+}
+
+/* ==========================================
+   CARD
+========================================== */
+
+.scholarshipCard {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  transition:
+    transform 0.4s ease,
+    opacity 0.4s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.scholarshipCard:hover {
+  transform: translateY(-6px);
+  box-shadow: 0px 8px 18px rgba(0, 0, 0, 0.15);
+  border-top: 2px solid #3e62b1;
+}
+
+/* ==========================================
+   IMAGE
+========================================== */
+
+.cardImgBox {
+  width: 100%;
+  height: 200px;
+  background: #e5e7eb;
+}
+
+.cardImgBox img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ==========================================
+   BODY
+========================================== */
+
+.cardBody {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.cardTitle {
+  font-size: 20px;
+  font-weight: bold;
+  color: #111827;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+.cardDesc {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 15px;
+
+  display: -webkit-box;
+  line-clamp: 3;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ==========================================
+   INFO
+========================================== */
+
+.cardInfo {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px 20px;
+  margin-top: 12px;
+}
+
+.cardInfo p {
+  margin: 0;
+  font-size: 14px;
+  color: #444;
+}
+
+.cardInfo b {
+  color: #111;
+}
+
+/* ==========================================
+   BUTTONS
+========================================== */
+
+.cardButtons {
+  margin-top: auto;
+  display: flex;
+  gap: 10px;
+  padding-top: 15px;
+}
+
+.applyBtn {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  background: #618dec;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+  text-decoration: none;
+  text-align: center;
+  display: block;
+}
+
+.applyBtn:hover {
+  background: #194dbe;
+}
+
+.visitBtn {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: 2px solid #194dbe;
+  background: transparent;
+  color: #194dbe;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.visitBtn:hover {
+  background: #eff6ff;
+}
+
+/* ==========================================
+   TITLE BANNER
+========================================== */
+
+.titleBanner {
+  width: auto;
+  margin-left: calc(-50vw + 50%);
+  min-height: 390px;
+
+  background-image: url("/scholarshipImg.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  color: white;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  margin-top: 60px;
+  margin-bottom: 60px;
+
+  padding-bottom: 70px;
+  padding-top: 20px;
+
+  position: relative;
+}
+
+.titleBanner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.titleBanner h1,
+.titleBanner h2,
+.titleBanner p {
+  position: relative;
+  z-index: 2;
+}
+
+.scholarshipsTitle {
+  font-size: 50px;
+  font-weight: bold;
+  padding-top: 30px;
+  margin-bottom: 0;
+  color: white;
+  letter-spacing: 2px;
+  padding-left: 60px;
+}
+
+.titleBanner h2 {
+  font-size: 35px;
+  padding-left: 60px;
+}
+
+.titleBanner p {
+  padding-left: 60px;
+}
+
+.bannerPara {
+  width: 450px;
+}
+
+/* ==========================================
+   MAIN HERO
+========================================== */
+
+.mainHero {
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 60px;
+  margin-left: 50px;
+  margin-right: 50px;
+  margin-top: 100px;
+}
+
+/* ==========================================
+   FILTER WRAPPER
+========================================== */
+
+.filtersWrapper {
+  margin-bottom: 20px;
+}
+
+/* ==========================================
+   FILTER BAR
+========================================== */
+
+.filtersBar {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  border-radius: 15px;
+  background-color: rgb(238, 235, 235);
+  width: 400px;
+  padding: 20px;
+  height: fit-content;
+}
+
+.filtersBar select,
+.searchBtn {
+  width: 100%;
+}
+
+.filtersBar > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.filterHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.filterBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  font-size: 22px;
+  font-weight: 600;
+  color: #2f3949;
+  cursor: pointer;
+}
+
+.filterPara {
+  font-size: 20px;
+  font-weight: 600;
+  color: #166e86;
+  letter-spacing: 0.5px;
+}
+
+.hrLine {
+  border: none;
+  height: 1px;
+  background: #e5e7eb;
+  margin: 5px 0 10px 0;
+}
+
+/* ==========================================
+   FILTER SELECT
+========================================== */
+
+.filtersBar select {
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  font-size: 15px;
+  outline: none;
+  transition: 0.3s;
+  background: #f9fafb;
+}
+
+.filtersBar select:focus {
+  border-color: #194dbe;
+  background: #ffffff;
+}
+
+/* ==========================================
+   SEARCH
+========================================== */
+
+.searchBtn {
+  padding: 12px;
+  background: #5080e7;
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.searchBtn:hover {
+  background: #194dbe;
+}
+
+/* ==========================================
+   RESET
+========================================== */
+
+.resetBtn {
+  background: transparent;
+  color: #f7142e;
+  border: 1px solid rgb(228, 182, 182);
+  font-weight: 800;
+  cursor: pointer;
+  font-size: 15px;
+  transition: 0.3s;
+  padding: 6px 12px;
+  border-radius: 7px;
+  margin-left: 140px;
+  letter-spacing: 0;
+}
+
+.resetBtn:hover {
+  background-color: rgb(253, 218, 223);
+}
+
+/* ==========================================
+   FILTER MOBILE TOGGLE
+========================================== */
+
+.filterToggle {
+  display: none;
+  background: linear-gradient(
+    to right,
+    #59b5ee,
+    #3e62b1
+  );
+  color: white;
+  padding: 7px 18px;
+  font-size: 18px;
+  font-weight: 500;
+  width: 130%;
+  border-radius: 6px;
+  cursor: pointer;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: -40px;
+}
+
+.arrow {
+  transition: transform 0.3s ease;
+}
+
+.rotate {
+  transform: rotate(180deg);
+}
+
+/* ==========================================
+   PAGINATION
+========================================== */
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pagination button {
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  background: white;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: 0.2s;
+}
+
+.pagination button:hover {
+  background: #3e62b1;
+  color: white;
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.activePage {
+  background: #3e62b1 !important;
+  color: white !important;
+  font-weight: bold;
+}
+
+/* ==========================================
+   DETAILS PAGE
+========================================== */
+
+.detailsPage {
+  width: 100%;
+  min-height: 100vh;
+  background: white;
+  padding-top: 0;
+}
+
+/* ==========================================
+   BANNER
+========================================== */
+
+.bannerSection {
+  width: 100%;
+  margin-top: 50px;
+  height: 400px;
+  position: relative;
+  overflow: hidden;
+}
+
+.bannerImg {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+}
+
+.bannerOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.55);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  padding: 50px;
+}
+
+.bannerTitle {
+  font-size: 48px;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 20px;
+}
+
+.bannerButtons {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+  width: 380px;
+}
+
+/* ==========================================
+   BROCHURE
+========================================== */
+
+.brochureBtn {
+  padding: 12px 25px;
+  background: #16a34a;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.brochureBtn:hover {
+  background: #15803d;
+}
+
+.disabledBtn {
+  background: gray !important;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.appliedText {
+  margin-top: 20px;
+  color: #86efac;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+/* ==========================================
+   BACK BUTTON
+========================================== */
+
+.bannerBackBtn {
+  position: absolute;
+  top: 25px;
+  left: 30px;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition: 0.3s;
+}
+
+.bannerBackBtn:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+/* ==========================================
+   DETAILS CONTENT
+========================================== */
+
+.detailsContent {
+  width: 90%;
+  background: white;
+
+  padding-left: 35px;
+  padding-right: 35px;
+  padding-top: 35px;
+  padding-bottom: 35px;
+}
+
+.detailsContent p {
+  background-color: #749cf3;
+  color: white;
+}
+
+.detailsContent p b {
+  color: rgb(47, 46, 46);
+  font-weight: 500;
+}
+
+.detailsHeading {
+  font-size: 40px;
+  font-weight: 800;
+  margin-bottom: 50px;
+  color: black;
+  margin-left: 355px;
+  width: fit-content;
+}
+
+.detailsDesc {
+  font-size: 18px;
+  color: #374151;
+  line-height: 1.6;
+  margin-bottom: 25px;
+}
+
+/* ==========================================
+   DETAILS GRID
+========================================== */
+
+.detailsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+}
+
+.detailsGrid p {
+  background: #86a8f3;
+  padding: 12px 15px;
+  border-radius: 10px;
+  font-size: 16px;
+  color: white;
+}
+
+.detailsGrid b {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1b4194;
+}
+
+/* ==========================================
+   DETAIL SPLIT
+========================================== */
+
+.detailSplit {
+  display: flex;
+  width: 100%;
+  background-color: white;
+}
+
+/* ==========================================
+   DETAILS TEXT
+========================================== */
+
+.details {
+  background-color: #cff2fc;
+  padding: 15px;
+  border-radius: 15px;
+  margin-top: -20px;
+}
+
+.details b {
+  font-size: x-large;
+  color: #0a4a5e;
+  letter-spacing: 0.2px;
+}
+
+/* ==========================================
+   APPLY BOTTOM
+========================================== */
+
+.applyBtnBottom {
+  display: block;
+  width: fit-content;
+  padding: 15px 35px;
+  border: none;
+  border-radius: 10px;
+  background: #618dec;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+  margin: 30px auto;
+}
+
+.applyBtnBottom:hover {
+  background: #194dbe;
+}
+
+/* ==========================================
+   POPULAR SCHOLARSHIPS
+========================================== */
+
+.scholarshipLinks {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  border: 1px solid black;
+  top: 30px;
+  border-radius: 20px;
+  height: fit-content;
+
+  margin-top: 150px;
+  margin-right: 30px;
+}
+
+.linksH2 {
+  background-color: #749cf3;
+  width: 350px;
+
+  display: flex;
+  font-weight: 500;
+
+  align-items: center;
+  justify-content: center;
+
+  color: black;
+
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  border: 1px solid black;
+}
+
+.linksDiv {
+  margin-left: 50px;
+}
+
+.linksDiv a {
+  cursor: pointer;
+  text-decoration: none;
+  margin-top: 2px;
+  color: black;
+  display: block;
+}
+
+/* ==========================================
+   FAQ
+========================================== */
+
+.faqSection {
+  margin-top: 40px;
+  padding: 20px;
+  border-radius: 20px;
+  background-color: #749cf3;
+}
+
+.faqItem {
+  border-bottom: 1px solid #e5e7eb;
+  padding: 12px 0;
+}
+
+.faqQuestion {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  font-weight: 600;
+  font-size: 16px;
+
+  cursor: pointer;
+  color: black;
+
+  transition: 0.3s;
+
+  border-bottom: 1px solid #60b8d3;
+}
+
+.faqIcon {
+  font-size: 20px;
+  transition: transform 0.3s ease;
+}
+
+.faqIcon.open {
+  transform: rotate(45deg);
+}
+
+.faqAnswer {
+  max-height: 0;
+  overflow: hidden;
+
+  transition: all 0.4s ease;
+
+  font-size: 15px;
+  color: black;
+  margin-top: 0;
+}
+
+.faqAnswer.show {
+  max-height: 300px;
+  margin-top: 10px;
+}
+
+.detailsFAQ {
+  color: rgb(56, 56, 56);
+  font-weight: 500;
+}
+
+/* ==========================================
+   MODAL
+========================================== */
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
+
+  background: rgba(0, 0, 0, 0.6);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 1000;
+  padding: 15px;
+}
+
+.modalBox {
+  background: white;
+  width: 100%;
+  max-width: 600px;
+
+  border-radius: 10px;
+  padding: 25px;
+
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.15);
+
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modalTitle {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.modalForm {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.formGroup label {
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.formGroup input,
+.formGroup select {
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+/* ==========================================
+   MODAL BUTTONS
+========================================== */
+
+.modalButtons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+  gap: 10px;
+}
+
+.cancelBtn {
+  flex: 1;
+  padding: 10px;
+  background: #eee;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.submitBtn {
+  flex: 1;
+  padding: 10px;
+  background: #3e62b1;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.submitBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ==========================================
+   TABLET
+========================================== */
+
+@media (max-width: 1200px) {
+  .scholarshipsContainer {
+    padding: 30px 40px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .scholarshipsGrid {
+    grid-template-columns: repeat(
+      2,
+      1fr
+    );
+  }
+
+  .scholarshipsContainer {
+    padding: 25px 25px;
+  }
+
+  .filtersBar {
+    flex-direction: column !important;
+    flex-wrap: nowrap !important;
+    height: 400px;
+    width: 350px;
+    display: flex;
+  }
+
+  .filtersBar select,
+  .searchBtn,
+  .resetBtn {
+    width: 100%;
+  }
+
+  .mainHero {
+    flex-direction: column;
+    gap: 40px;
+    margin-top: 40px;
+  }
+
+  .detailsHeading {
+    margin-left: 20px;
+  }
+}
+
+/* ==========================================
+   TABLET / MOBILE
+========================================== */
+
+@media (max-width: 768px) {
+  .scholarshipsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .scholarshipsContainer {
+    padding: 20px;
+  }
+
+  .cardInfo {
+    grid-template-columns: 1fr;
+  }
+
+  .detailsGrid {
+    grid-template-columns: repeat(
+      2,
+      1fr
+    );
+  }
+
+  /* TITLE BANNER */
+
+  .titleBanner {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+
+    padding: 40px 20px;
+
+    margin-top: -10px;
+
+    text-align: center;
+    align-items: center;
+
+    min-height: 150px;
+  }
+
+  .titleBanner h2 {
+    font-size: 27px;
+    padding-left: 0;
+  }
+
+  .titleBanner p {
+    padding-left: 0;
+  }
+
+  .scholarshipsTitle {
+    font-size: 35px;
+    padding-left: 0;
+  }
+
+  .bannerPara {
+    width: 100%;
+    max-width: 320px;
+    font-size: 14px;
+  }
+
+  /* MAIN */
+
+  .mainHero {
+    flex-direction: column;
+    margin-top: -20px;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  /* FILTER TOGGLE */
+
+  .filterToggle {
+    display: flex;
+  }
+
+  /* FILTER */
+
+  .filtersBar {
+    display: none;
+
+    flex-direction: column;
+
+    gap: 12px;
+
+    margin-top: 10px;
+
+    background: #f8f8f8;
+
+    padding: 15px;
+
+    border-radius: 6px;
+
+    height: fit-content;
+
+    max-width: 100%;
+  }
+
+  .filtersBar.show {
+    display: flex;
+  }
+
+  .filtersBar select,
+  .filtersBar button {
+    width: 100%;
+  }
+
+  .filterPara {
+    font-size: 18px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .filtersBar select {
+    font-size: 14px;
+  }
+
+  .searchBtn {
+    font-size: 14px;
+  }
+
+  .resetBtn {
+    background: transparent;
+    border: 1px solid rgb(228, 182, 182);
+    color: #f7142e;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 15px;
+    padding: 10px 1px;
+    border-radius: 7px;
+    text-align: center;
+    white-space: nowrap;
+    margin-left: 0;
+  }
+
+  .applyBtn {
+    font-size: 10px;
+    padding: 10px;
+  }
+
+  .brochureBtn {
+    font-size: 5px;
+    padding: 20px;
+  }
+
+  /* DETAILS */
+
+  .bannerSection {
+    width: 100%;
+    margin-top: 65px;
+    height: 215px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .bannerOverlay {
+    padding: 20px;
+    align-items: center;
+    text-align: center;
+  }
+
+  .bannerTitle {
+    font-size: 22px;
+  }
+
+  .bannerImg {
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+  }
+
+  .bannerButtons {
+    flex-direction: row;
+    width: 300px;
+  }
+
+  .detailsContent {
+    width: 100%;
+    margin-bottom: -100px;
+  }
+
+  .detailSplit {
+    flex-direction: column;
+  }
+
+  .scholarshipLinks {
+    width: 90%;
+    border: none;
+    padding: 15px;
+    background: #f3f9fc;
+    margin-left: 20px;
+    margin-bottom: 20px;
+  }
+
+  .linksH2 {
+    width: 100%;
+    font-size: 28px;
+    margin-top: -15px;
+    margin-left: -15px;
+  }
+
+  .linksDiv {
+    margin-left: 0;
+    padding: 3px 0;
+  }
+
+  .linksDiv a {
+    display: block;
+    width: 100%;
+    cursor: pointer;
+    text-decoration: none;
+    margin-top: 2px;
+  }
+
+  .detailsHeading {
+    font-size: 26px;
+    margin-left: 20px;
+    margin-top: 20px;
+  }
+
+  .applyBtnBottom {
+    width: 100%;
+    margin: 25px 0;
+    text-align: center;
+  }
+
+  /* MODAL */
+
+  .modalBox {
+    max-width: 80%;
+    padding: 22px;
+    border-radius: 8px;
+  }
+
+  .modalTitle {
+    font-size: 20px;
+  }
+
+  .formGroup input,
+  .formGroup select {
+    font-size: 15px;
+    padding: 11px;
+  }
+
+  .modalButtons {
+    gap: 12px;
+  }
+
+  .cancelBtn,
+  .submitBtn {
+    padding: 11px;
+    font-size: 15px;
+  }
+
+  .faqSection {
+    margin-bottom: 0;
+  }
+}
+
+/* ==========================================
+   SMALL MOBILE
+========================================== */
+
+@media (max-width: 480px) {
+  .modalBox {
+    padding: 18px;
+  }
+
+  .modalButtons {
+    flex-direction: column;
+  }
+
+  .detailsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .bannerButtons {
+    width: 100%;
+  }
+}

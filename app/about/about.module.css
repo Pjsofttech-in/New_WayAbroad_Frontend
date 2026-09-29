@@ -1,0 +1,256 @@
+.aboutPage {
+  width: 100%;
+  min-height: 100vh;
+  background: #f3f4f7;
+  color: #344255;
+}
+
+/* =========================
+   HERO
+========================= */
+
+.aboutHero {
+  position: relative;
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
+  background-image: url("/images/about-hero.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.78);
+}
+
+.heroContent {
+  position: relative;
+  z-index: 2;
+  padding: 30px 20px;
+}
+
+.heroContent h1 {
+  margin: 0;
+  font-size: clamp(40px, 5vw, 58px);
+  font-weight: 700;
+  color: #1d3557;
+}
+
+.heroContent p {
+  margin: 18px 0 28px;
+  font-size: 20px;
+  color: #526277;
+}
+
+/* =========================
+   GET STARTED BUTTON
+========================= */
+
+.getStarted {
+  display: inline-block;
+  padding: 14px 35px;
+  border-radius: 7px;
+
+  background: #4f6da5;
+  color: #ffffff;
+
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+
+  cursor: pointer;
+  transition:
+    background 0.3s ease,
+    transform 0.2s ease;
+}
+
+.getStarted:hover {
+  background: #294f8c;
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+/* =========================
+   CONTAINER
+========================= */
+
+.container {
+  width: min(1110px, calc(100% - 40px));
+  margin: 0 auto;
+}
+
+/* =========================
+   SECTIONS
+========================= */
+
+.section {
+  padding: 24px 0;
+}
+
+.section h2 {
+  margin: 0 0 14px;
+
+  font-size: 28px;
+  font-weight: 400;
+
+  color: #344255;
+}
+
+.section h3 {
+  margin: 28px 0 10px;
+
+  font-size: 23px;
+  font-weight: 400;
+
+  color: #344255;
+}
+
+.section h4 {
+  margin: 0 0 6px;
+
+  font-size: 17px;
+  font-weight: 400;
+
+  color: #344255;
+}
+
+.section p {
+  margin: 0 0 14px;
+
+  font-size: 16px;
+  line-height: 1.75;
+
+  color: #536176;
+}
+
+/* =========================
+   CENTER HEADING
+========================= */
+
+.centerHeading {
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+.centerHeading h2 {
+  font-size: clamp(32px, 4vw, 40px);
+  margin-bottom: 15px;
+}
+
+.centerHeading span {
+  display: block;
+
+  font-size: 18px;
+  color: #64748b;
+}
+
+/* =========================
+   CARDS
+========================= */
+
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  margin-top: 18px;
+}
+
+.infoCard {
+  padding: 20px 22px;
+
+  background: rgba(255, 255, 255, 0.55);
+
+  border-left: 4px solid #4c6ea8;
+  border-radius: 10px;
+
+  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.08);
+}
+
+.infoCard p {
+  margin-bottom: 0;
+}
+
+.infoCard a {
+  color: #4d6594;
+  text-decoration: none;
+}
+
+.infoCard a:hover {
+  text-decoration: underline;
+}
+
+/* =========================
+   LINKS
+========================= */
+
+.learnMore {
+  display: inline-block;
+  margin: 12px 0 20px;
+
+  color: #4c6595;
+  text-decoration: none;
+
+  font-size: 16px;
+}
+
+.learnMore:hover {
+  text-decoration: underline;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 768px) {
+  .container {
+    width: calc(100% - 30px);
+  }
+
+  .aboutHero {
+    min-height: 260px;
+  }
+
+  .heroContent {
+    padding: 25px 15px;
+  }
+
+  .heroContent h1 {
+    font-size: 38px;
+  }
+
+  .heroContent p {
+    font-size: 17px;
+  }
+
+  .getStarted {
+    padding: 13px 30px;
+    font-size: 15px;
+  }
+
+  .section {
+    padding: 20px 0;
+  }
+
+  .section h2 {
+    font-size: 25px;
+  }
+
+  .section h3 {
+    font-size: 21px;
+  }
+
+  .section p {
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  .infoCard {
+    padding: 17px;
+  }
+}

@@ -1,0 +1,305 @@
+/* =========================================================
+   COURSES PAGE
+========================================================= */
+
+.coursesPage {
+  width: 100%;
+  min-height: 100vh;
+  background: #f6f8fb;
+}
+
+.coursesSection {
+  width: 100%;
+  padding: 60px 20px 80px;
+  box-sizing: border-box;
+  background: linear-gradient(
+    180deg,
+    #f4f8fc 0%,
+    #ffffff 55%,
+    #f5f8fb 100%
+  );
+}
+
+.container {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.header {
+  max-width: 900px;
+  margin: 0 auto 48px;
+  text-align: center;
+}
+
+.eyebrow {
+  display: inline-block;
+  margin-bottom: 12px;
+  color: #2799bb;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+}
+
+.header h1 {
+  margin: 0 0 18px;
+  color: #1f3045;
+  font-size: 46px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.intro {
+  max-width: 850px;
+  margin: 0 auto;
+  color: #59697b;
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+
+/* =========================================================
+   COURSE GRID
+========================================================= */
+
+.courseGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+}
+
+
+/* =========================================================
+   COURSE CARD
+========================================================= */
+
+.courseCard {
+  position: relative;
+  min-height: 155px;
+  padding: 25px;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  background: #ffffff;
+  border: 1px solid #dce3ea;
+  border-radius: 14px;
+
+  text-decoration: none;
+  overflow: hidden;
+  cursor: pointer;
+
+  box-shadow: 0 5px 18px rgba(31, 48, 69, 0.06);
+
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.courseCard::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 4px;
+
+  background: #2799bb;
+
+  transform: scaleX(0);
+  transform-origin: left;
+
+  transition: transform 0.25s ease;
+}
+
+.courseCard:hover {
+  transform: translateY(-5px);
+  border-color: #2799bb;
+  box-shadow: 0 14px 30px rgba(39, 153, 187, 0.13);
+}
+
+.courseCard:hover::before {
+  transform: scaleX(1);
+}
+
+
+/* =========================================================
+   CARD CONTENT
+========================================================= */
+
+.cardContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.cardNumber {
+  margin-bottom: 14px;
+  color: #2799bb;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+.cardContent h2 {
+  margin: 0 0 8px;
+  color: #26384d;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.cardContent p {
+  margin: 0;
+  color: #788696;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   ARROW
+========================================================= */
+
+.cardArrow {
+  align-self: flex-end;
+
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+  background: #eef8fb;
+
+  color: #2799bb;
+  font-size: 18px;
+
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.courseCard:hover .cardArrow {
+  background: #2799bb;
+  color: #ffffff;
+  transform: translateX(3px);
+}
+
+
+/* =========================================================
+   BOTTOM INFORMATION
+========================================================= */
+
+.bottomInfo {
+  max-width: 900px;
+  margin: 50px auto 0;
+  padding: 22px 28px;
+  box-sizing: border-box;
+
+  background: #eef8fb;
+  border-left: 4px solid #2799bb;
+  border-radius: 8px;
+
+  text-align: center;
+}
+
+.bottomInfo p {
+  margin: 0;
+  color: #526678;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 950px) {
+  .coursesSection {
+    padding: 50px 20px 70px;
+  }
+
+  .courseGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+
+  .header h1 {
+    font-size: 40px;
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 650px) {
+  .coursesSection {
+    padding: 40px 16px 60px;
+  }
+
+  .header {
+    margin-bottom: 35px;
+  }
+
+  .header h1 {
+    font-size: 32px;
+  }
+
+  .intro {
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .courseGrid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .courseCard {
+    min-height: 135px;
+    padding: 21px;
+  }
+
+  .cardContent h2 {
+    font-size: 18px;
+  }
+
+  .bottomInfo {
+    margin-top: 35px;
+    padding: 18px 20px;
+  }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 400px) {
+  .header h1 {
+    font-size: 28px;
+  }
+
+  .courseCard {
+    min-height: 125px;
+  }
+
+  .cardContent h2 {
+    font-size: 17px;
+  }
+}

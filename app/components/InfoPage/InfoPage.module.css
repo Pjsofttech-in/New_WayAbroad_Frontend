@@ -1,0 +1,209 @@
+.page {
+  width: 100%;
+  min-height: 100vh;
+  background: #ffffff;
+}
+
+.hero {
+  min-height: 360px;
+
+  display: flex;
+  align-items: center;
+
+  padding: 50px 5%;
+
+  background:
+    linear-gradient(
+      rgba(20, 45, 70, 0.45),
+      rgba(20, 45, 70, 0.45)
+    ),
+    url("/images/partner-hero.png");
+
+  background-size: cover;
+  background-position: center;
+}
+
+.heroOverlay {
+  width: 100%;
+  max-width: 1300px;
+
+  margin: 0 auto;
+
+  padding: 40px;
+
+  background: rgba(255, 255, 255, 0.82);
+
+  border-radius: 12px;
+}
+
+.hero h1 {
+  margin: 0 0 15px;
+
+  color: #17243a;
+
+  font-size: clamp(36px, 4vw, 58px);
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.hero p {
+  margin: 0;
+
+  color: #374151;
+
+  font-size: clamp(18px, 2vw, 23px);
+}
+
+.container {
+  width: 100%;
+  max-width: 1250px;
+
+  margin: 0 auto;
+
+  padding: 60px 25px 80px;
+}
+
+.section {
+  margin-bottom: 55px;
+}
+
+.section h2 {
+  margin: 0 0 25px;
+
+  color: #1d2b45;
+
+  font-size: clamp(28px, 3vw, 40px);
+}
+
+.section h3 {
+  margin: 30px 0 15px;
+
+  color: #355c92;
+
+  font-size: 24px;
+}
+
+.section p {
+  margin: 0 0 18px;
+
+  color: #4b5563;
+
+  font-size: 17px;
+  line-height: 1.8;
+}
+
+.grid {
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 25px;
+}
+
+.card {
+  padding: 25px;
+
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+
+  background: #ffffff;
+
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+}
+
+.card h3 {
+  margin: 0 0 12px;
+
+  color: #355c92;
+
+  font-size: 21px;
+}
+
+.card p {
+  margin: 0;
+
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.list {
+  padding-left: 25px;
+}
+
+.list li {
+  margin-bottom: 14px;
+
+  color: #4b5563;
+
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+.quote {
+  padding: 25px;
+
+  margin-top: 20px;
+
+  border-left: 5px solid #4d69a3;
+
+  background: #f5f7fb;
+
+  border-radius: 8px;
+}
+
+.quote p {
+  font-style: italic;
+  margin-bottom: 12px;
+}
+
+.button {
+  display: inline-block;
+
+  padding: 13px 24px;
+
+  background: #4d69a3;
+
+  border-radius: 6px;
+
+  color: #ffffff;
+
+  font-weight: 600;
+  text-decoration: none;
+
+  transition: 0.3s ease;
+}
+
+.button:hover {
+  background: #354f84;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .hero {
+    min-height: 280px;
+
+    padding: 25px 15px;
+  }
+
+  .heroOverlay {
+    padding: 25px;
+  }
+
+  .container {
+    padding: 40px 18px 60px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .section p,
+  .list li {
+    font-size: 16px;
+  }
+}

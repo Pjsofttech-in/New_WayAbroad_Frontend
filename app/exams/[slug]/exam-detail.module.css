@@ -1,0 +1,1837 @@
+/* =========================================================
+   WAYABROAD EXAM DETAIL PAGE
+   Shared responsive styles for all exams
+========================================================= */
+
+.examPage {
+  --blue: #4568b2;
+  --green: #3eaa4c;
+  --pink: #ed1658;
+  --orange: #ff8b00;
+  --text: #172b46;
+  --muted: #536477;
+
+  width: 100%;
+  min-height: 100vh;
+
+  background: #f5f5f5;
+  color: var(--text);
+
+  overflow-x: hidden;
+}
+
+.container {
+  width: 1150px;
+  max-width: calc(100% - 40px);
+  margin: 0 auto;
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero {
+  width: 100%;
+  min-height: 322px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #486bb5;
+  color: #fff;
+
+  text-align: center;
+}
+
+.heroContent {
+  width: 1100px;
+  max-width: calc(100% - 40px);
+
+  padding: 38px 20px 42px;
+  box-sizing: border-box;
+}
+
+.breadcrumb {
+  display: inline-block;
+
+  margin-bottom: 26px;
+  padding: 7px 17px;
+
+  border-radius: 22px;
+
+  background: rgba(255, 255, 255, 0.17);
+  color: #fff;
+
+  font-size: 14px;
+  line-height: 1.3;
+}
+
+.hero h1 {
+  max-width: 1080px;
+
+  margin: 0 auto 25px;
+
+  color: #fff;
+
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1.16;
+  letter-spacing: -0.5px;
+}
+
+.hero p {
+  max-width: 900px;
+
+  margin: 0 auto;
+
+  color: #fff;
+
+  font-size: 19px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   COMMON SECTIONS
+========================================================= */
+
+.section {
+  width: 100%;
+
+  padding: 27px 0 18px;
+
+  box-sizing: border-box;
+}
+
+.section h2 {
+  margin: 0 0 22px;
+
+  color: #4169b2;
+
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.centerTitle {
+  text-align: center;
+}
+
+.description,
+.scoringIntro p {
+  width: 100%;
+
+  margin: 0;
+
+  color: var(--text);
+
+  font-size: 16px;
+  line-height: 1.75;
+}
+
+
+/* =========================================================
+   TEST STRUCTURE
+   One shared layout for all 10 exams.
+========================================================= */
+
+.structureGrid {
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+
+  gap: 24px;
+
+  margin-top: 30px;
+
+  align-items: stretch;
+}
+
+.structureCard {
+  width: 100%;
+  min-width: 0;
+  min-height: 208px;
+
+  padding: 22px 20px;
+
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  background: #fff;
+
+  border: 2px solid var(--blue);
+  border-radius: 6px;
+
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+}
+
+.sectionIcon {
+  min-height: 44px;
+
+  margin-bottom: 5px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--blue);
+
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.structureCard h3 {
+  margin: 7px 0 9px;
+
+  color: var(--blue);
+
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.28;
+}
+
+.structureCard p {
+  margin: 2px 0;
+
+  color: var(--text);
+
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.sectionQuestions {
+  font-weight: 600 !important;
+}
+
+.sectionTime {
+  color: var(--muted) !important;
+}
+
+.sectionDescription {
+  margin-top: 9px !important;
+
+  color: var(--muted) !important;
+
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+}
+
+
+/* =========================================================
+   SHARED FOUR-COLOR CYCLE
+   No separate TOEFL/LSAT/MCAT/PTE/Duolingo blocks needed.
+========================================================= */
+
+.structureCard:nth-child(4n + 1) {
+  border-color: var(--blue);
+}
+
+.structureCard:nth-child(4n + 1) .sectionIcon,
+.structureCard:nth-child(4n + 1) h3 {
+  color: var(--blue);
+}
+
+.structureCard:nth-child(4n + 2) {
+  border-color: var(--green);
+}
+
+.structureCard:nth-child(4n + 2) .sectionIcon,
+.structureCard:nth-child(4n + 2) h3 {
+  color: var(--green);
+}
+
+.structureCard:nth-child(4n + 3) {
+  border-color: var(--pink);
+}
+
+.structureCard:nth-child(4n + 3) .sectionIcon,
+.structureCard:nth-child(4n + 3) h3 {
+  color: var(--pink);
+}
+
+.structureCard:nth-child(4n + 4) {
+  border-color: var(--orange);
+}
+
+.structureCard:nth-child(4n + 4) .sectionIcon,
+.structureCard:nth-child(4n + 4) h3 {
+  color: var(--orange);
+}
+
+
+/* =========================================================
+   SCORING
+========================================================= */
+
+.scoringIntro {
+  width: 100%;
+
+  margin: 0 0 27px;
+}
+
+.scoringGrid {
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+
+  gap: 22px;
+
+  margin-top: 25px;
+
+  box-sizing: border-box;
+}
+
+.scoringCard {
+  width: 100%;
+  min-width: 0;
+  min-height: 160px;
+
+  padding: 25px 24px;
+
+  box-sizing: border-box;
+
+  background: #fff;
+
+  border: 1px solid #ddd;
+  border-left: 4px solid var(--blue);
+  border-radius: 4px;
+
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.10);
+}
+
+.scoringCard h3 {
+  margin: 0 0 12px;
+
+  color: var(--blue);
+
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.scoringCard p {
+  margin: 0;
+
+  color: var(--muted);
+
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.score {
+  margin-bottom: 14px;
+
+  color: var(--text);
+
+  font-size: 25px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.scoringIcon {
+  margin-bottom: 9px;
+
+  color: var(--blue);
+
+  font-size: 26px;
+  line-height: 1;
+}
+
+.scoringCard:nth-child(5n + 1) {
+  border-left-color: var(--blue);
+}
+
+.scoringCard:nth-child(5n + 1) h3,
+.scoringCard:nth-child(5n + 1) .scoringIcon {
+  color: var(--blue);
+}
+
+.scoringCard:nth-child(5n + 2) {
+  border-left-color: var(--pink);
+}
+
+.scoringCard:nth-child(5n + 2) h3,
+.scoringCard:nth-child(5n + 2) .scoringIcon {
+  color: var(--pink);
+}
+
+.scoringCard:nth-child(5n + 3) {
+  border-left-color: var(--green);
+}
+
+.scoringCard:nth-child(5n + 3) h3,
+.scoringCard:nth-child(5n + 3) .scoringIcon {
+  color: var(--green);
+}
+
+.scoringCard:nth-child(5n + 4) {
+  border-left-color: #2196f3;
+}
+
+.scoringCard:nth-child(5n + 4) h3,
+.scoringCard:nth-child(5n + 4) .scoringIcon {
+  color: #2196f3;
+}
+
+.scoringCard:nth-child(5n + 5) {
+  border-left-color: var(--orange);
+}
+
+.scoringCard:nth-child(5n + 5) h3,
+.scoringCard:nth-child(5n + 5) .scoringIcon {
+  color: var(--orange);
+}
+
+
+/* =========================================================
+   TEST TYPES
+========================================================= */
+
+.testTypesList {
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+
+  gap: 24px;
+
+  margin-top: 30px;
+}
+
+.testTypeCard {
+  min-height: 202px;
+
+  padding: 25px 22px;
+
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+
+  text-align: center;
+
+  background: #fff;
+
+  border: 1px solid #ddd;
+  border-top: 4px solid var(--blue);
+  border-radius: 5px;
+
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.10);
+}
+
+.testTypeIcon {
+  min-height: 40px;
+
+  margin-bottom: 4px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 31px;
+  line-height: 1;
+}
+
+.testTypeCard h3 {
+  margin: 12px 0 15px;
+
+  color: var(--blue);
+
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.testTypeCard p {
+  margin: 0;
+
+  color: var(--muted);
+
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.testType0 {
+  border-top-color: var(--blue);
+}
+
+.testType0 .testTypeIcon,
+.testType0 h3 {
+  color: var(--blue);
+}
+
+.testType1 {
+  border-top-color: var(--green);
+}
+
+.testType1 .testTypeIcon,
+.testType1 h3 {
+  color: var(--green);
+}
+
+.testType2 {
+  border-top-color: var(--orange);
+}
+
+.testType2 .testTypeIcon,
+.testType2 h3 {
+  color: var(--orange);
+}
+
+
+/* =========================================================
+   KEY FEATURES
+========================================================= */
+
+.featuresGrid {
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+
+  gap: 24px;
+
+  margin-top: 30px;
+}
+
+.featureCard {
+  min-height: 285px;
+
+  padding: 25px;
+
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  text-align: center;
+
+  background: #fff;
+
+  border: 1px solid #ddd;
+  border-top: 4px solid var(--blue);
+  border-radius: 6px;
+
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.09);
+}
+
+.featureIcon {
+  width: 50px;
+  height: 50px;
+
+  margin-bottom: 15px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--blue);
+
+  font-size: 28px;
+}
+
+.featureCard h3 {
+  margin: 0 0 13px;
+
+  color: var(--blue);
+
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.featureCard p {
+  margin: 0;
+
+  color: var(--muted);
+
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.feature0 {
+  border-top-color: var(--blue);
+}
+
+.feature0 .featureIcon,
+.feature0 h3 {
+  color: var(--blue);
+}
+
+.feature1 {
+  border-top-color: var(--green);
+}
+
+.feature1 .featureIcon,
+.feature1 h3 {
+  color: var(--green);
+}
+
+.feature2 {
+  border-top-color: var(--pink);
+}
+
+.feature2 .featureIcon,
+.feature2 h3 {
+  color: var(--pink);
+}
+
+
+/* =========================================================
+   WHY CHOOSE WAYABROAD
+========================================================= */
+
+.reasonsList {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 21px;
+
+  margin-top: 30px;
+}
+
+.reasonCard {
+  width: 100%;
+  min-height: 100px;
+
+  padding: 25px 32px;
+
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: flex-start;
+
+  gap: 20px;
+
+  background: #fff;
+
+  border: 1px solid #ddd;
+  border-radius: 5px;
+
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.10);
+}
+
+.reasonIcon {
+  width: 30px;
+
+  flex-shrink: 0;
+
+  padding-top: 2px;
+
+  color: #4169b2;
+
+  font-size: 22px;
+  font-weight: 700;
+
+  text-align: center;
+}
+
+.reasonContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.reasonCard h3 {
+  margin: 0 0 8px;
+
+  color: #4169b2;
+
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.reasonCard p {
+  margin: 0;
+
+  color: var(--muted);
+
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+
+/* =========================================================
+   OPTIONAL HIGHLIGHTS / SCORE STATS
+========================================================= */
+
+.highlightGrid {
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+
+  gap: 20px;
+
+  margin-top: 5px;
+}
+
+.highlightCard {
+  min-height: 110px;
+
+  padding: 20px;
+
+  box-sizing: border-box;
+
+  background: #fff;
+
+  border: 1px solid #ddd;
+  border-top: 4px solid var(--blue);
+  border-radius: 6px;
+
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+}
+
+
+/* =========================================================
+   REUSABLE HIGHLIGHT BANNER
+   Used by Duolingo and can be reused by any exam.
+========================================================= */
+
+.highlightBanner {
+  /* IMPORTANT:
+     Makes the banner span the entire highlight grid. */
+  grid-column: 1 / -1;
+
+  width: 100%;
+  min-height: 66px;
+
+  padding: 15px 20px;
+
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+
+  background: #eef8ff;
+
+  border: 1px solid #dbeef9;
+  border-left: 4px solid #08a9ed;
+
+  border-radius: 6px;
+
+  box-shadow: none;
+}
+
+.highlightBanner .highlightIcon {
+  flex: 0 0 auto;
+
+  width: auto;
+
+  margin: 0 4px 0 0;
+
+  color: #172033;
+
+  font-size: 20px;
+  line-height: 1;
+}
+
+.highlightBanner .highlightLabel {
+  flex: 0 0 auto;
+
+  margin: 0 4px 0 0;
+
+  color: #374151;
+
+  font-size: 16px;
+  font-weight: 500;
+
+  line-height: 1.6;
+}
+
+.highlightBanner .highlightValue {
+  flex: 0 1 auto;
+
+  margin: 0;
+
+  color: #374151;
+
+  font-size: 16px;
+  font-weight: 400;
+
+  line-height: 1.6;
+}
+
+
+/* =========================================================
+   NORMAL HIGHLIGHT CARD CONTENT
+========================================================= */
+
+.highlightIcon {
+  width: 100%;
+
+  margin-bottom: 9px;
+
+  color: var(--blue);
+
+  font-size: 28px;
+  line-height: 1;
+}
+
+.highlightLabel {
+  margin-bottom: 8px;
+
+  color: var(--muted);
+
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.highlightValue {
+  color: var(--text);
+
+  font-size: 20px;
+  font-weight: 700;
+
+  line-height: 1.35;
+}
+
+.highlightCard h3 {
+  margin: 0 0 8px;
+
+  color: var(--blue);
+
+  font-size: 19px;
+  font-weight: 700;
+
+  line-height: 1.3;
+}
+
+.highlightCard p {
+  margin: 0;
+
+  color: var(--muted);
+
+  font-size: 15px;
+
+  line-height: 1.55;
+}
+
+.highlight0 {
+  border-top-color: var(--blue);
+}
+
+.highlight1 {
+  border-top-color: var(--pink);
+}
+
+.highlight2 {
+  border-top-color: var(--green);
+}
+
+.highlight3 {
+  border-top-color: var(--orange);
+}
+
+
+/* =========================================================
+   SCORE STATS
+========================================================= */
+
+.scoreStatsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+
+  gap: 22px;
+}
+
+.scoreStatCard {
+  min-height: 125px;
+
+  padding: 22px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  background: #fff;
+
+  border: 1px solid #ddd;
+  border-top: 4px solid var(--blue);
+  border-radius: 6px;
+
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+}
+
+.scoreStatValue {
+  margin-bottom: 7px;
+
+  color: var(--blue);
+
+  font-size: 30px;
+  font-weight: 700;
+
+  line-height: 1.15;
+}
+
+.scoreStatLabel {
+  color: var(--muted);
+
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.scoreStat0 {
+  border-top-color: var(--blue);
+}
+
+.scoreStat0 .scoreStatValue {
+  color: var(--blue);
+}
+
+.scoreStat1 {
+  border-top-color: var(--green);
+}
+
+.scoreStat1 .scoreStatValue {
+  color: var(--green);
+}
+
+.scoreStat2 {
+  border-top-color: var(--pink);
+}
+
+.scoreStat2 .scoreStatValue {
+  color: var(--pink);
+}
+
+
+/* =========================================================
+   STRUCTURE NOTES
+========================================================= */
+
+.structureNotes {
+  display: flex;
+  flex-direction: column;
+
+  gap: 15px;
+
+  margin-top: 22px;
+}
+
+.structureNote {
+  padding: 18px 22px;
+
+  display: flex;
+  align-items: flex-start;
+
+  gap: 13px;
+
+  background: #fff;
+
+  border-left: 4px solid var(--blue);
+  border-radius: 5px;
+
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+}
+
+.structureNoteIcon {
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding-top: 1px;
+
+  color: var(--blue);
+
+  font-size: 23px;
+  line-height: 1;
+}
+
+.structureNoteContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.structureNoteContent strong {
+  display: block;
+
+  margin-bottom: 6px;
+
+  color: var(--blue);
+
+  font-size: 17px;
+}
+
+.structureNoteContent span {
+  display: block;
+
+  color: var(--muted);
+
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+
+/* =========================================================
+   GLOBAL RECOGNITION / TEST ATTEMPTS
+========================================================= */
+
+.globalRecognition,
+.testAttempts {
+  width: 100%;
+
+  box-sizing: border-box;
+}
+
+.globalRecognition {
+  min-height: 126px;
+
+  padding: 17px 20px;
+
+  display: flex;
+  align-items: flex-start;
+
+  background: #e8f6e7;
+
+  border: 1px solid #d4e8d2;
+  border-left: 4px solid #4caf50;
+
+  border-radius: 5px;
+
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.10);
+}
+
+.globalRecognitionIcon {
+  flex-shrink: 0;
+
+  width: 36px;
+
+  margin-right: 17px;
+
+  color: #42a94b;
+
+  font-size: 25px;
+  font-weight: 700;
+
+  line-height: 1.3;
+
+  text-align: center;
+}
+
+.globalRecognitionContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.globalRecognitionContent h3 {
+  margin: 0 0 7px;
+
+  color: #258637;
+
+  font-size: 20px;
+  font-weight: 700;
+
+  line-height: 1.3;
+}
+
+.globalRecognitionContent p {
+  margin: 0;
+
+  color: var(--muted);
+
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.testAttempts {
+  min-height: 170px;
+
+  padding: 22px 20px;
+
+  display: flex;
+  align-items: flex-start;
+
+  background: #f4f2ff;
+
+  border-left: 4px solid #9254ff;
+  border-radius: 5px;
+
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+}
+
+.testAttemptsIcon {
+  flex-shrink: 0;
+
+  width: 28px;
+
+  margin: 1px 14px 0 0;
+
+  color: #172033;
+
+  font-size: 21px;
+
+  line-height: 1;
+
+  text-align: center;
+}
+
+.testAttemptsContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.testAttemptsTitle {
+  margin-bottom: 6px;
+
+  color: #4c5368;
+
+  font-size: 17px;
+  font-weight: 400;
+
+  line-height: 1.4;
+}
+
+.testAttemptsContent p {
+  margin: 0;
+
+  color: #5e6478;
+
+  font-size: 17px;
+
+  line-height: 1.75;
+}
+
+
+/* =========================================================
+   SCORE VALIDITY
+========================================================= */
+
+.scoreValidity {
+  width: 100%;
+  min-height: 80px;
+
+  margin-top: 32px;
+
+  padding: 17px 22px;
+
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+
+  gap: 16px;
+
+  background: #eaf6e8;
+
+  border: 1px solid #d5e8d2;
+  border-left: 4px solid var(--green);
+
+  border-radius: 5px;
+
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.10);
+}
+
+.scoreValidityIcon {
+  flex-shrink: 0;
+
+  color: var(--green);
+
+  font-size: 28px;
+  font-weight: 700;
+
+  line-height: 1;
+}
+
+.scoreValidityContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.scoreValidityContent h3 {
+  margin: 0 0 6px;
+
+  color: #258637;
+
+  font-size: 20px;
+  font-weight: 700;
+
+  line-height: 1.3;
+}
+
+.scoreValidityContent p {
+  margin: 0;
+
+  color: var(--muted);
+
+  font-size: 15px;
+
+  line-height: 1.6;
+}
+
+
+/* =========================================================
+   LSAT SPECIAL CONTENT
+   Kept because LSAT intentionally uses an information bar
+   and two note cards, not because of duplicate structure CSS.
+========================================================= */
+
+.lsat .highlightGrid {
+  display: block;
+
+  width: 100%;
+}
+
+.lsat .highlightCard {
+  width: 100%;
+  min-height: 66px;
+
+  padding: 16px 20px;
+
+  display: flex;
+  align-items: center;
+
+  background: #e4f2fc;
+
+  border: 1px solid #d2e3ef;
+  border-left: 4px solid var(--blue);
+}
+
+.lsat .highlightIcon {
+  flex-shrink: 0;
+
+  width: 32px;
+
+  margin: 0 17px 0 0;
+
+  color: var(--blue);
+
+  font-size: 27px;
+
+  text-align: center;
+}
+
+.lsat .highlightLabel,
+.lsat .highlightValue {
+  display: inline;
+
+  margin: 0;
+
+  color: var(--text);
+
+  font-size: 16px;
+
+  line-height: 1.7;
+}
+
+.lsat .highlightLabel {
+  margin-right: 7px;
+
+  font-weight: 500;
+}
+
+.lsat .structureNotes {
+  display: grid;
+
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  gap: 24px;
+}
+
+.lsat .structureNote {
+  width: 100%;
+  min-height: 208px;
+
+  padding: 22px 20px;
+
+  box-sizing: border-box;
+
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  border: 2px solid var(--blue);
+
+  border-left-width: 2px;
+}
+
+.lsat .structureNoteIcon {
+  width: auto;
+
+  margin: 0 0 8px;
+
+  padding: 0;
+
+  font-size: 31px;
+}
+
+.lsat .structureNoteContent {
+  width: 100%;
+
+  flex: 0 1 auto;
+}
+
+.lsat .structureNoteContent strong {
+  margin: 7px 0 10px;
+
+  color: var(--blue);
+
+  font-size: 20px;
+
+  line-height: 1.28;
+}
+
+.lsat .structureNoteContent span {
+  color: var(--text);
+
+  font-size: 16px;
+
+  line-height: 1.5;
+}
+
+.lsat .structureNote.note0 {
+  border-color: var(--blue);
+}
+
+.lsat .structureNote.note0 .structureNoteIcon,
+.lsat .structureNote.note0 .structureNoteContent strong {
+  color: var(--blue);
+}
+
+.lsat .structureNote.note1 {
+  border-color: var(--green);
+}
+
+.lsat .structureNote.note1 .structureNoteIcon,
+.lsat .structureNote.note1 .structureNoteContent strong {
+  color: var(--green);
+}
+
+
+/* =========================================================
+   MCAT / PTE SPECIAL CONTENT
+========================================================= */
+
+.mcat .ctaButton {
+  padding: 14px 32px;
+
+  background: #5b7fc4;
+
+  color: #000;
+
+  border: none;
+  border-radius: 6px;
+
+  font-size: 18px;
+  font-weight: 700;
+
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+}
+
+.mcat .ctaButton:hover {
+  background: #4d70b2;
+
+  transform: translateY(-1px);
+}
+
+.mcat .ctaSection {
+  background: transparent;
+
+  box-shadow: none;
+
+  border: none;
+}
+
+.pte .highlightGrid {
+  display: block;
+
+  width: 100%;
+}
+
+.pte .highlightCard {
+  width: 100%;
+  min-height: 66px;
+
+  padding: 15px 20px;
+
+  display: flex;
+  align-items: center;
+
+  background: #a9dceb;
+
+  border: 1px solid #9bcddd;
+  border-left: 4px solid var(--blue);
+}
+
+.pte .highlightIcon {
+  flex-shrink: 0;
+
+  width: 30px;
+
+  margin: 0 15px 0 0;
+
+  color: var(--blue);
+
+  font-size: 24px;
+
+  text-align: center;
+}
+
+.pte .highlightLabel,
+.pte .highlightValue {
+  color: var(--text);
+
+  font-size: 16px;
+
+  line-height: 1.6;
+}
+
+.pte .highlightLabel {
+  margin-right: 6px;
+
+  font-weight: 500;
+}
+
+
+/* =========================================================
+   CTA
+========================================================= */
+
+.ctaSection {
+  width: 1150px;
+  max-width: calc(100% - 40px);
+
+  margin: 54px auto 18px;
+
+  padding: 34px 25px 36px;
+
+  box-sizing: border-box;
+
+  text-align: center;
+
+  background: #4568b2;
+
+  color: #fff;
+
+  border-radius: 5px;
+
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.16);
+}
+
+.ctaSection h2 {
+  margin: 0 0 18px;
+
+  color: #fff;
+
+  font-size: 26px;
+  font-weight: 700;
+
+  line-height: 1.3;
+}
+
+.ctaSection p {
+  max-width: 850px;
+
+  margin: 0 auto 23px;
+
+  color: #fff;
+
+  font-size: 16px;
+
+  line-height: 1.55;
+}
+
+.ctaButton {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 9px 22px;
+
+  background: #7295d5;
+
+  color: #fff;
+
+  border-radius: 20px;
+
+  font-size: 16px;
+
+  line-height: 1.3;
+
+  text-decoration: none;
+
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.ctaButton:hover {
+  background: #87a7e0;
+
+  color: #fff;
+
+  text-decoration: none;
+
+  transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 900px) {
+  .container {
+    width: calc(100% - 40px);
+  }
+
+  .structureGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 18px;
+  }
+
+  .scoringGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .testTypesList,
+  .featuresGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .highlightGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .scoreStatsGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  /* Banner always spans all available columns */
+  .highlightBanner {
+    grid-column: 1 / -1;
+  }
+}
+
+
+@media (max-width: 700px) {
+  .container {
+    width: calc(100% - 30px);
+  }
+
+  .hero {
+    min-height: 290px;
+  }
+
+  .heroContent {
+    width: calc(100% - 20px);
+
+    padding: 36px 10px 40px;
+  }
+
+  .breadcrumb {
+    margin-bottom: 20px;
+
+    padding: 6px 14px;
+
+    font-size: 13px;
+  }
+
+  .hero h1 {
+    font-size: 32px;
+
+    line-height: 1.2;
+  }
+
+  .hero p {
+    font-size: 17px;
+  }
+
+  .section {
+    padding: 32px 0 12px;
+  }
+
+  .section h2 {
+    font-size: 29px;
+  }
+
+  .description,
+  .scoringIntro p {
+    font-size: 15px;
+
+    line-height: 1.7;
+  }
+
+  .structureGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 15px;
+  }
+
+  .structureCard {
+    min-height: 185px;
+
+    padding: 18px 12px;
+  }
+
+  .sectionIcon {
+    font-size: 29px;
+  }
+
+  .structureCard h3 {
+    font-size: 17px;
+  }
+
+  .structureCard p {
+    font-size: 14px;
+  }
+
+  .scoringGrid {
+    grid-template-columns: 1fr;
+
+    gap: 15px;
+  }
+
+  .scoringCard {
+    min-height: 160px;
+  }
+
+  .testTypesList,
+  .featuresGrid {
+    grid-template-columns: 1fr;
+
+    gap: 15px;
+  }
+
+  .highlightGrid,
+  .scoreStatsGrid {
+    grid-template-columns: 1fr;
+
+    gap: 15px;
+  }
+
+  .highlightCard {
+    min-height: 95px;
+  }
+
+  /* =====================================================
+     MOBILE HIGHLIGHT BANNER
+  ===================================================== */
+
+  .highlightBanner {
+    grid-column: 1 / -1;
+
+    align-items: flex-start;
+
+    padding: 14px 16px;
+  }
+
+  .highlightBanner .highlightIcon {
+    width: auto;
+
+    margin-top: 2px;
+    margin-right: 8px;
+  }
+
+  .highlightBanner .highlightLabel,
+  .highlightBanner .highlightValue {
+    font-size: 15px;
+
+    line-height: 1.6;
+  }
+
+  .scoreStatCard {
+    min-height: 110px;
+  }
+
+  .reasonCard {
+    padding: 19px;
+
+    gap: 14px;
+  }
+
+  .reasonCard h3 {
+    font-size: 17px;
+  }
+
+  .reasonCard p {
+    font-size: 15px;
+  }
+
+  .structureNote {
+    padding: 16px 18px;
+  }
+
+  .structureNoteIcon {
+    font-size: 21px;
+  }
+
+  .highlightIcon {
+    font-size: 25px;
+  }
+
+  .scoringIcon {
+    font-size: 24px;
+  }
+
+  .testAttempts {
+    min-height: auto;
+
+    padding: 18px 16px;
+  }
+
+  .testAttemptsIcon {
+    margin-right: 10px;
+
+    font-size: 19px;
+  }
+
+  .testAttemptsTitle {
+    font-size: 16px;
+  }
+
+  .testAttemptsContent p {
+    font-size: 15px;
+
+    line-height: 1.6;
+  }
+
+  .pte .highlightCard {
+    padding: 15px 16px;
+  }
+
+  .pte .highlightLabel,
+  .pte .highlightValue {
+    font-size: 15px;
+  }
+
+  .pte .globalRecognition {
+    padding: 16px;
+  }
+
+  .pte .globalRecognitionIcon {
+    width: 28px;
+
+    margin-right: 10px;
+
+    font-size: 22px;
+  }
+
+  .pte .globalRecognitionContent h3 {
+    font-size: 18px;
+  }
+
+  .pte .globalRecognitionContent p {
+    font-size: 14px;
+  }
+
+  .lsat .highlightCard {
+    padding: 15px 17px;
+  }
+
+  .lsat .highlightLabel,
+  .lsat .highlightValue {
+    font-size: 15px;
+  }
+
+  .lsat .structureNotes {
+    grid-template-columns: 1fr;
+
+    gap: 15px;
+  }
+
+  .lsat .structureNote {
+    min-height: 190px;
+  }
+
+  .lsat .scoreValidity {
+    align-items: flex-start;
+
+    padding: 16px 18px;
+  }
+
+  .mcat .testAttemptsIcon {
+    font-size: 19px;
+  }
+
+  .mcat .ctaButton {
+    width: 100%;
+
+    box-sizing: border-box;
+  }
+
+  .ctaSection {
+    width: calc(100% - 30px);
+
+    margin-top: 40px;
+
+    padding: 29px 18px 31px;
+  }
+
+  .ctaSection h2 {
+    font-size: 23px;
+  }
+}
+
+
+@media (max-width: 450px) {
+  .hero h1 {
+    font-size: 28px;
+  }
+
+  .hero p {
+    font-size: 16px;
+  }
+
+  .section h2 {
+    font-size: 26px;
+  }
+
+  .structureGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .reasonCard {
+    padding: 16px;
+
+    gap: 12px;
+  }
+
+  .reasonIcon {
+    width: 25px;
+
+    font-size: 20px;
+  }
+
+  .reasonCard h3 {
+    font-size: 16px;
+  }
+
+  .reasonCard p {
+    font-size: 14px;
+  }
+
+  .ctaSection {
+    width: calc(100% - 20px);
+  }
+
+  .ctaButton {
+    width: 100%;
+
+    box-sizing: border-box;
+  }
+}

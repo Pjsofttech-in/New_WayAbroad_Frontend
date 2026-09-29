@@ -1,0 +1,368 @@
+/* =========================================
+   WAYABROAD FOOTER
+========================================= */
+
+.wayabroad-footer {
+  width: 100%;
+  background: #2999ba;
+  padding: 55px 40px 30px;
+  color: #ffffff;
+}
+
+
+/* =========================================
+   FOOTER LINKS CONTAINER
+========================================= */
+
+.footer-container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+
+  gap: 45px;
+}
+
+
+/* =========================================
+   FOOTER COLUMN
+========================================= */
+
+.footer-column {
+  min-width: 0;
+}
+
+.footer-column h3 {
+  margin: 0 0 20px;
+
+  font-size: 18px;
+  font-weight: 600;
+
+  color: #ffffff;
+}
+
+
+/* =========================================
+   FOOTER LINKS
+========================================= */
+
+.footer-links {
+  display: flex;
+  flex-direction: column;
+
+  gap: 14px;
+}
+
+.footer-links a {
+  color: rgba(255, 255, 255, 0.9);
+
+  text-decoration: none;
+
+  font-size: 15px;
+  line-height: 1.4;
+
+  transition: 0.2s ease;
+}
+
+.footer-links a:hover {
+  color: #ffffff;
+
+  transform: translateX(4px);
+}
+
+
+/* =========================================
+   FOOTER ACTION BUTTONS
+========================================= */
+
+.footerActions {
+  width: 100%;
+  max-width: 1280px;
+
+  margin: 55px auto 38px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 20px;
+}
+
+
+/* FIND OFFICE BUTTON */
+
+.officeButton {
+  min-width: 365px;
+  height: 54px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 9px;
+
+  padding: 0 25px;
+
+  background: transparent;
+
+  border: 1px solid #176d9d;
+  border-radius: 9px;
+
+  color: #244b87;
+
+  font-size: 16px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.25s ease;
+}
+
+.officeButton:hover {
+  background: rgba(255, 255, 255, 0.12);
+
+  transform: translateY(-2px);
+}
+
+
+/* SIGNUP BUTTON */
+
+.signupButton {
+  min-width: 130px;
+  height: 54px;
+
+  padding: 0 28px;
+
+  border: none;
+  border-radius: 7px;
+
+  background: #41679e;
+
+  color: #ffffff;
+
+  font-size: 16px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.25s ease;
+}
+
+.signupButton:hover {
+  background: #345889;
+
+  transform: translateY(-2px);
+
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
+}
+
+
+/* =========================================
+   FOOTER BOTTOM
+========================================= */
+
+.footerBottom {
+  width: 100%;
+  max-width: 1280px;
+
+  margin: 0 auto;
+
+  text-align: center;
+}
+
+
+/* HORIZONTAL LINE */
+
+.footerLine {
+  width: 100%;
+  height: 1px;
+
+  background: rgba(15, 63, 83, 0.65);
+
+  margin-bottom: 40px;
+}
+
+
+/* COPYRIGHT */
+
+.copyright {
+  margin: 0 0 28px;
+
+  color: #173c4a;
+
+  font-size: 14px;
+
+  letter-spacing: 0.4px;
+}
+
+
+/* =========================================
+   SOCIAL ICONS
+========================================= */
+
+.socialIcons {
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+
+  gap: 12px;
+}
+
+.socialIcons a {
+  width: 54px;
+  height: 54px;
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #ffffff;
+
+  text-decoration: none;
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.socialIcons a:hover {
+  transform: translateY(-4px);
+
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+
+/* INSTAGRAM */
+
+.instagram {
+  background: #e4405f;
+}
+
+
+/* FACEBOOK */
+
+.facebook {
+  background: #3b5998;
+}
+
+
+/* LINKEDIN */
+
+.linkedin {
+  background: #16769a;
+}
+
+
+/* WHATSAPP */
+
+.whatsapp {
+  background: #25d366;
+
+  overflow: hidden;
+}
+
+.whatsapp img {
+  width: 27px;
+  height: 27px;
+
+  object-fit: contain;
+}
+
+
+/* TELEGRAM */
+
+.telegram {
+  background: #4a9ed4;
+}
+
+
+/* =========================================
+   LARGE TABLET
+========================================= */
+
+@media (max-width: 1100px) {
+
+  .footer-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+}
+
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 800px) {
+
+  .wayabroad-footer {
+    padding: 50px 25px 30px;
+  }
+
+  .footer-container {
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 40px;
+  }
+
+  .footerActions {
+    margin-top: 45px;
+  }
+
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+
+  .wayabroad-footer {
+    padding: 45px 20px 25px;
+  }
+
+  .footer-container {
+    grid-template-columns: 1fr;
+
+    gap: 35px;
+  }
+
+  .footerActions {
+    flex-direction: column;
+
+    margin-top: 40px;
+
+    gap: 15px;
+  }
+
+  .officeButton,
+  .signupButton {
+    width: 100%;
+
+    min-width: 0;
+  }
+
+  .footerLine {
+    margin-bottom: 30px;
+  }
+
+  .socialIcons {
+    gap: 8px;
+  }
+
+  .socialIcons a {
+    width: 46px;
+    height: 46px;
+  }
+
+  .copyright {
+    font-size: 13px;
+  }
+
+}

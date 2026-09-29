@@ -1,0 +1,415 @@
+.examsPage {
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* =================================
+   EXAMS SECTION
+================================= */
+
+.examsSection {
+  width: 100%;
+  min-height: 100vh;
+
+  padding: 40px 20px 80px;
+
+  box-sizing: border-box;
+
+  background: linear-gradient(
+    135deg,
+    #f2f3f6 0%,
+    #dce5f2 55%,
+    #9db5d9 100%
+  );
+}
+
+/* =================================
+   CONTAINER
+================================= */
+
+.container {
+  width: 100%;
+  max-width: 1120px;
+
+  margin: 0 auto;
+}
+
+/* =================================
+   HEADING
+================================= */
+
+.container h1 {
+  margin: 0;
+
+  text-align: center;
+
+  font-size: 40px;
+  font-weight: 700;
+
+  line-height: 1.2;
+
+  color: #293d59;
+}
+
+.headingLine {
+  width: 80px;
+  height: 4px;
+
+  margin: 18px auto 48px;
+
+  background: #526e9e;
+
+  border-radius: 10px;
+}
+
+/* =================================
+   EXAM GRID
+================================= */
+
+.examGrid {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+
+  gap: 24px;
+
+  margin-bottom: 70px;
+}
+
+/* =================================
+   EXAM CARD
+================================= */
+
+.examCard {
+  width: 100%;
+  height: 68px;
+
+  padding: 0 22px;
+
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background: linear-gradient(
+    135deg,
+    #4867a1,
+    #6684bd
+  );
+
+  border: none;
+
+  border-radius: 11px;
+
+  box-shadow:
+    0 10px 22px rgba(53, 77, 118, 0.18);
+
+  color: #ffffff;
+
+  font-family: inherit;
+
+  font-size: 16px;
+  font-weight: 600;
+
+  letter-spacing: 0.5px;
+
+  text-decoration: none;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.examCard:hover {
+  transform: translateY(-3px);
+
+  background: linear-gradient(
+    135deg,
+    #405f98,
+    #5c7bb4
+  );
+
+  color: #ffffff;
+
+  text-decoration: none;
+
+  box-shadow:
+    0 14px 28px rgba(53, 77, 118, 0.28);
+}
+
+.examCard:active {
+  transform: translateY(-1px);
+}
+
+.examCard span:first-child {
+  min-width: 0;
+
+  max-width: 160px;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+
+  text-align: left;
+}
+
+.arrow {
+  flex-shrink: 0;
+
+  margin-left: 12px;
+
+  font-size: 22px;
+
+  font-weight: 500;
+
+  line-height: 1;
+
+  color: #ffffff;
+}
+
+/* =================================
+   REGISTER BOX
+================================= */
+
+.registerBox {
+  width: 100%;
+
+  max-width: 700px;
+
+  margin: 0 auto;
+
+  padding: 40px 35px;
+
+  box-sizing: border-box;
+
+  text-align: center;
+
+  background: #ffffff;
+
+  border-radius: 14px;
+
+  box-shadow:
+    0 12px 28px rgba(50, 60, 80, 0.12);
+}
+
+.registerBox h2 {
+  margin: 0 0 16px;
+
+  color: #293d59;
+
+  font-size: 28px;
+
+  font-weight: 400;
+
+  line-height: 1.3;
+}
+
+.registerBox p {
+  margin: 0 0 25px;
+
+  color: #596778;
+
+  font-size: 17px;
+
+  line-height: 1.6;
+}
+
+/* =================================
+   REGISTER BUTTON
+================================= */
+
+.registerButton {
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  min-width: 245px;
+
+  min-height: 50px;
+
+  padding: 0 30px;
+
+  box-sizing: border-box;
+
+  background: linear-gradient(
+    135deg,
+    #4c6ba5,
+    #6382bb
+  );
+
+  border: none;
+
+  border-radius: 10px;
+
+  color: #ffffff;
+
+  font-family: inherit;
+
+  font-size: 16px;
+
+  font-weight: 600;
+
+  letter-spacing: 0.2px;
+
+  text-align: center;
+
+  text-decoration: none;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 6px 14px rgba(76, 107, 165, 0.22);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.registerButton:hover {
+  background: linear-gradient(
+    135deg,
+    #3f5f99,
+    #5676b1
+  );
+
+  color: #ffffff;
+
+  text-decoration: none;
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 9px 18px rgba(76, 107, 165, 0.30);
+}
+
+.registerButton:active {
+  transform: translateY(0);
+
+  box-shadow:
+    0 4px 9px rgba(76, 107, 165, 0.20);
+}
+
+/* =================================
+   TABLET
+================================= */
+
+@media (max-width: 1000px) {
+  .examGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    gap: 20px;
+  }
+}
+
+/* =================================
+   MOBILE
+================================= */
+
+@media (max-width: 650px) {
+  .examsSection {
+    padding: 30px 15px 60px;
+  }
+
+  .container h1 {
+    font-size: 32px;
+  }
+
+  .headingLine {
+    width: 65px;
+
+    margin-top: 15px;
+
+    margin-bottom: 35px;
+  }
+
+  .examGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 15px;
+
+    margin-bottom: 50px;
+  }
+
+  .examCard {
+    height: 65px;
+
+    padding: 0 15px;
+
+    font-size: 14px;
+
+    letter-spacing: 0.2px;
+
+    border-radius: 9px;
+  }
+
+  .examCard span:first-child {
+    max-width: calc(100% - 30px);
+  }
+
+  .arrow {
+    margin-left: 8px;
+
+    font-size: 19px;
+  }
+
+  .registerBox {
+    padding: 30px 20px;
+
+    border-radius: 12px;
+  }
+
+  .registerBox h2 {
+    font-size: 23px;
+  }
+
+  .registerBox p {
+    font-size: 15px;
+
+    line-height: 1.5;
+  }
+
+  .registerButton {
+    width: 100%;
+
+    min-width: 0;
+
+    min-height: 48px;
+
+    padding: 0 20px;
+
+    font-size: 15px;
+  }
+}
+
+/* =================================
+   SMALL MOBILE
+================================= */
+
+@media (max-width: 400px) {
+  .examGrid {
+    grid-template-columns: 1fr;
+
+    gap: 14px;
+  }
+
+  .examCard {
+    width: 100%;
+
+    height: 60px;
+  }
+
+  .examCard span:first-child {
+    max-width: none;
+  }
+}

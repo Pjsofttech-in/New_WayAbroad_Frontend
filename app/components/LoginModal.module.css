@@ -1,0 +1,620 @@
+/* =========================================
+   OVERLAY
+========================================= */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.55);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  z-index: 9999;
+
+  overflow-y: auto;
+}
+
+
+/* =========================================
+   LOGIN MODAL
+   Compact design like your screenshot
+========================================= */
+
+.loginModal {
+  position: relative;
+
+  width: 100%;
+  max-width: 400px;
+
+  background: #9199d6;
+
+  border-radius: 8px;
+
+  padding: 28px 30px 20px;
+
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+
+/* =========================================
+   CLOSE BUTTON
+========================================= */
+
+.closeButton {
+  position: absolute;
+
+  top: 14px;
+  right: 18px;
+
+  border: none;
+  background: transparent;
+
+  color: #3e4148;
+
+  cursor: pointer;
+
+  padding: 0;
+
+  z-index: 20;
+}
+
+
+/* =========================================
+   LOGIN
+========================================= */
+
+.loginTitle {
+  text-align: center;
+
+  font-size: 26px;
+
+  font-weight: 700;
+
+  color: #3d3f46;
+
+  margin: 0 0 25px;
+}
+
+
+.loginModal form {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 10px;
+}
+
+
+.loginModal form > label {
+  font-size: 14px;
+
+  font-weight: 600;
+
+  color: #303746;
+
+  margin-top: 2px;
+}
+
+
+.loginModal input[type="email"],
+.loginModal input[type="password"] {
+  width: 100%;
+
+  height: 52px;
+
+  padding: 0 14px;
+
+  border: 1px solid #d6d6d6;
+
+  border-radius: 10px;
+
+  background: #ffffff;
+
+  font-size: 15px;
+
+  outline: none;
+
+  box-sizing: border-box;
+}
+
+
+.loginModal input::placeholder {
+  color: #777d87;
+}
+
+
+.loginModal input[type="email"]:focus,
+.loginModal input[type="password"]:focus {
+  border-color: #299fc0;
+}
+
+
+/* =========================================
+   LOGIN OPTIONS
+========================================= */
+
+.loginOptions {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  margin: 2px 0 4px;
+}
+
+
+.remember {
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  color: #505869;
+
+  font-size: 14px;
+
+  cursor: pointer;
+}
+
+
+.remember input {
+  width: 14px !important;
+
+  height: 14px !important;
+
+  margin: 0;
+}
+
+
+.forgot {
+  border: none;
+
+  background: transparent;
+
+  color: #f1f1f1;
+
+  font-size: 14px;
+
+  cursor: pointer;
+
+  padding: 0;
+}
+
+
+/* =========================================
+   LOGIN BUTTON
+========================================= */
+
+.loginButton {
+  width: 100%;
+
+  height: 50px;
+
+  border: none;
+
+  border-radius: 6px;
+
+  background: #278f8d;
+
+  color: #ffffff;
+
+  font-size: 16px;
+
+  font-weight: 500;
+
+  cursor: pointer;
+
+  margin-top: 2px;
+}
+
+
+.loginButton:hover {
+  background: #207d7b;
+}
+
+
+/* =========================================
+   LOGIN SIGNUP TEXT
+========================================= */
+
+.switchText {
+  text-align: center;
+
+  margin: 0;
+
+  font-size: 15px;
+
+  color: #505869;
+}
+
+
+.switchText button {
+  border: none;
+
+  background: transparent;
+
+  padding: 0;
+
+  color: #287ca8;
+
+  font-size: 15px;
+
+  font-family: inherit;
+
+  cursor: pointer;
+}
+
+
+/* =========================================
+   SIGNUP MODAL
+========================================= */
+
+.signupModal {
+  position: relative;
+
+  width: min(100%, 1000px);
+
+  max-height: 90vh;
+
+  overflow-y: auto;
+
+  background: #ffffff;
+
+  border-radius: 12px;
+
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+
+/* =========================================
+   SIGNUP CONTAINER
+========================================= */
+
+.container {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  min-height: 500px;
+}
+
+
+/* =========================================
+   SIGNUP LEFT SIDE
+========================================= */
+
+.leftSide {
+  padding: 40px;
+
+  text-align: center;
+
+  background: #f8f9fc;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+.accountImage {
+  width: 100%;
+
+  max-width: 320px;
+
+  height: 210px;
+
+  object-fit: cover;
+
+  border-radius: 24px;
+
+  margin-bottom: 20px;
+}
+
+
+.leftSide h2 {
+  font-size: 27px;
+
+  font-weight: 500;
+
+  color: #2d3b55;
+
+  margin: 10px 0;
+}
+
+
+.subtitle {
+  color: #596273;
+
+  font-size: 17px;
+
+  line-height: 1.5;
+
+  margin: 10px 0;
+}
+
+
+.benefits {
+  text-align: left;
+
+  list-style: none;
+
+  padding: 10px 0;
+
+  margin: 20px 0;
+}
+
+
+.benefits li {
+  margin: 14px 0;
+
+  color: #3d4758;
+
+  font-size: 16px;
+
+  line-height: 1.4;
+}
+
+
+.note {
+  font-size: 13px;
+
+  line-height: 1.5;
+
+  color: #737b89;
+
+  margin-top: 20px;
+}
+
+
+/* =========================================
+   SIGNUP RIGHT SIDE
+========================================= */
+
+.rightSide {
+  padding: 40px 35px;
+
+  background: #ffffff;
+}
+
+
+.signupTitle {
+  text-align: center;
+
+  color: #3d4d6a;
+
+  font-size: 26px;
+
+  margin: 5px 0 25px;
+}
+
+
+.rightSide form {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 14px;
+}
+
+
+.rightSide input,
+.rightSide select {
+  width: 100%;
+
+  height: 48px;
+
+  border: 1px solid #c9d0da;
+
+  border-radius: 7px;
+
+  padding: 0 14px;
+
+  font-size: 15px;
+
+  color: #394252;
+
+  background: #ffffff;
+
+  outline: none;
+
+  box-sizing: border-box;
+}
+
+
+.rightSide input:focus,
+.rightSide select:focus {
+  border-color: #299fc0;
+
+  box-shadow: 0 0 0 3px rgba(41, 159, 192, 0.1);
+}
+
+
+/* =========================================
+   NAME ROW
+========================================= */
+
+.nameRow {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 10px;
+}
+
+
+/* =========================================
+   PHONE ROW
+========================================= */
+
+.phoneRow {
+  display: grid;
+
+  grid-template-columns: 100px 1fr;
+
+  gap: 10px;
+}
+
+
+/* =========================================
+   SIGNUP CHECKBOXES
+========================================= */
+
+.checkboxes {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 10px;
+}
+
+
+.checkboxes label {
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 8px;
+
+  color: #596273;
+
+  font-size: 14px;
+
+  line-height: 1.45;
+}
+
+
+.checkboxes input {
+  width: 14px !important;
+
+  height: 14px !important;
+
+  margin-top: 3px;
+
+  flex-shrink: 0;
+}
+
+
+/* =========================================
+   SIGNUP BUTTON
+========================================= */
+
+.signupButton {
+  height: 48px;
+
+  border: none;
+
+  border-radius: 7px;
+
+  background: #41679e;
+
+  color: white;
+
+  font-size: 16px;
+
+  cursor: pointer;
+
+  margin-top: 5px;
+}
+
+
+.signupButton:hover {
+  background: #345889;
+}
+
+
+.signupSwitch {
+  text-align: center;
+
+  color: #596273;
+
+  margin: 0;
+
+  font-size: 15px;
+}
+
+
+.signupSwitch button {
+  border: none;
+
+  background: transparent;
+
+  color: #41679e;
+
+  cursor: pointer;
+
+  font-size: 15px;
+
+  font-family: inherit;
+
+  padding: 0;
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 768px) {
+
+  .overlay {
+    align-items: flex-start;
+
+    padding: 15px;
+  }
+
+  .loginModal {
+    margin-top: 40px;
+
+    max-width: 400px;
+  }
+
+  .signupModal {
+    margin-top: 20px;
+
+    max-height: none;
+  }
+
+  .container {
+    grid-template-columns: 1fr;
+  }
+
+  .leftSide {
+    padding: 35px 25px;
+  }
+
+  .rightSide {
+    padding: 35px 25px;
+  }
+
+  .accountImage {
+    height: 180px;
+  }
+}
+
+
+@media (max-width: 480px) {
+
+  .loginModal {
+    padding: 28px 20px 20px;
+  }
+
+  .nameRow {
+    grid-template-columns: 1fr;
+  }
+
+  .phoneRow {
+    grid-template-columns: 80px 1fr;
+  }
+
+  .leftSide,
+  .rightSide {
+    padding: 30px 20px;
+  }
+}

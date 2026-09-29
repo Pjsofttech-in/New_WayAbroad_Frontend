@@ -1,0 +1,751 @@
+.partnerPage {
+  width: 100%;
+  min-height: 100vh;
+  background: #f4f5f7;
+  color: #28384d;
+}
+
+.container {
+  width: min(1150px, calc(100% - 40px));
+  margin: auto;
+}
+
+/* =================================
+   HERO
+================================= */
+
+.hero {
+  min-height: 300px;
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  background-image: url("/images/partner-hero.png");
+  background-size: cover;
+  background-position: center;
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.heroContent {
+  position: relative;
+  z-index: 2;
+
+  max-width: 950px;
+  padding: 20px;
+
+  color: white;
+}
+
+.heroContent h1 {
+  margin: 0;
+
+  font-size: clamp(42px, 5vw, 70px);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.heroContent h2 {
+  margin: 15px 0;
+
+  font-size: clamp(25px, 3vw, 42px);
+  font-weight: 400;
+}
+
+.heroContent p {
+  margin: 20px auto 25px;
+
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* =================================
+   HERO BUTTON
+================================= */
+
+.heroButton {
+  display: inline-block;
+
+  padding: 14px 40px;
+
+  background: linear-gradient(
+    90deg,
+    #4567a0,
+    #6384bc
+  );
+
+  color: white;
+
+  border: none;
+  border-radius: 18px;
+
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+
+.heroButton:hover {
+  transform: translateY(-2px);
+}
+
+/* =================================
+   PARTNER IMAGE
+================================= */
+
+.partnerImageSection {
+  padding: 70px 20px 15px;
+
+  display: flex;
+  justify-content: center;
+
+  background: #f4f5f7;
+}
+
+.partnerImageCard {
+  width: 100%;
+  max-width: 860px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: white;
+
+  border-radius: 6px;
+
+  overflow: hidden;
+
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
+}
+
+.partnerImage {
+  width: 100%;
+  height: auto;
+
+  display: block;
+
+  object-fit: contain;
+}
+
+/* =================================
+   OPPORTUNITIES
+================================= */
+
+.opportunities {
+  padding: 15px 0 70px;
+
+  background: #f4f5f7;
+}
+
+.opportunities h2,
+.featuresSection h2,
+.successSection h2 {
+  margin: 0 0 20px;
+
+  font-size: 34px;
+  font-weight: 700;
+
+  color: #344255;
+}
+
+.intro {
+  margin-bottom: 20px;
+
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.opportunityList {
+  display: flex;
+  flex-direction: column;
+
+  gap: 18px;
+
+  margin-bottom: 18px;
+}
+
+.opportunity h3 {
+  margin: 0 0 5px;
+
+  font-size: 17px;
+}
+
+.opportunity p {
+  margin: 0;
+
+  font-size: 16px;
+}
+
+/* =================================
+   START EARNING BUTTON
+================================= */
+
+.earningButton {
+  padding: 10px 22px;
+
+  background: white;
+
+  border: 1px solid #5974a5;
+  border-radius: 5px;
+
+  color: #4a628c;
+
+  font-family: inherit;
+  font-size: 14px;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.earningButton:hover {
+  background: #4d6ea6;
+  color: white;
+}
+
+/* =================================
+   FEATURES
+================================= */
+
+.featuresSection {
+  padding: 70px 0 80px;
+
+  background: #f0f2f6;
+}
+
+.featuresGrid {
+  display: grid;
+
+  grid-template-columns: repeat(4, 1fr);
+
+  gap: 22px;
+
+  margin-top: 20px;
+}
+
+.featureCard {
+  min-height: 58px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  padding: 14px 16px;
+
+  background: white;
+
+  border: 1px solid #d6dbe3;
+  border-radius: 6px;
+
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+
+  font-size: 16px;
+}
+
+.check {
+  width: 18px;
+  height: 18px;
+
+  flex-shrink: 0;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #42a34b;
+
+  color: white;
+
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* =================================
+   SECOND BECOME PARTNER BUTTON
+================================= */
+
+.partnerButton {
+  display: inline-block;
+
+  margin-top: 30px;
+
+  padding: 12px 22px;
+
+  background: #4d6ea6;
+
+  border: none;
+  border-radius: 5px;
+
+  color: white;
+
+  font-family: inherit;
+  font-size: 14px;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.partnerButton:hover {
+  background: #385987;
+}
+
+/* =================================
+   SUCCESS
+================================= */
+
+.successSection {
+  padding: 55px 0 80px;
+
+  background: #f4f5f7;
+}
+
+.successGrid {
+  display: grid;
+
+  grid-template-columns: repeat(2, 1fr);
+
+  gap: 30px;
+
+  max-width: 850px;
+}
+
+.successCard {
+  padding: 35px;
+
+  background: white;
+
+  border: 1px solid #d7dce3;
+  border-radius: 6px;
+
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.successCard h3 {
+  margin: 0 0 12px;
+
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.successCard p {
+  margin: 0 0 18px;
+
+  font-size: 16px;
+}
+
+.successCard em {
+  font-size: 14px;
+}
+
+/* =================================
+   JOIN US SECTION
+================================= */
+
+.joinSection {
+  position: relative;
+
+  min-height: 255px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  background-image: url("/images/partner-join-bg.jpg");
+  background-size: cover;
+  background-position: center;
+
+  overflow: hidden;
+}
+
+.joinOverlay {
+  position: absolute;
+  inset: 0;
+
+  background: rgba(24, 151, 197, 0.45);
+}
+
+.joinContent {
+  position: relative;
+  z-index: 2;
+
+  padding: 40px 20px;
+}
+
+.joinContent h2 {
+  margin: 0 0 25px;
+
+  color: #ffffff;
+
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.joinButton {
+  display: inline-block;
+
+  padding: 12px 25px;
+
+  background: #5279bd;
+
+  color: #ffffff;
+
+  border: none;
+  border-radius: 4px;
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.joinButton:hover {
+  background: #3e63a3;
+
+  transform: translateY(-2px);
+}
+
+/* =================================
+   PARTNER FORM MODAL
+================================= */
+
+.modalOverlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 9999;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  background: rgba(0, 0, 0, 0.55);
+}
+
+/* =================================
+   MODAL BOX
+================================= */
+
+.modal {
+  width: min(600px, 100%);
+
+  max-height: 90vh;
+
+  overflow-y: auto;
+
+  background: #ffffff;
+
+  border-radius: 4px;
+
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.3);
+
+  animation: modalAppear 0.2s ease;
+}
+
+@keyframes modalAppear {
+  from {
+    opacity: 0;
+    transform: translateY(-15px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =================================
+   MODAL HEADER
+================================= */
+
+.modalHeader {
+  position: relative;
+
+  padding: 18px 24px 12px;
+}
+
+.modalHeader h2 {
+  margin: 0;
+
+  color: #333333;
+
+  font-size: 22px;
+  font-weight: 400;
+}
+
+.closeButton {
+  position: absolute;
+
+  top: 10px;
+  right: 15px;
+
+  width: 35px;
+  height: 35px;
+
+  border: none;
+
+  background: transparent;
+
+  color: #555555;
+
+  font-size: 30px;
+  line-height: 30px;
+
+  cursor: pointer;
+}
+
+.closeButton:hover {
+  color: #111111;
+}
+
+/* =================================
+   FORM
+================================= */
+
+.partnerForm {
+  padding: 20px 24px 25px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 24px;
+}
+
+.partnerForm input {
+  width: 100%;
+
+  height: 56px;
+
+  box-sizing: border-box;
+
+  padding: 0 13px;
+
+  border: 1px solid #c8c8c8;
+
+  border-radius: 3px;
+
+  background: #ffffff;
+
+  color: #333333;
+
+  font-family: inherit;
+
+  font-size: 16px;
+
+  outline: none;
+}
+
+.partnerForm input::placeholder {
+  color: #666666;
+}
+
+.partnerForm input:focus {
+  border-color: #557bb8;
+
+  box-shadow: 0 0 0 1px #557bb8;
+}
+
+/* =================================
+   MODAL ACTIONS
+================================= */
+
+.modalActions {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: flex-end;
+
+  gap: 10px;
+
+  margin-top: 5px;
+}
+
+.cancelButton {
+  padding: 10px 16px;
+
+  border: none;
+
+  background: transparent;
+
+  color: #4d72b3;
+
+  font-family: inherit;
+
+  font-size: 14px;
+
+  cursor: pointer;
+}
+
+.cancelButton:hover {
+  background: #f2f5fa;
+}
+
+.submitButton {
+  padding: 11px 18px;
+
+  border: none;
+
+  border-radius: 4px;
+
+  background: #4d76b8;
+
+  color: white;
+
+  font-family: inherit;
+
+  font-size: 14px;
+
+  cursor: pointer;
+
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.submitButton:hover {
+  background: #3e63a0;
+}
+
+/* =================================
+   TABLET
+================================= */
+
+@media (max-width: 900px) {
+  .featuresGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .successGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .partnerImageSection {
+    padding-top: 50px;
+  }
+
+  .joinContent h2 {
+    font-size: 32px;
+  }
+}
+
+/* =================================
+   MOBILE
+================================= */
+
+@media (max-width: 600px) {
+  .container {
+    width: calc(100% - 30px);
+  }
+
+  .hero {
+    min-height: 350px;
+  }
+
+  .heroContent h1 {
+    font-size: 40px;
+  }
+
+  .partnerImageSection {
+    padding: 35px 15px 10px;
+  }
+
+  .partnerImageCard {
+    max-width: 100%;
+  }
+
+  .featuresGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .opportunities h2,
+  .featuresSection h2,
+  .successSection h2 {
+    font-size: 28px;
+  }
+
+  .successCard {
+    padding: 25px;
+  }
+
+  /* JOIN US MOBILE */
+
+  .joinSection {
+    min-height: 220px;
+  }
+
+  .joinContent {
+    padding: 30px 18px;
+  }
+
+  .joinContent h2 {
+    font-size: 28px;
+    margin-bottom: 22px;
+  }
+
+  .joinButton {
+    padding: 11px 22px;
+    font-size: 13px;
+  }
+
+  /* MOBILE MODAL */
+
+  .modalOverlay {
+    padding: 12px;
+  }
+
+  .modal {
+    width: 100%;
+
+    max-height: 95vh;
+  }
+
+  .modalHeader {
+    padding: 16px 18px 10px;
+  }
+
+  .modalHeader h2 {
+    font-size: 20px;
+  }
+
+  .partnerForm {
+    padding: 16px 18px 22px;
+
+    gap: 18px;
+  }
+
+  .partnerForm input {
+    height: 52px;
+  }
+
+  .modalActions {
+    margin-top: 5px;
+  }
+}

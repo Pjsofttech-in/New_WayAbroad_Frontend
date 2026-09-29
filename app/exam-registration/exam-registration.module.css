@@ -1,0 +1,220 @@
+.page {
+  width: 100%;
+  min-height: calc(100vh - 80px);
+
+  padding: 55px 20px;
+
+  box-sizing: border-box;
+
+  background: #f5f6f8;
+}
+
+.card {
+  width: min(1200px, 100%);
+
+  min-height: 570px;
+
+  margin: 0 auto;
+
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  background: #ffffff;
+
+  border-radius: 8px;
+
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+
+  overflow: hidden;
+}
+
+/* =================================
+   FORM SECTION
+================================= */
+
+.formSection {
+  padding: 50px 32px 45px;
+}
+
+.formSection h1 {
+  margin: 0 0 30px;
+
+  color: #24569b;
+
+  font-size: 27px;
+
+  font-weight: 400;
+
+  line-height: 1.3;
+}
+
+/* =================================
+   FORM
+================================= */
+
+.formGroup {
+  margin-bottom: 25px;
+}
+
+.formGroup label {
+  display: block;
+
+  margin-bottom: 9px;
+
+  color: #12243d;
+
+  font-size: 16px;
+
+  font-weight: 700;
+}
+
+.formGroup label span {
+  color: #e05a5a;
+
+  margin-left: 4px;
+}
+
+.formGroup input,
+.formGroup select {
+  width: 100%;
+
+  height: 52px;
+
+  box-sizing: border-box;
+
+  padding: 0 16px;
+
+  border: 1px solid #d6dfe9;
+
+  border-radius: 11px;
+
+  background: #f8fafc;
+
+  color: #526277;
+
+  font-family: inherit;
+
+  font-size: 16px;
+
+  outline: none;
+}
+
+.formGroup input::placeholder {
+  color: #8995a7;
+}
+
+.formGroup input:focus,
+.formGroup select:focus {
+  border-color: #6e98e6;
+
+  box-shadow: 0 0 0 1px #6e98e6;
+}
+
+.formGroup select {
+  cursor: pointer;
+
+  background: #ffffff;
+}
+
+/* =================================
+   SUBMIT BUTTON
+================================= */
+
+.submitButton {
+  width: 100%;
+
+  height: 46px;
+
+  margin-top: 5px;
+
+  border: none;
+
+  border-radius: 5px;
+
+  background: #4568b2;
+
+  color: #ffffff;
+
+  font-family: inherit;
+
+  font-size: 16px;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.submitButton:hover {
+  background: #35599f;
+}
+
+/* =================================
+   IMAGE SECTION
+================================= */
+
+.imageSection {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 35px;
+
+  background: #ffffff;
+}
+
+.examImage {
+  width: 100%;
+
+  max-width: 560px;
+
+  height: auto;
+
+  object-fit: contain;
+}
+
+/* =================================
+   MOBILE
+================================= */
+
+@media (max-width: 900px) {
+  .card {
+    grid-template-columns: 1fr;
+  }
+
+  .imageSection {
+    order: -1;
+
+    padding: 30px 25px 10px;
+  }
+
+  .examImage {
+    max-width: 450px;
+  }
+}
+
+@media (max-width: 600px) {
+  .page {
+    padding: 25px 15px;
+  }
+
+  .formSection {
+    padding: 30px 20px;
+  }
+
+  .formSection h1 {
+    font-size: 24px;
+
+    margin-bottom: 25px;
+  }
+
+  .imageSection {
+    padding: 25px 15px 5px;
+  }
+
+  .formGroup {
+    margin-bottom: 20px;
+  }
+}

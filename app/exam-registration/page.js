@@ -1,0 +1,168 @@
+"use client";
+
+import { useState } from "react";
+import Image from "next/image";
+import styles from "./exam-registration.module.css";
+
+export default function ExamRegistrationPage() {
+  const [form, setForm] = useState({
+    name: "",
+    mobile: "",
+    email: "",
+    exam: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    alert("Exam registration submitted successfully!");
+
+    console.log("Exam Registration:", form);
+  };
+
+  return (
+    <main className={styles.page}>
+      <div className={styles.card}>
+
+        {/* LEFT SIDE - FORM */}
+
+        <section className={styles.formSection}>
+          <h1>Register for Exam Preparation</h1>
+
+          <form onSubmit={handleSubmit}>
+
+            {/* NAME */}
+
+            <div className={styles.formGroup}>
+              <label htmlFor="name">
+                Name <span>*</span>
+              </label>
+
+              <input
+                id="name"
+                type="text"
+                name="name"
+                placeholder="Enter your full name"
+                value={form.name}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            {/* MOBILE */}
+
+            <div className={styles.formGroup}>
+              <label htmlFor="mobile">
+                Mobile Number <span>*</span>
+              </label>
+
+              <input
+                id="mobile"
+                type="tel"
+                name="mobile"
+                placeholder="Enter your 10-digit mobile number"
+                value={form.mobile}
+                onChange={handleChange}
+                maxLength={10}
+                required
+              />
+            </div>
+
+            {/* EMAIL */}
+
+            <div className={styles.formGroup}>
+              <label htmlFor="email">
+                Email ID <span>*</span>
+              </label>
+
+              <input
+                id="email"
+                type="email"
+                name="email"
+                placeholder="Enter your email address"
+                value={form.email}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            {/* EXAM */}
+
+            <div className={styles.formGroup}>
+              <label htmlFor="exam">
+                Exam Name <span>*</span>
+              </label>
+
+              <select
+                id="exam"
+                name="exam"
+                value={form.exam}
+                onChange={handleChange}
+                required
+                >
+                <option value="">Select Exam</option>
+
+                <option value="ACT">ACT</option>
+
+                <option value="SAT">SAT</option>
+
+                <option value="GRE">GRE</option>
+
+                <option value="GMAT">GMAT</option>
+
+                <option value="IELTS">IELTS</option>
+
+                <option value="TOEFL">TOEFL</option>
+
+                <option value="LSAT">LSAT</option>
+
+                <option value="MCAT">MCAT</option>
+
+                <option value="PTE">PTE</option>
+
+                <option value="Duolingo English Test">
+                    Duolingo English Test
+                </option>
+
+                <option value="Others">Others</option>
+                </select>
+            </div>
+
+            {/* SUBMIT */}
+
+            <button
+              type="submit"
+              className={styles.submitButton}
+            >
+              Submit
+            </button>
+
+          </form>
+        </section>
+
+        {/* RIGHT SIDE - ILLUSTRATION */}
+
+        <section className={styles.imageSection}>
+          <Image
+            src="/images/exam-registration.png"
+            alt="Exam preparation"
+            width={600}
+            height={500}
+            className={styles.examImage}
+            priority
+          />
+        </section>
+
+      </div>
+    </main>
+  );
+}

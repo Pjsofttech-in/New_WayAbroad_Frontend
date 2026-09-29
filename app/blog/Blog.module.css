@@ -1,0 +1,193 @@
+.blogSection {
+  padding: 90px 20px;
+  background: #ffffff;
+  text-align: center;
+}
+
+.blogTitle {
+  font-size: 32px;
+  font-weight: bold;
+  color: #0f3c5b;
+  margin-bottom: 30px;
+}
+
+.blogGrid {
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(260px, 1fr)
+  );
+  gap: 30px;
+  max-width: 1400px;
+  margin: auto;
+}
+
+.blogCard {
+  display: block;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.blogCard:hover {
+  transform: translateY(-5px);
+}
+
+.blogImage {
+  width: 100%;
+  height: 200px;
+  object-fit: contain;
+  background: #f5f5f5;
+}
+
+.blogCaption {
+  background-color: #1da1f2;
+  color: white;
+  font-weight: bold;
+  padding: 15px 10px;
+  font-size: 16px;
+}
+
+/* Error */
+
+.errorContainer {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: #fff5f5;
+  border: 1px solid #ffebee;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.errorMessage {
+  color: #d32f2f;
+  font-size: 16px;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.retryButton {
+  background-color: #1da1f2;
+  color: white;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.retryButton:hover {
+  background-color: #0d8ecf;
+}
+
+/* Loading */
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+  font-size: 16px;
+}
+
+/* Pagination */
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin-top: 40px;
+  flex-wrap: wrap;
+}
+
+.paginationItem {
+  display: inline-flex;
+  align-items: center;
+}
+
+.pageNumber {
+  border: none;
+  background: transparent;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-size: 15px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.pageNumber:hover {
+  background: #f1f1f1;
+}
+
+.pageNumber.active {
+  background: #1da1f2;
+  color: white;
+  font-weight: 600;
+}
+
+.pageArrow {
+  border: none;
+  background: transparent;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 6px 10px;
+}
+
+.pageArrow:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.dots {
+  padding: 0 6px;
+  font-size: 16px;
+}
+
+/* Responsive */
+
+@media (max-width: 768px) {
+  .blogTitle {
+    font-size: 26px;
+  }
+
+  .blogSection {
+    margin-top: 0;
+  }
+
+  .blogGrid {
+    gap: 2rem;
+    padding: 10px;
+  }
+
+  .blogCaption {
+    font-size: 15px;
+    padding: 12px 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .blogTitle {
+    font-size: 22px;
+  }
+
+  .blogGrid {
+    gap: 1.5rem;
+  }
+
+  .blogImage {
+    height: 150px;
+  }
+
+  .blogCaption {
+    font-size: 14px;
+    padding: 10px 6px;
+  }
+}
