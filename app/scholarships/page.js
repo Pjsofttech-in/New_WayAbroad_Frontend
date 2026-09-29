@@ -6,7 +6,7 @@ import { FaSlidersH } from "react-icons/fa";
 
 import { getAllScholarships } from "../services/api";
 
-import styles from "./Scholarships.module.css";
+import styles from "./scholarships.module.css";
 
 export default function Scholarships() {
   const [scholarships, setScholarships] = useState([]);
