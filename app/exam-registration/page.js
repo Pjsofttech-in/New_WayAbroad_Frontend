@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import styles from "./exam-registration.module.css";
+import { createExamPreparation } from "../services/api";
 
 export default function ExamRegistrationPage() {
   const [form, setForm] = useState({
@@ -11,6 +12,10 @@ export default function ExamRegistrationPage() {
     email: "",
     exam: "",
   });
+
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,12 +26,47 @@ export default function ExamRegistrationPage() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    alert("Exam registration submitted successfully!");
+    setLoading(true);
+    setMessage("");
+    setError("");
 
-    console.log("Exam Registration:", form);
+    try {
+      const payload = {
+        name: form.name,
+        contactNumber: form.mobile,
+        examName: form.exam,
+
+        // These fields are expected by the backend.
+        // Keep them null if this is a public student form.
+        createdByEmail: null,
+        role: null,
+      };
+
+      console.log("Exam Registration Payload:", payload);
+
+      await createExamPreparation(payload);
+
+      setMessage("Exam registration submitted successfully!");
+
+      setForm({
+        name: "",
+        mobile: "",
+        email: "",
+        exam: "",
+      });
+    } catch (err) {
+      console.error("Exam Registration Error:", err);
+
+      setError(
+        err?.message ||
+          "Failed to submit exam registration. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -108,42 +148,48 @@ export default function ExamRegistrationPage() {
                 value={form.exam}
                 onChange={handleChange}
                 required
-                >
+              >
                 <option value="">Select Exam</option>
-
                 <option value="ACT">ACT</option>
-
                 <option value="SAT">SAT</option>
-
                 <option value="GRE">GRE</option>
-
                 <option value="GMAT">GMAT</option>
-
                 <option value="IELTS">IELTS</option>
-
                 <option value="TOEFL">TOEFL</option>
-
                 <option value="LSAT">LSAT</option>
-
                 <option value="MCAT">MCAT</option>
-
                 <option value="PTE">PTE</option>
-
                 <option value="Duolingo English Test">
-                    Duolingo English Test
+                  Duolingo English Test
                 </option>
-
                 <option value="Others">Others</option>
-                </select>
+              </select>
             </div>
+
+            {/* SUCCESS MESSAGE */}
+
+            {message && (
+              <p className={styles.successMessage}>
+                {message}
+              </p>
+            )}
+
+            {/* ERROR MESSAGE */}
+
+            {error && (
+              <p className={styles.errorMessage}>
+                {error}
+              </p>
+            )}
 
             {/* SUBMIT */}
 
             <button
               type="submit"
               className={styles.submitButton}
+              disabled={loading}
             >
-              Submit
+              {loading ? "Submitting..." : "Submit"}
             </button>
 
           </form>

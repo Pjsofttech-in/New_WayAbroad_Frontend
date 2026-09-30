@@ -36,26 +36,8 @@ export default function ConsultationForm() {
         setDataLoading(true);
         setError("");
 
-        /*
-         * Your backend requires role and email for GET requests.
-         *
-         * For the public website, we need a role/email that has
-         * GET permission in your backend PermissionService.
-         *
-         * These values should match a user/role configured in
-         * your backend.
-         */
-        const role = process.env.NEXT_PUBLIC_CONTINENT_ROLE;
-        const email = process.env.NEXT_PUBLIC_CONTINENT_EMAIL;
-
-        if (!role || !email) {
-          throw new Error(
-            "Continent API credentials are not configured. Set NEXT_PUBLIC_CONTINENT_ROLE and NEXT_PUBLIC_CONTINENT_EMAIL."
-          );
-        }
-
         const [continentsData, coursesData] = await Promise.all([
-          getAllContinents(role, email),
+          getAllContinents(),
           getAllCourseNames(),
         ]);
 

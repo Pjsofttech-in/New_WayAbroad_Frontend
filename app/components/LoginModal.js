@@ -65,17 +65,8 @@ export default function LoginModal({
   useEffect(() => {
     const loadData = async () => {
       try {
-        const role = process.env.NEXT_PUBLIC_CONTINENT_ROLE;
-        const email = process.env.NEXT_PUBLIC_CONTINENT_EMAIL;
-
-        if (!role || !email) {
-          throw new Error(
-            "Continent API credentials are not configured. Set NEXT_PUBLIC_CONTINENT_ROLE and NEXT_PUBLIC_CONTINENT_EMAIL."
-          );
-        }
-
         const [continentsData, coursesData] = await Promise.all([
-          getAllContinents(role, email),
+          getAllContinents(),
           getAllCourseNames(),
         ]);
 

@@ -158,7 +158,7 @@ export default function ContactPage() {
         <div className={styles.info}>
           <div className={styles.item}>
             <span className={styles.icon}>
-              🏢
+              🏢 Address : 
             </span>
 
             <p>
@@ -170,7 +170,7 @@ export default function ContactPage() {
 
           <div className={styles.item}>
             <span className={styles.icon}>
-              ✉️
+              ✉️ info : 
             </span>
 
             <p>
@@ -180,21 +180,51 @@ export default function ContactPage() {
 
           <div className={styles.item}>
             <span className={styles.icon}>
-              📱
+              1. Abroad Education : 
             </span>
 
             <p>
-              (+91) 95454456101
+              (+91) 9545456101
             </p>
           </div>
 
           <div className={styles.item}>
             <span className={styles.icon}>
-              📱
+              2. Abroad Jobs
+            </span>
+
+            <p>
+              (+91) 7350729801
+            </p>
+          </div>
+
+          <div className={styles.item}>
+            <span className={styles.icon}>
+              3. Language Admission : 
+            </span>
+
+            <p>
+              (+91) 9371610111
+            </p>
+          </div>
+
+          <div className={styles.item}>
+            <span className={styles.icon}>
+              4. MBBS Admission : 
             </span>
 
             <p>
               (+91) 9011758101
+            </p>
+          </div>
+
+          <div className={styles.item}>
+            <span className={styles.icon}>
+              5. Abroad Partner : 
+            </span>
+
+            <p>
+              (+91) 9923570901
             </p>
           </div>
         </div>
