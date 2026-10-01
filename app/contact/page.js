@@ -27,14 +27,18 @@ export default function ContactPage() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
-  // FETCH CONTINENTS AND COURSES
+  /* =========================================================
+     FETCH CONTINENTS AND COURSES
+  ========================================================= */
+
   useEffect(() => {
     const loadData = async () => {
       try {
-        const [continentsData, coursesData] = await Promise.all([
-          getAllContinents(),
-          getAllCourseNames(),
-        ]);
+        const [continentsData, coursesData] =
+          await Promise.all([
+            getAllContinents(),
+            getAllCourseNames(),
+          ]);
 
         setContinents(continentsData || []);
         setCourses(coursesData || []);
@@ -54,7 +58,10 @@ export default function ContactPage() {
     loadData();
   }, []);
 
-  // HANDLE INPUT CHANGES
+  /* =========================================================
+     HANDLE INPUT CHANGES
+  ========================================================= */
+
   const handleChange = (e) => {
     const {
       name,
@@ -72,7 +79,10 @@ export default function ContactPage() {
     }));
   };
 
-  // SUBMIT CONTACT FORM
+  /* =========================================================
+     SUBMIT CONTACT FORM
+  ========================================================= */
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -102,7 +112,9 @@ export default function ContactPage() {
         formType: "CONTACT_US",
 
         name: form.name,
+
         email: form.email,
+
         phoneNumber: form.phone,
 
         continentId: Number(
@@ -114,9 +126,13 @@ export default function ContactPage() {
         ),
 
         password: null,
+
         createdByEmail: null,
+
         role: null,
+
         branchCode: null,
+
         status: "NEW",
       });
 
@@ -149,93 +165,242 @@ export default function ContactPage() {
 
   return (
     <main className={styles.contactPage}>
+
+      {/* =====================================================
+          LEFT SIDE
+      ===================================================== */}
+
       <section className={styles.left}>
-        <h1>
-          Take The First Step To
-          <span>STUDY ABROAD</span>
-        </h1>
 
-        <div className={styles.info}>
-          <div className={styles.item}>
-            <span className={styles.icon}>
-              🏢 Address : 
-            </span>
+        {/* Decorative background */}
+        <div className={styles.leftDecoration}></div>
 
-            <p>
-              1482, 2nd Floor, White House Building,
-              In front Of Tilak Smarak, Near SP Collage,
-              Tilak Road, Sadashiv Peth Pune -411030
-            </p>
+        <div className={styles.leftContent}>
+
+          {/* Small heading */}
+          <div className={styles.eyebrow}>
+            WAYABROAD EDUCATION
           </div>
 
-          <div className={styles.item}>
-            <span className={styles.icon}>
-              ✉️ info : 
-            </span>
+          {/* Main heading */}
+          <h1>
+            Take The First Step To
+            <span>STUDY ABROAD</span>
+          </h1>
 
-            <p>
-              info@wayabroad.in
-            </p>
+          {/* Description */}
+          <p className={styles.description}>
+            Get expert guidance for universities,
+            courses, admissions, scholarships and
+            your complete study-abroad journey.
+          </p>
+
+
+          {/* =================================================
+              OFFICE ADDRESS
+          ================================================= */}
+
+          <div className={styles.addressCard}>
+
+            <div className={styles.addressIcon}>
+              📍
+            </div>
+
+            <div className={styles.addressContent}>
+
+              <div className={styles.cardLabel}>
+                OUR OFFICE
+              </div>
+
+              <p>
+                1482, 2nd Floor, White House
+                Building, In front of Tilak
+                Smarak, Near SP College,
+                Tilak Road, Sadashiv Peth,
+                Pune - 411030
+              </p>
+
+            </div>
+
           </div>
 
-          <div className={styles.item}>
-            <span className={styles.icon}>
-              1. Abroad Education : 
-            </span>
 
-            <p>
-              (+91) 9545456101
-            </p>
+          {/* =================================================
+              CONTACT DETAILS
+          ================================================= */}
+
+          <div className={styles.contactDetails}>
+
+            <h3>
+              CONTACT OUR EXPERTS
+            </h3>
+
+
+            {/* EMAIL */}
+
+            <a
+              href="mailto:info@wayabroad.in"
+              className={styles.emailCard}
+            >
+
+              <div className={styles.contactIcon}>
+                ✉
+              </div>
+
+              <div>
+                <span className={styles.smallLabel}>
+                  EMAIL
+                </span>
+
+                <strong>
+                  info@wayabroad.in
+                </strong>
+              </div>
+
+            </a>
+
+
+            {/* PHONE NUMBERS */}
+
+            <div className={styles.phoneList}>
+
+              <a
+                href="tel:+919545456101"
+                className={styles.phoneItem}
+              >
+                <span className={styles.phoneIcon}>
+                  ☎
+                </span>
+
+                <span className={styles.phoneName}>
+                  Abroad Education
+                </span>
+
+                <span className={styles.phoneNumber}>
+                  +91 9545456101
+                </span>
+              </a>
+
+
+              <a
+                href="tel:+917350729801"
+                className={styles.phoneItem}
+              >
+                <span className={styles.phoneIcon}>
+                  ☎
+                </span>
+
+                <span className={styles.phoneName}>
+                  Abroad Jobs
+                </span>
+
+                <span className={styles.phoneNumber}>
+                  +91 7350729801
+                </span>
+              </a>
+
+
+              <a
+                href="tel:+919371610111"
+                className={styles.phoneItem}
+              >
+                <span className={styles.phoneIcon}>
+                  ☎
+                </span>
+
+                <span className={styles.phoneName}>
+                  Language Admission
+                </span>
+
+                <span className={styles.phoneNumber}>
+                  +91 9371610111
+                </span>
+              </a>
+
+
+              <a
+                href="tel:+919011758101"
+                className={styles.phoneItem}
+              >
+                <span className={styles.phoneIcon}>
+                  ☎
+                </span>
+
+                <span className={styles.phoneName}>
+                  MBBS Admission
+                </span>
+
+                <span className={styles.phoneNumber}>
+                  +91 9011758101
+                </span>
+              </a>
+
+
+              <a
+                href="tel:+919923570901"
+                className={styles.phoneItem}
+              >
+                <span className={styles.phoneIcon}>
+                  ☎
+                </span>
+
+                <span className={styles.phoneName}>
+                  Abroad Partner
+                </span>
+
+                <span className={styles.phoneNumber}>
+                  +91 9923570901
+                </span>
+              </a>
+
+            </div>
+
           </div>
 
-          <div className={styles.item}>
-            <span className={styles.icon}>
-              2. Abroad Jobs
-            </span>
 
-            <p>
-              (+91) 7350729801
-            </p>
+          {/* Bottom message */}
+
+          <div className={styles.trustMessage}>
+            <span>✦</span>
+
+            <span>
+              Your trusted partner for studying abroad
+            </span>
           </div>
 
-          <div className={styles.item}>
-            <span className={styles.icon}>
-              3. Language Admission : 
-            </span>
-
-            <p>
-              (+91) 9371610111
-            </p>
-          </div>
-
-          <div className={styles.item}>
-            <span className={styles.icon}>
-              4. MBBS Admission : 
-            </span>
-
-            <p>
-              (+91) 9011758101
-            </p>
-          </div>
-
-          <div className={styles.item}>
-            <span className={styles.icon}>
-              5. Abroad Partner : 
-            </span>
-
-            <p>
-              (+91) 9923570901
-            </p>
-          </div>
         </div>
       </section>
 
+
+      {/* =====================================================
+          RIGHT SIDE - FORM
+      ===================================================== */}
+
       <section className={styles.right}>
-        <h2>
-          Start Your Study Abroad Journey
-        </h2>
+
+        <div className={styles.formHeader}>
+
+          <span className={styles.formEyebrow}>
+            FREE CONSULTATION
+          </span>
+
+          <h2>
+            Start Your Study Abroad Journey
+          </h2>
+
+          <p>
+            Tell us a little about yourself and
+            our counsellors will help you take
+            the next step.
+          </p>
+
+        </div>
+
 
         <form onSubmit={handleSubmit}>
+
+          {/* NAME */}
+
           <input
             name="name"
             placeholder="Enter Full Name*"
@@ -243,6 +408,9 @@ export default function ContactPage() {
             onChange={handleChange}
             required
           />
+
+
+          {/* EMAIL */}
 
           <input
             name="email"
@@ -253,15 +421,20 @@ export default function ContactPage() {
             required
           />
 
+
+          {/* PHONE */}
+
           <input
             name="phone"
+            type="tel"
             placeholder="Phone Number*"
             value={form.phone}
             onChange={handleChange}
             required
           />
 
-          {/* DYNAMIC CONTINENTS */}
+
+          {/* CONTINENT */}
 
           <select
             name="continentId"
@@ -288,7 +461,8 @@ export default function ContactPage() {
             )}
           </select>
 
-          {/* DYNAMIC COURSES */}
+
+          {/* COURSE */}
 
           <select
             name="courseId"
@@ -315,6 +489,9 @@ export default function ContactPage() {
             )}
           </select>
 
+
+          {/* TERMS */}
+
           <label
             className={styles.checkbox}
           >
@@ -325,8 +502,14 @@ export default function ContactPage() {
               onChange={handleChange}
             />
 
-            I have read and agreed to terms & privacy policy
+            <span>
+              I have read and agreed to
+              terms & privacy policy
+            </span>
           </label>
+
+
+          {/* SUBMIT */}
 
           <button
             type="submit"
@@ -337,15 +520,28 @@ export default function ContactPage() {
               : "Book your Free Consultation"}
           </button>
 
+
+          {/* SUCCESS MESSAGE */}
+
           {message && (
-            <p>{message}</p>
+            <p className={styles.successMessage}>
+              {message}
+            </p>
           )}
 
+
+          {/* ERROR MESSAGE */}
+
           {error && (
-            <p>{error}</p>
+            <p className={styles.errorMessage}>
+              {error}
+            </p>
           )}
+
         </form>
+
       </section>
+
     </main>
   );
 }

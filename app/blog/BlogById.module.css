@@ -1,82 +1,249 @@
-.blogSection {
+/* =========================================================
+   BLOG PAGE
+========================================================= */
+
+.blogPage {
   width: 100%;
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 50px 24px 80px;
+  background: #ffffff;
 }
 
-/* =========================
+.blogLayout {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+
+  padding: 40px 32px 80px;
+
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 380px;
+
+  gap: 40px;
+
+  align-items: start;
+}
+
+
+/* =========================================================
+   LEFT SIDE - MAIN BLOG
+========================================================= */
+
+.blogMain {
+  width: 100%;
+  min-width: 0;
+}
+
+
+/* =========================================================
+   BREADCRUMB
+========================================================= */
+
+.breadcrumb {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  margin-bottom: 22px;
+
+  font-size: 14px;
+
+  color: #7a8799;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+}
+
+.breadcrumbLink {
+  color: #1267d6;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: color 0.2s ease;
+}
+
+.breadcrumbLink:hover {
+  color: #084b9b;
+}
+
+.breadcrumbArrow {
+  color: #9aa8ba;
+
+  font-size: 20px;
+
+  line-height: 1;
+}
+
+.breadcrumbCurrent {
+  color: #7a8799;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+
+/* =========================================================
+   CATEGORY BADGE
+========================================================= */
+
+.categoryBadge {
+  display: inline-flex;
+
+  align-items: center;
+
+  padding: 8px 16px;
+
+  margin-bottom: 18px;
+
+  border-radius: 30px;
+
+  background: #e4f1ff;
+
+  color: #0875e1;
+
+  font-size: 14px;
+
+  font-weight: 700;
+}
+
+
+/* =========================================================
    BLOG TITLE
-========================= */
+========================================================= */
 
 .blogTitle {
-  font-size: 42px;
-  line-height: 1.2;
-  font-weight: 700;
-  color: #222;
-  text-align: center;
-  margin: 0 auto 35px;
-  max-width: 900px;
+  width: 100%;
+
+  margin: 0 0 20px;
+
+  color: #102a43;
+
+  font-size: 44px;
+
+  line-height: 1.16;
+
+  font-weight: 800;
+
+  letter-spacing: -0.8px;
 }
 
-/* =========================
+
+/* =========================================================
+   BLOG META
+========================================================= */
+
+.blogMeta {
+  display: flex;
+
+  align-items: center;
+
+  flex-wrap: wrap;
+
+  gap: 12px;
+
+  margin-bottom: 28px;
+
+  color: #718096;
+
+  font-size: 15px;
+}
+
+.metaItem {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 6px;
+}
+
+.metaIcon {
+  font-size: 15px;
+
+  line-height: 1;
+}
+
+.metaSeparator {
+  color: #c4ccd6;
+}
+
+
+/* =========================================================
    MAIN BLOG IMAGE
-========================= */
+========================================================= */
 
 .blogImageContainer {
   width: 100%;
-  max-width: 1000px;
-  margin: 0 auto 45px;
+
+  margin: 0 0 35px;
+
   overflow: hidden;
-  border-radius: 12px;
+
+  border-radius: 16px;
+
+  background: #eef3f8;
 }
 
 .blogImage {
   display: block;
+
   width: 100%;
-  max-height: 550px;
+
+  max-height: 600px;
+
   object-fit: cover;
-  border-radius: 12px;
+
+  border-radius: 16px;
 }
 
-/* =========================
+
+/* =========================================================
    BLOG CONTENT
-========================= */
+========================================================= */
 
 .blogContent {
   width: 100%;
-  max-width: 900px;
-  margin: 0 auto;
 
-  color: #333;
+  color: #333d4b;
 
   font-size: 18px;
-  line-height: 1.8;
+
+  line-height: 1.85;
 
   word-break: normal;
+
   overflow-wrap: break-word;
 }
 
-/* =========================
+
+/* =========================================================
    PARAGRAPHS
-========================= */
+========================================================= */
 
 .blogContent :global(p) {
   margin: 0 0 22px;
 }
 
-/* =========================
+
+/* =========================================================
    BOLD TEXT
-========================= */
+========================================================= */
 
 .blogContent :global(strong),
 .blogContent :global(b) {
   font-weight: 700;
+
+  color: #202b3a;
 }
 
-/* =========================
+
+/* =========================================================
    HEADINGS
-========================= */
+========================================================= */
 
 .blogContent :global(h1),
 .blogContent :global(h2),
@@ -84,12 +251,15 @@
 .blogContent :global(h4),
 .blogContent :global(h5),
 .blogContent :global(h6) {
-  color: #222;
-  line-height: 1.3;
-  font-weight: 700;
+  color: #102a43;
 
-  margin-top: 35px;
-  margin-bottom: 15px;
+  line-height: 1.3;
+
+  font-weight: 750;
+
+  margin-top: 38px;
+
+  margin-bottom: 16px;
 }
 
 .blogContent :global(h1) {
@@ -116,42 +286,55 @@
   font-size: 18px;
 }
 
-/* =========================
+
+/* =========================================================
    LINKS
-========================= */
+========================================================= */
 
 .blogContent :global(a) {
-  color: #0066cc;
+  color: #006bd6;
+
   text-decoration: underline;
+
+  text-decoration-thickness: 1px;
+
+  text-underline-offset: 3px;
 }
 
 .blogContent :global(a:hover) {
   text-decoration: none;
+
+  color: #004e9e;
 }
 
-/* =========================
+
+/* =========================================================
    IMAGES INSIDE BLOG
-========================= */
+========================================================= */
 
 .blogContent :global(img) {
   display: block;
 
   max-width: 100%;
+
   width: auto;
+
   height: auto;
 
-  margin: 25px auto;
+  margin: 28px auto;
 
-  border-radius: 8px;
+  border-radius: 10px;
 }
 
-/* =========================
+
+/* =========================================================
    LISTS
-========================= */
+========================================================= */
 
 .blogContent :global(ul),
 .blogContent :global(ol) {
   margin: 20px 0;
+
   padding-left: 30px;
 }
 
@@ -159,117 +342,502 @@
   margin-bottom: 10px;
 }
 
-/* =========================
+
+/* =========================================================
    BLOCKQUOTE
-========================= */
+========================================================= */
 
 .blogContent :global(blockquote) {
-  margin: 25px 0;
-  padding: 15px 20px;
+  margin: 28px 0;
 
-  border-left: 4px solid #0066cc;
+  padding: 18px 22px;
 
-  background: #f5f5f5;
+  border-left: 4px solid #0875e1;
 
-  color: #444;
+  border-radius: 0 8px 8px 0;
+
+  background: #f3f8fd;
+
+  color: #44546a;
 }
 
-/* =========================
+
+/* =========================================================
    TABLES
-========================= */
+========================================================= */
 
 .blogContent :global(table) {
   width: 100%;
+
   border-collapse: collapse;
 
-  margin: 25px 0;
+  margin: 28px 0;
 
   overflow-x: auto;
 }
 
 .blogContent :global(th),
 .blogContent :global(td) {
-  border: 1px solid #ddd;
+  border: 1px solid #dce3ea;
 
-  padding: 10px 12px;
+  padding: 11px 13px;
 
   text-align: left;
 }
 
 .blogContent :global(th) {
   font-weight: 700;
-  background: #f5f5f5;
+
+  background: #f3f6f9;
+
+  color: #243b53;
 }
 
-/* =========================
+
+/* =========================================================
    CODE
-========================= */
+========================================================= */
 
 .blogContent :global(code) {
-  padding: 2px 5px;
+  padding: 2px 6px;
 
   border-radius: 4px;
 
-  background: #f2f2f2;
+  background: #f2f4f7;
+
+  color: #263238;
 
   font-size: 0.9em;
 }
 
 .blogContent :global(pre) {
   max-width: 100%;
+
   overflow-x: auto;
 
-  padding: 15px;
+  padding: 18px;
 
   border-radius: 8px;
 
-  background: #f5f5f5;
+  background: #f3f5f7;
 }
 
-/* =========================
+
+/* =========================================================
    HORIZONTAL LINE
-========================= */
+========================================================= */
 
 .blogContent :global(hr) {
   margin: 35px 0;
 
   border: 0;
-  border-top: 1px solid #ddd;
+
+  border-top: 1px solid #e2e7ec;
 }
 
-/* =========================
+
+/* =========================================================
    WORDPRESS CONTENT
-========================= */
+========================================================= */
 
 .blogContent :global(.wp-block-heading) {
-  color: #222;
+  color: #102a43;
 
   font-weight: 700;
 
   line-height: 1.3;
 
-  margin-top: 35px;
-  margin-bottom: 15px;
+  margin-top: 38px;
+
+  margin-bottom: 16px;
 }
 
 .blogContent :global(.wp-block-image) {
-  margin: 25px 0;
+  margin: 28px 0;
 }
 
 .blogContent :global(.wp-block-image img) {
   max-width: 100%;
+
   height: auto;
 }
 
-/* =========================
-   EMPTY CONTENT
-========================= */
+
+/* =========================================================
+   RIGHT SIDEBAR
+========================================================= */
+
+.blogSidebar {
+  width: 100%;
+
+  position: sticky;
+
+  top: 25px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 24px;
+}
+
+
+/* =========================================================
+   SIDEBAR BOX
+========================================================= */
+
+.sidebarBox {
+  width: 100%;
+
+  padding: 22px;
+
+  border-radius: 18px;
+
+  overflow: hidden;
+}
+
+
+/* =========================================================
+   SUGGESTIONS BOX
+========================================================= */
+
+.suggestionsBox {
+  background: linear-gradient(
+    145deg,
+    #edf7ff 0%,
+    #e6f2ff 100%
+  );
+
+  border: 1px solid #d9ebfb;
+}
+
+
+/* =========================================================
+   RELATED BLOGS BOX
+========================================================= */
+
+.relatedBox {
+  background: linear-gradient(
+    145deg,
+    #effcf7 0%,
+    #e8f8f1 100%
+  );
+
+  border: 1px solid #d8eee5;
+}
+
+
+/* =========================================================
+   SIDEBAR HEADER
+========================================================= */
+
+.sidebarHeader {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 10px;
+
+  margin-bottom: 18px;
+}
+
+.sidebarTitleWrapper {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  min-width: 0;
+}
+
+.sidebarTitleWrapper h2 {
+  margin: 0;
+
+  color: #102a43;
+
+  font-size: 21px;
+
+  line-height: 1.25;
+
+  font-weight: 750;
+}
+
+.sidebarIcon {
+  width: 34px;
+
+  height: 34px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 9px;
+
+  background: rgba(255, 255, 255, 0.75);
+
+  font-size: 19px;
+}
+
+
+/* =========================================================
+   VIEW ALL BUTTON
+========================================================= */
+
+.viewAllButton {
+  flex-shrink: 0;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 5px;
+
+  padding: 0;
+
+  border: none;
+
+  background: transparent;
+
+  color: #0875e1;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.viewAllButton:hover {
+  color: #004f9e;
+
+  transform: translateX(2px);
+}
+
+.viewAllButton span {
+  font-size: 18px;
+
+  line-height: 1;
+}
+
+
+/* =========================================================
+   SIDEBAR BLOG LIST
+========================================================= */
+
+.sidebarBlogList {
+  width: 100%;
+
+  display: flex;
+
+  flex-direction: column;
+}
+
+
+/* =========================================================
+   SIDEBAR BLOG CARD
+========================================================= */
+
+.sidebarBlogCard {
+  width: 100%;
+
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 14px;
+
+  padding: 14px 0;
+
+  border-bottom: 1px solid rgba(
+    102,
+    126,
+    153,
+    0.18
+  );
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.sidebarBlogCard:first-child {
+  padding-top: 0;
+}
+
+.sidebarBlogCard:last-child {
+  border-bottom: none;
+
+  padding-bottom: 0;
+}
+
+.sidebarBlogCard:hover {
+  transform: translateX(3px);
+
+  opacity: 0.9;
+}
+
+
+/* =========================================================
+   SIDEBAR IMAGE
+========================================================= */
+
+.sidebarImageWrapper {
+  width: 112px;
+
+  height: 82px;
+
+  flex-shrink: 0;
+
+  overflow: hidden;
+
+  border-radius: 10px;
+
+  background: #dce8f2;
+}
+
+.sidebarImage {
+  display: block;
+
+  width: 100%;
+
+  height: 100%;
+
+  object-fit: cover;
+
+  transition: transform 0.3s ease;
+}
+
+.sidebarBlogCard:hover .sidebarImage {
+  transform: scale(1.04);
+}
+
+
+/* =========================================================
+   SIDEBAR IMAGE PLACEHOLDER
+========================================================= */
+
+.sidebarImagePlaceholder {
+  width: 100%;
+
+  height: 100%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background: #dce8f2;
+
+  color: #52718f;
+
+  font-size: 25px;
+}
+
+
+/* =========================================================
+   SIDEBAR BLOG INFO
+========================================================= */
+
+.sidebarBlogInfo {
+  min-width: 0;
+
+  flex: 1;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+}
+
+.sidebarBlogInfo h3 {
+  margin: 0 0 9px;
+
+  color: #16324f;
+
+  font-size: 15.5px;
+
+  line-height: 1.35;
+
+  font-weight: 700;
+
+  display: -webkit-box;
+
+  -webkit-line-clamp: 3;
+
+  -webkit-box-orient: vertical;
+
+  overflow: hidden;
+}
+
+
+/* =========================================================
+   SIDEBAR DATE
+========================================================= */
+
+.sidebarDate {
+  display: block;
+
+  color: #718096;
+
+  font-size: 12.5px;
+
+  line-height: 1.3;
+}
+
+
+/* =========================================================
+   SIDEBAR LOADING
+========================================================= */
+
+.sidebarLoading {
+  padding: 25px 5px;
+
+  text-align: center;
+
+  color: #718096;
+
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   EMPTY SIDEBAR
+========================================================= */
+
+.emptySidebar {
+  padding: 20px 5px;
+
+  text-align: center;
+
+  color: #718096;
+
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   NO CONTENT
+========================================================= */
 
 .noContent {
   width: 100%;
-  max-width: 900px;
 
-  margin: 0 auto;
+  padding: 40px 20px;
 
   text-align: center;
 
@@ -278,26 +846,58 @@
   font-size: 18px;
 }
 
-/* =========================
+
+/* =========================================================
    LOADING
-========================= */
+========================================================= */
 
 .loading {
   min-height: 400px;
 
   display: flex;
 
+  flex-direction: column;
+
   align-items: center;
+
   justify-content: center;
 
-  font-size: 20px;
+  gap: 15px;
 
   color: #555;
+
+  font-size: 18px;
 }
 
-/* =========================
+
+/* =========================================================
+   LOADING SPINNER
+========================================================= */
+
+.loadingSpinner {
+  width: 38px;
+
+  height: 38px;
+
+  border: 4px solid #e2e8f0;
+
+  border-top-color: #0875e1;
+
+  border-radius: 50%;
+
+  animation: blogSpinner 0.8s linear infinite;
+}
+
+@keyframes blogSpinner {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* =========================================================
    ERROR
-========================= */
+========================================================= */
 
 .errorContainer {
   min-height: 400px;
@@ -307,6 +907,7 @@
   flex-direction: column;
 
   align-items: center;
+
   justify-content: center;
 
   padding: 30px;
@@ -322,16 +923,17 @@
   margin-bottom: 20px;
 }
 
-/* =========================
+
+/* =========================================================
    RETRY BUTTON
-========================= */
+========================================================= */
 
 .retryButton {
   border: none;
 
   padding: 12px 25px;
 
-  border-radius: 6px;
+  border-radius: 7px;
 
   background: #0066cc;
 
@@ -340,43 +942,152 @@
   font-size: 16px;
 
   cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
 }
 
 .retryButton:hover {
-  opacity: 0.9;
+  background: #0055aa;
+
+  transform: translateY(-1px);
 }
 
-/* =========================
+
+/* =========================================================
+   LARGE TABLETS
+========================================================= */
+
+@media (max-width: 1100px) {
+  .blogLayout {
+    grid-template-columns:
+      minmax(0, 1fr)
+      330px;
+
+    gap: 28px;
+
+    padding-left: 24px;
+
+    padding-right: 24px;
+  }
+
+  .blogTitle {
+    font-size: 38px;
+  }
+
+  .sidebarBox {
+    padding: 18px;
+  }
+
+  .sidebarImageWrapper {
+    width: 95px;
+
+    height: 72px;
+  }
+
+  .sidebarTitleWrapper h2 {
+    font-size: 18px;
+  }
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+  .blogLayout {
+    grid-template-columns: 1fr;
+
+    gap: 45px;
+
+    padding: 35px 24px 60px;
+  }
+
+  .blogSidebar {
+    position: static;
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 20px;
+  }
+
+  .sidebarBox {
+    height: fit-content;
+  }
+
+  .blogTitle {
+    font-size: 38px;
+  }
+}
+
+
+/* =========================================================
    MOBILE
-========================= */
+========================================================= */
 
 @media (max-width: 768px) {
-  .blogSection {
-    padding: 30px 16px 50px;
+  .blogLayout {
+    padding: 25px 16px 50px;
+
+    gap: 35px;
+  }
+
+  .breadcrumb {
+    font-size: 13px;
+
+    margin-bottom: 18px;
+  }
+
+  .categoryBadge {
+    padding: 7px 13px;
+
+    margin-bottom: 14px;
+
+    font-size: 13px;
   }
 
   .blogTitle {
     font-size: 30px;
 
-    margin-bottom: 25px;
+    line-height: 1.2;
+
+    letter-spacing: -0.3px;
+
+    margin-bottom: 17px;
+  }
+
+  .blogMeta {
+    gap: 8px;
+
+    font-size: 13px;
+
+    margin-bottom: 22px;
+  }
+
+  .metaSeparator {
+    display: none;
   }
 
   .blogImageContainer {
-    margin-bottom: 30px;
+    margin-bottom: 28px;
 
-    border-radius: 8px;
+    border-radius: 10px;
   }
 
   .blogImage {
-    max-height: 350px;
+    max-height: 400px;
 
-    border-radius: 8px;
+    border-radius: 10px;
   }
 
   .blogContent {
     font-size: 16px;
 
-    line-height: 1.7;
+    line-height: 1.75;
   }
 
   .blogContent :global(h1) {
@@ -401,5 +1112,113 @@
     overflow-x: auto;
 
     white-space: nowrap;
+  }
+
+  /*
+  Sidebar becomes single column
+  on mobile.
+  */
+
+  .blogSidebar {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 18px;
+  }
+
+  .sidebarBox {
+    padding: 18px;
+
+    border-radius: 14px;
+  }
+
+  .sidebarHeader {
+    margin-bottom: 16px;
+  }
+
+  .sidebarTitleWrapper h2 {
+    font-size: 18px;
+  }
+
+  .sidebarIcon {
+    width: 31px;
+
+    height: 31px;
+
+    font-size: 17px;
+  }
+
+  .viewAllButton {
+    font-size: 13px;
+  }
+
+  .sidebarImageWrapper {
+    width: 100px;
+
+    height: 72px;
+  }
+
+  .sidebarBlogInfo h3 {
+    font-size: 14px;
+  }
+
+  .sidebarDate {
+    font-size: 11.5px;
+  }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 480px) {
+  .blogLayout {
+    padding: 22px 14px 45px;
+  }
+
+  .breadcrumbCurrent {
+    display: none;
+  }
+
+  .blogTitle {
+    font-size: 27px;
+  }
+
+  .blogMeta {
+    font-size: 12px;
+  }
+
+  .blogImage {
+    max-height: 300px;
+  }
+
+  .sidebarBox {
+    padding: 16px;
+  }
+
+  .sidebarTitleWrapper {
+    gap: 8px;
+  }
+
+  .sidebarTitleWrapper h2 {
+    font-size: 17px;
+  }
+
+  .sidebarImageWrapper {
+    width: 90px;
+
+    height: 68px;
+  }
+
+  .sidebarBlogCard {
+    gap: 11px;
+  }
+
+  .sidebarBlogInfo h3 {
+    font-size: 13.5px;
+
+    -webkit-line-clamp: 3;
   }
 }

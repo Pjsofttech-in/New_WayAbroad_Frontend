@@ -6,6 +6,10 @@ import WhatsAppButton from "./components/WhatsAppButton";
 export const metadata = {
   title: "Wayabroad",
   description: "Study abroad website",
+
+  icons: {
+    icon: "/favicon.png",
+  },
 };
 
 export default function RootLayout({ children }) {

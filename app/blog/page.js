@@ -141,7 +141,7 @@ export default function Blog() {
           PAGE TITLE
       ================================= */}
 
-      <div className={styles.blogHeader}>
+      <div className={styles.blogTitle}>
         <h1>Blogs</h1>
         <p>
           Explore our latest articles,

@@ -4,27 +4,44 @@
   text-align: center;
 }
 
+/* =========================
+   BLOG PAGE TITLE
+========================= */
+
 .blogTitle {
-  font-size: 32px;
-  font-weight: bold;
   color: #0f3c5b;
   margin-bottom: 30px;
 }
 
+.blogTitle h1 {
+  font-size: 25px;
+  margin: 0 0 10px;
+}
+
+.blogTitle p {
+  margin: 0;
+}
+
+/* =========================
+   BLOG GRID
+========================= */
+
 .blogGrid {
   padding: 20px;
   display: grid;
-  grid-template-columns: repeat(
-    auto-fill,
-    minmax(260px, 1fr)
-  );
+  grid-template-columns: repeat(4, 1fr);
   gap: 30px;
-  max-width: 1400px;
+  max-width: 1500px;
   margin: auto;
 }
 
+/* =========================
+   BLOG CARD
+========================= */
+
 .blogCard {
-  display: block;
+  display: flex;
+  flex-direction: column;
   background: white;
   border-radius: 12px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -38,22 +55,44 @@
   transform: translateY(-5px);
 }
 
+/* =========================
+   BLOG IMAGE
+========================= */
+
 .blogImage {
   width: 100%;
   height: 200px;
-  object-fit: contain;
+  object-fit: cover;
   background: #f5f5f5;
+  display: block;
 }
+
+/* =========================
+   BLOG BLUE CONTENT
+========================= */
 
 .blogCaption {
   background-color: #1da1f2;
   color: white;
-  font-weight: bold;
   padding: 15px 10px;
-  font-size: 16px;
+  font-size: 13px;
 }
 
-/* Error */
+.blogCaption h2 {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0 0 15px;
+}
+
+.blogCaption p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* =========================
+   ERROR
+========================= */
 
 .errorContainer {
   max-width: 600px;
@@ -72,23 +111,9 @@
   line-height: 1.5;
 }
 
-.retryButton {
-  background-color: #1da1f2;
-  color: white;
-  border: none;
-  padding: 10px 24px;
-  border-radius: 4px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.retryButton:hover {
-  background-color: #0d8ecf;
-}
-
-/* Loading */
+/* =========================
+   LOADING
+========================= */
 
 .loading {
   text-align: center;
@@ -97,7 +122,9 @@
   font-size: 16px;
 }
 
-/* Pagination */
+/* =========================
+   PAGINATION
+========================= */
 
 .pagination {
   display: flex;
@@ -108,86 +135,67 @@
   flex-wrap: wrap;
 }
 
-.paginationItem {
-  display: inline-flex;
-  align-items: center;
-}
-
-.pageNumber {
-  border: none;
-  background: transparent;
-  padding: 8px 14px;
+.pagination button {
+  border: 1px solid #ccc;
+  background: white;
+  color: #222;
+  padding: 8px 12px;
+  font-size: 14px;
+  border-radius: 4px;
   cursor: pointer;
-  font-size: 15px;
-  border-radius: 50%;
-  transition: all 0.2s ease;
 }
 
-.pageNumber:hover {
+.pagination button:hover {
   background: #f1f1f1;
 }
 
-.pageNumber.active {
-  background: #1da1f2;
-  color: white;
-  font-weight: 600;
-}
-
-.pageArrow {
-  border: none;
-  background: transparent;
-  font-size: 20px;
-  cursor: pointer;
-  padding: 6px 10px;
-}
-
-.pageArrow:disabled {
-  opacity: 0.4;
+.pagination button:disabled {
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
-.dots {
-  padding: 0 6px;
-  font-size: 16px;
+.pagination .activePage {
+  background: #1da1f2;
+  color: white;
+  border-color: #1da1f2;
+  font-weight: 600;
 }
 
-/* Responsive */
+/* =========================
+   TABLET
+========================= */
 
-@media (max-width: 768px) {
-  .blogTitle {
-    font-size: 26px;
+@media (max-width: 1024px) {
+  .blogGrid {
+    grid-template-columns: repeat(2, 1fr);
   }
+}
 
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
   .blogSection {
-    margin-top: 0;
+    padding: 50px 10px;
   }
 
   .blogGrid {
-    gap: 2rem;
+    grid-template-columns: 1fr;
+    gap: 20px;
     padding: 10px;
   }
 
-  .blogCaption {
-    font-size: 15px;
-    padding: 12px 8px;
-  }
-}
-
-@media (max-width: 480px) {
-  .blogTitle {
-    font-size: 22px;
-  }
-
-  .blogGrid {
-    gap: 1.5rem;
-  }
-
   .blogImage {
-    height: 150px;
+    height: 200px;
   }
 
   .blogCaption {
     font-size: 14px;
-    padding: 10px 6px;
+    padding: 15px 10px;
+  }
+
+  .blogCaption h2 {
+    font-size: 18px;
   }
 }
