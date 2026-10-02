@@ -16,7 +16,7 @@ export default function Scholarships() {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const scholarshipsPerPage = 6;
+  const scholarshipsPerPage = 10;
 
   const [showFilters, setShowFilters] = useState(false);
 
@@ -259,14 +259,6 @@ export default function Scholarships() {
                 <span>
                   Filter
                 </span>
-              </button>
-
-              <button
-                type="button"
-                className={styles.resetBtn}
-                onClick={handleReset}
-              >
-                🗙 Clear All
               </button>
 
             </div>

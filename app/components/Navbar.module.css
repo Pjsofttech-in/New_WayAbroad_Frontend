@@ -1,27 +1,35 @@
 /* =========================================================
-   TOPBAR / NAVBAR
+   WAYABROAD NAVBAR
+   Clean / Modern / No Overlap
 ========================================================= */
 
 .topbar {
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 1000;
 
   width: 100%;
   height: 78px;
+  min-height: 78px;
 
   display: flex;
   align-items: center;
 
-  padding: 0 4%;
+  padding: 0 34px;
   box-sizing: border-box;
 
-  gap: 18px;
+  gap: 16px;
 
-  background: #29a0c1;
-  border-top: 3px solid #197f9f;
+  background: linear-gradient(
+    135deg,
+    #087ea4 0%,
+    #0b91b6 100%
+  );
 
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+  border-top: 3px solid #056f91;
+
+  box-shadow:
+    0 4px 18px rgba(0, 45, 65, 0.16);
 }
 
 
@@ -30,32 +38,84 @@
 ========================================================= */
 
 .brand {
-  flex-shrink: 0;
+  flex: 0 0 195px;
+
+  width: 195px;
+  min-width: 195px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 
   color: #ffffff;
 
-  font-size: 20px;
-  font-weight: 700;
+  text-decoration: none;
+
+  line-height: 1;
+
+  box-sizing: border-box;
+}
+
+.brandName {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 4px;
+
+  color: #ffffff;
+
+  font-size: 21px;
+  font-weight: 850;
+
   letter-spacing: 0.5px;
 
-  text-decoration: none;
+  white-space: nowrap;
+}
+
+.brandMark {
+  display: inline-block;
+
+  font-size: 18px;
+
+  line-height: 1;
+
+  transform: rotate(-12deg) translateY(-1px);
+}
+
+.brandTagline {
+  display: block;
+
+  margin-top: 5px;
+
+  color: rgba(255, 255, 255, 0.85);
+
+  font-size: 8px;
+
+  font-weight: 500;
+
+  letter-spacing: 0.35px;
+
   white-space: nowrap;
 }
 
 
 /* =========================================================
-   NAVIGATION
+   MAIN NAVIGATION
 ========================================================= */
 
 .nav {
-  flex: 1;
+  flex: 1 1 auto;
+
   min-width: 0;
 
   display: flex;
   align-items: center;
-  justify-content: flex-end;
 
-  gap: 20px;
+  justify-content: flex-start;
+
+  gap: 2px;
+
+  box-sizing: border-box;
 }
 
 
@@ -63,148 +123,35 @@
    NORMAL NAVIGATION LINKS
 ========================================================= */
 
-.nav > a {
-  display: flex;
-  align-items: center;
-
-  color: #ffffff;
-
-  font-size: 16px;
-  font-weight: 500;
-
-  text-decoration: none;
-  white-space: nowrap;
-
-  transition:
-    color 0.25s ease,
-    transform 0.25s ease;
-}
-
-.nav > a:hover {
-  color: #e8f8fc;
-  transform: translateY(-1px);
-}
-
-
-/* =========================================================
-   ACTIVE NAV ITEM
-========================================================= */
-
-.active {
-  padding: 8px 12px;
-
-  background: rgba(255, 255, 255, 0.12);
-
-  border: 1px solid rgba(255, 255, 255, 0.7);
-  border-radius: 6px;
-}
-
-
-/* =========================================================
-   STUDY ABROAD DROPDOWN
-========================================================= */
-
-.studyAbroadDropdown {
+.navLink {
   position: relative;
 
-  flex-shrink: 0;
-}
+  flex: 0 0 auto;
 
+  height: 44px;
 
-/* STUDY ABROAD BUTTON */
+  display: inline-flex;
 
-.studyAbroadDropdown > button {
-  display: flex;
-  align-items: center;
-
-  gap: 5px;
-
-  padding: 8px 0;
-
-  background: transparent;
-  border: none;
-
-  color: #ffffff;
-
-  font-family: inherit;
-  font-size: 16px;
-  font-weight: 500;
-
-  cursor: pointer;
-  white-space: nowrap;
-
-  transition:
-    color 0.25s ease,
-    background 0.25s ease;
-}
-
-.studyAbroadDropdown > button:hover {
-  color: #e8f8fc;
-}
-
-
-/* ACTIVE STUDY ABROAD BUTTON */
-
-.studyAbroadDropdown > button.active {
-  padding: 8px 12px;
-
-  background: rgba(255, 255, 255, 0.12);
-
-  border: 1px solid rgba(255, 255, 255, 0.7);
-  border-radius: 6px;
-}
-
-
-/* =========================================================
-   STUDY ABROAD MENU
-========================================================= */
-
-.studyAbroadMenu {
-  position: absolute;
-  top: calc(100% + 10px);
-  left: 50%;
-
-  width: 200px;
-
-  padding: 8px 0;
-
-  background: #ffffff;
-
-  border-radius: 10px;
-
-  box-shadow:
-    0 10px 30px rgba(0, 0, 0, 0.18);
-
-  overflow: hidden;
-
-  transform: translateX(-50%);
-
-  z-index: 9999;
-}
-
-
-/* STUDY ABROAD ITEMS */
-
-.studyAbroadMenu .studyAbroadItem {
-  cursor: default;
-  display: flex;
   align-items: center;
   justify-content: center;
 
-  width: 100%;
+  padding: 0 8px;
 
-  padding: 13px 20px;
+  color: #ffffff;
 
-  box-sizing: border-box;
+  font-size: 13.5px;
 
-  color: #555555 !important;
-
-  font-size: 15px;
-  font-weight: 400;
+  font-weight: 700;
 
   text-decoration: none;
 
   white-space: nowrap;
+
+  border: 1px solid transparent;
+
+  border-radius: 7px;
+
+  box-sizing: border-box;
 
   transition:
     background 0.2s ease,
@@ -212,69 +159,345 @@
 }
 
 
-/* STUDY ABROAD ITEM HOVER */
+/* =========================================================
+   NAV ACTIVE UNDERLINE
+========================================================= */
 
-.studyAbroadMenu .studyAbroadItem:hover {
-  background: #f3f8fa !important;
+.navLink::after {
+  content: "";
 
-  color: #2799bb !important;
+  position: absolute;
 
-  transform: none;
+  left: 9px;
+  right: 9px;
+
+  bottom: 3px;
+
+  height: 2px;
+
+  background: transparent;
+
+  border-radius: 2px;
+
+  transition:
+    background 0.2s ease;
 }
 
 
 /* =========================================================
-   COMPANY DROPDOWN
+   NAV HOVER
 ========================================================= */
 
-.companyDropdown {
+.navLink:hover {
+  background: rgba(255, 255, 255, 0.10);
+}
+
+.navLink.active {
+  background: transparent;
+
+  border-color: transparent;
+}
+
+.navLink.active::after {
+  background: #ffffff;
+}
+
+
+/* =========================================================
+   DROPDOWN CONTAINER
+========================================================= */
+
+.dropdown {
   position: relative;
+
+  flex: 0 0 auto;
 
   flex-shrink: 0;
 }
 
 
-/* COMPANY BUTTON */
+/* =========================================================
+   DROPDOWN BUTTON
+========================================================= */
 
-.companyDropdown > button {
-  display: flex;
+.dropdownButton {
+  height: 44px;
+
+  display: inline-flex;
+
   align-items: center;
+  justify-content: center;
 
-  gap: 5px;
+  gap: 4px;
 
-  padding: 8px 0;
+  padding: 0 8px;
 
   background: transparent;
-  border: none;
+
+  border: 1px solid transparent;
+
+  border-radius: 7px;
 
   color: #ffffff;
 
   font-family: inherit;
-  font-size: 16px;
-  font-weight: 500;
+
+  font-size: 13.5px;
+
+  font-weight: 700;
 
   cursor: pointer;
+
   white-space: nowrap;
 
+  box-sizing: border-box;
+
   transition:
-    color 0.25s ease,
-    background 0.25s ease;
-}
-
-.companyDropdown > button:hover {
-  color: #e8f8fc;
+    background 0.2s ease,
+    border-color 0.2s ease;
 }
 
 
-/* ACTIVE COMPANY BUTTON */
+/* =========================================================
+   DROPDOWN HOVER
+========================================================= */
 
-.companyDropdown > button.active {
-  padding: 8px 12px;
+.dropdownButton:hover {
+  background: rgba(255, 255, 255, 0.10);
+}
 
-  background: rgba(255, 255, 255, 0.12);
 
-  border: 1px solid rgba(255, 255, 255, 0.7);
-  border-radius: 6px;
+/* =========================================================
+   DROPDOWN ACTIVE
+========================================================= */
+
+.dropdownButton.active {
+  background: rgba(255, 255, 255, 0.08);
+
+  border-color:
+    rgba(255, 255, 255, 0.60);
+}
+
+
+/* =========================================================
+   DROPDOWN ARROW
+========================================================= */
+
+.dropdownIcon {
+  flex-shrink: 0;
+
+  transition:
+    transform 0.2s ease;
+}
+
+.rotateIcon {
+  flex-shrink: 0;
+
+  transform: rotate(180deg);
+
+  transition:
+    transform 0.2s ease;
+}
+
+
+/* =========================================================
+   DROPDOWN MENU
+========================================================= */
+
+.dropdownMenu {
+  position: absolute;
+
+  top: calc(100% + 10px);
+
+  left: 50%;
+
+  width: 238px;
+
+  transform: translateX(-50%);
+
+  padding: 8px;
+
+  background: #ffffff;
+
+  border: 1px solid #e7edf1;
+
+  border-radius: 12px;
+
+  box-shadow:
+    0 18px 45px rgba(18, 46, 61, 0.20),
+    0 4px 12px rgba(18, 46, 61, 0.08);
+
+  overflow: hidden;
+
+  z-index: 9999;
+
+  animation:
+    dropdownIn 0.16s ease-out;
+}
+
+
+/* =========================================================
+   DROPDOWN ANIMATION
+========================================================= */
+
+@keyframes dropdownIn {
+  from {
+    opacity: 0;
+
+    transform:
+      translateX(-50%)
+      translateY(-5px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateX(-50%)
+      translateY(0);
+  }
+}
+
+
+/* =========================================================
+   DROPDOWN ARROW / TRIANGLE
+========================================================= */
+
+.dropdownMenu::before {
+  content: "";
+
+  position: absolute;
+
+  top: -6px;
+
+  left: 50%;
+
+  width: 11px;
+  height: 11px;
+
+  background: #ffffff;
+
+  border-left:
+    1px solid #e7edf1;
+
+  border-top:
+    1px solid #e7edf1;
+
+  transform:
+    translateX(-50%)
+    rotate(45deg);
+}
+
+
+/* =========================================================
+   DROPDOWN HEADING
+========================================================= */
+
+.menuHeading {
+  position: relative;
+
+  z-index: 1;
+
+  display: flex;
+
+  flex-direction: column;
+
+  padding: 8px 11px 10px;
+
+  color: #1d3342;
+}
+
+.menuHeading span {
+  font-size: 14px;
+
+  font-weight: 800;
+}
+
+.menuHeading small {
+  margin-top: 3px;
+
+  color: #7a8a93;
+
+  font-size: 11px;
+
+  font-weight: 500;
+}
+
+
+/* =========================================================
+   STUDY ABROAD ITEMS
+========================================================= */
+
+.dropdownItem {
+  position: relative;
+
+  z-index: 1;
+
+  width: 100%;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 11px;
+
+  padding: 10px 11px;
+
+  box-sizing: border-box;
+
+  color: #253c49;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  border-radius: 8px;
+
+  white-space: nowrap;
+
+  cursor: default;
+
+  transition:
+    background 0.18s ease,
+    color 0.18s ease,
+    transform 0.18s ease;
+}
+
+
+/* =========================================================
+   STUDY ABROAD HOVER
+========================================================= */
+
+.dropdownItem:hover {
+  background: #edf8fb;
+
+  color: #0783a8;
+
+  transform:
+    translateX(2px);
+}
+
+
+/* =========================================================
+   STUDY ABROAD ICON
+========================================================= */
+
+.dropdownItemIcon {
+  width: 29px;
+  height: 29px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  color: #0783a8;
+
+  background: #e9f6fa;
+
+  border-radius: 7px;
 }
 
 
@@ -283,56 +506,158 @@
 ========================================================= */
 
 .companyMenu {
-  position: absolute;
-  top: calc(100% + 10px);
+  left: auto;
+
   right: 0;
 
-  width: 200px;
+  width: 205px;
 
-  padding: 8px 0;
-
-  background: #ffffff;
-
-  border-radius: 10px;
-
-  box-shadow:
-    0 10px 30px rgba(0, 0, 0, 0.18);
-
-  overflow: hidden;
-
-  z-index: 9999;
+  transform: none;
 }
 
 
-/* COMPANY MENU ITEMS */
+/* =========================================================
+   COMPANY MENU ARROW
+========================================================= */
 
-.companyMenu a {
-  display: block;
+.companyMenu::before {
+  left: auto;
+
+  right: 25px;
+
+  transform:
+    rotate(45deg);
+}
+
+
+/* =========================================================
+   COMPANY ITEMS
+========================================================= */
+
+.companyItem {
+  position: relative;
+
+  z-index: 1;
 
   width: 100%;
 
-  padding: 13px 20px;
+  display: flex;
+
+  align-items: center;
+
+  gap: 11px;
+
+  padding: 11px;
 
   box-sizing: border-box;
 
-  color: #333333 !important;
+  color: #253c49;
 
-  font-size: 15px;
-  font-weight: 400;
+  font-size: 13px;
+
+  font-weight: 600;
 
   text-decoration: none;
 
+  border-radius: 8px;
+
   transition:
-    background 0.2s ease,
-    color 0.2s ease;
+    background 0.18s ease,
+    color 0.18s ease;
 }
 
-.companyMenu a:hover {
-  background: #f2f4f8 !important;
 
-  color: #4167a5 !important;
+/* =========================================================
+   COMPANY ICON
+========================================================= */
 
-  transform: none;
+.companyItem svg {
+  flex-shrink: 0;
+
+  color: #0783a8;
+}
+
+
+/* =========================================================
+   COMPANY HOVER
+========================================================= */
+
+.companyItem:hover {
+  background: #edf8fb;
+
+  color: #0783a8;
+}
+
+
+/* =========================================================
+   COURSE FINDER
+========================================================= */
+
+.courseFinder {
+  flex: 0 0 auto;
+
+  height: 44px;
+
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 6px;
+
+  padding: 0 12px;
+
+  color: #ffffff;
+
+  font-size: 13px;
+
+  font-weight: 750;
+
+  text-decoration: none;
+
+  white-space: nowrap;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.80);
+
+  border-radius: 7px;
+
+  background:
+    rgba(255, 255, 255, 0.025);
+
+  box-sizing: border-box;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+
+/* =========================================================
+   COURSE FINDER HOVER
+========================================================= */
+
+.courseFinder:hover {
+  background:
+    rgba(255, 255, 255, 0.13);
+
+  border-color: #ffffff;
+
+  transform:
+    translateY(-1px);
+}
+
+
+/* =========================================================
+   COURSE FINDER ACTIVE
+========================================================= */
+
+.finderActive {
+  background:
+    rgba(255, 255, 255, 0.13);
+
+  border-color: #ffffff;
 }
 
 
@@ -341,58 +666,76 @@
 ========================================================= */
 
 .counselling {
-  display: flex;
+  flex: 0 0 auto;
+
+  height: 42px;
+
+  display: inline-flex;
+
   align-items: center;
   justify-content: center;
 
-  flex-shrink: 0;
+  gap: 6px;
 
-  padding: 12px 20px;
+  padding: 0 14px;
 
-  background: #41679e !important;
-  color: #ffffff !important;
+  background: #ff7a00;
+
+  color: #ffffff;
 
   border: none;
-  border-radius: 8px;
+
+  border-radius: 9px;
 
   font-family: inherit;
-  font-size: 15px !important;
-  font-weight: 600 !important;
+
+  font-size: 11px;
+
+  font-weight: 800;
 
   cursor: pointer;
+
   white-space: nowrap;
 
   box-shadow:
-    0 4px 10px rgba(0, 0, 0, 0.12);
+    0 7px 16px rgba(122, 56, 0, 0.20);
+
+  box-sizing: border-box;
 
   transition:
-    background 0.25s ease,
-    transform 0.25s ease,
-    box-shadow 0.25s ease;
-}
-
-.counselling:hover {
-  background: #345889 !important;
-  color: #ffffff !important;
-
-  transform: translateY(-2px);
-
-  box-shadow:
-    0 7px 16px rgba(0, 0, 0, 0.18);
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 
 /* =========================================================
-   USER / LOGIN ICON
+   COUNSELLING HOVER
+========================================================= */
+
+.counselling:hover {
+  background: #ed6e00;
+
+  transform:
+    translateY(-1px);
+
+  box-shadow:
+    0 10px 20px rgba(122, 56, 0, 0.25);
+}
+
+
+/* =========================================================
+   USER / LOGIN
 ========================================================= */
 
 .user {
-  flex-shrink: 0;
+  flex: 0 0 auto;
 
-  width: 34px;
-  height: 34px;
+  width: 42px;
+  height: 42px;
 
   display: flex;
+
   align-items: center;
   justify-content: center;
 
@@ -400,39 +743,57 @@
 
   background: #ffffff;
 
+  color: #1c6380;
+
   border: none;
+
   border-radius: 50%;
 
-  color: #41679e;
-
   cursor: pointer;
+
+  box-shadow:
+    0 3px 10px rgba(0, 45, 65, 0.12);
 
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease;
 }
 
+
+/* =========================================================
+   USER HOVER
+========================================================= */
+
 .user:hover {
-  transform: scale(1.08);
+  transform:
+    scale(1.05);
 
   box-shadow:
-    0 4px 12px rgba(0, 0, 0, 0.18);
+    0 6px 16px rgba(0, 45, 65, 0.22);
 }
 
 
 /* =========================================================
-   HAMBURGER BUTTON
+   HAMBURGER
 ========================================================= */
 
 .hamburger {
   display: none;
 
+  width: 42px;
+  height: 42px;
+
+  flex-shrink: 0;
+
   align-items: center;
   justify-content: center;
 
-  padding: 6px;
+  margin-left: auto;
+
+  padding: 0;
 
   background: transparent;
+
   border: none;
 
   color: #ffffff;
@@ -442,32 +803,112 @@
 
 
 /* =========================================================
-   LAPTOP
+   LARGE LAPTOP
+   IMPORTANT:
+   Keep logo area wide enough so Home never touches it.
 ========================================================= */
 
-@media (max-width: 1250px) {
+@media (max-width: 1350px) {
   .topbar {
-    padding: 0 3%;
-    gap: 14px;
+    padding: 0 24px;
+
+    gap: 10px;
+  }
+
+  .brand {
+    flex: 0 0 190px;
+
+    width: 190px;
+    min-width: 190px;
+  }
+
+  .brandName {
+    font-size: 20px;
+  }
+
+  .brandTagline {
+    font-size: 7.5px;
   }
 
   .nav {
-    gap: 14px;
+    gap: 1px;
   }
 
-  .nav > a {
-    font-size: 14px;
+  .navLink,
+  .dropdownButton {
+    padding-left: 5px;
+    padding-right: 5px;
+
+    font-size: 12.5px;
   }
 
-  .studyAbroadDropdown > button,
-  .companyDropdown > button {
-    font-size: 14px;
+  .courseFinder {
+    padding-left: 9px;
+    padding-right: 9px;
+
+    font-size: 11.5px;
   }
 
   .counselling {
-    padding: 11px 14px;
+    padding-left: 10px;
+    padding-right: 10px;
 
-    font-size: 13px !important;
+    font-size: 10px;
+  }
+}
+
+
+/* =========================================================
+   MEDIUM LAPTOP
+========================================================= */
+
+@media (max-width: 1200px) {
+  .topbar {
+    padding: 0 18px;
+
+    gap: 8px;
+  }
+
+  .brand {
+    flex: 0 0 175px;
+
+    width: 175px;
+    min-width: 175px;
+  }
+
+  .brandName {
+    font-size: 18px;
+  }
+
+  .brandTagline {
+    font-size: 7px;
+  }
+
+  .navLink,
+  .dropdownButton {
+    padding-left: 4px;
+    padding-right: 4px;
+
+    font-size: 12px;
+  }
+
+  .courseFinder {
+    padding-left: 8px;
+    padding-right: 8px;
+
+    font-size: 11px;
+  }
+
+  .counselling {
+    padding-left: 9px;
+    padding-right: 9px;
+
+    font-size: 9.5px;
+  }
+
+  .user {
+    width: 39px;
+    height: 39px;
   }
 }
 
@@ -476,266 +917,325 @@
    TABLET / MOBILE
 ========================================================= */
 
-@media (max-width: 900px) {
+@media (max-width: 980px) {
   .topbar {
+    width: 100%;
+
     height: 70px;
+    min-height: 70px;
 
-    padding: 0 6%;
+    padding: 0 5%;
 
-    gap: 15px;
+    gap: 10px;
   }
 
   .brand {
-    font-size: 18px;
+    flex: 1 1 auto;
+
+    width: auto;
+    min-width: 0;
   }
 
-  .hamburger {
-    display: flex;
+  .brandName {
+    font-size: 19px;
+  }
 
-    margin-left: auto;
+  .brandTagline {
+    display: block;
+
+    font-size: 7px;
   }
 
   .nav {
     display: none;
   }
 
+  .user {
+    width: 38px;
+    height: 38px;
+  }
 
-  /* =========================================
-     MOBILE MENU
-  ========================================= */
+  .hamburger {
+    display: flex;
+  }
+
+
+  /* =======================================================
+     MOBILE NAVIGATION
+  ======================================================= */
 
   .nav.open {
     position: absolute;
 
     top: 70px;
+
     left: 0;
     right: 0;
 
+    width: 100%;
+
     display: flex;
+
     flex-direction: column;
+
     align-items: stretch;
 
-    gap: 4px;
+    gap: 2px;
 
-    padding: 20px 7%;
+    padding:
+      14px
+      5%
+      20px;
 
     background: #ffffff;
 
+    border-top:
+      1px solid #e8eef1;
+
     box-shadow:
-      0 10px 25px rgba(0, 0, 0, 0.12);
-  }
-
-
-  /* =========================================
-     MOBILE NORMAL LINKS
-  ========================================= */
-
-  .nav.open > a {
-    width: 100%;
-
-    padding: 12px 10px;
+      0 16px 30px rgba(12, 45, 60, 0.15);
 
     box-sizing: border-box;
 
-    color: #1d2b44;
+    max-height:
+      calc(100vh - 70px);
 
-    font-size: 16px;
-
-    border-bottom: 1px solid #eef1f4;
-  }
-
-  .nav.open > a:hover {
-    background: #f3f8fa;
-
-    color: #278eae;
-
-    transform: none;
+    overflow-y: auto;
   }
 
 
-  /* =========================================
-     MOBILE ACTIVE LINK
-  ========================================= */
+  /* =====================================================
+     MOBILE NORMAL LINKS
+  ===================================================== */
 
-  .nav.open .active {
-    padding: 12px 10px;
-
-    background: #eaf6fa;
-
-    border: none;
-    border-radius: 6px;
-
-    color: #278eae;
-  }
-
-
-  /* =========================================
-     MOBILE STUDY ABROAD
-  ========================================= */
-
-  .nav.open .studyAbroadDropdown {
+  .nav.open .navLink {
     width: 100%;
-  }
 
-  .nav.open .studyAbroadDropdown > button {
-    width: 100%;
+    height: 48px;
 
     display: flex;
+
     align-items: center;
-    justify-content: space-between;
 
-    padding: 12px 10px;
-
-    color: #1d2b44;
-
-    font-size: 16px;
-
-    text-align: left;
-  }
-
-  .nav.open .studyAbroadDropdown > button:hover {
-    background: #f3f8fa;
-
-    color: #278eae;
-  }
-
-  .nav.open .studyAbroadDropdown > button.active {
-    padding: 12px 10px;
-
-    background: #eaf6fa;
-
-    border: none;
-    border-radius: 6px;
-
-    color: #278eae;
-  }
-
-
-  /* =========================================
-     MOBILE STUDY ABROAD MENU
-  ========================================= */
-
-  .nav.open .studyAbroadMenu {
-    position: static;
-
-    width: 100%;
-
-    margin-top: 4px;
-
-    padding: 5px 0;
-
-    background: #f6f8fa;
-
-    border-radius: 8px;
-
-    box-shadow: none;
-
-    transform: none;
-  }
-
-  .nav.open .studyAbroadMenu .studyAbroadItem {
-  cursor: default;
     justify-content: flex-start;
 
-    padding: 12px 20px;
+    padding: 0 14px;
 
-    color: #555555 !important;
+    color: #1d3342;
 
     font-size: 15px;
-  }
-
-  .nav.open .studyAbroadMenu .studyAbroadItem:hover {
-    background: #eaf6fa !important;
-
-    color: #278eae !important;
-  }
-
-
-  /* =========================================
-     MOBILE COMPANY
-  ========================================= */
-
-  .nav.open .companyDropdown {
-    width: 100%;
-  }
-
-  .nav.open .companyDropdown > button {
-    width: 100%;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    padding: 12px 10px;
-
-    color: #1d2b44;
-
-    font-size: 16px;
-
-    text-align: left;
-  }
-
-  .nav.open .companyDropdown > button:hover {
-    background: #f3f8fa;
-
-    color: #278eae;
-  }
-
-  .nav.open .companyDropdown > button.active {
-    padding: 12px 10px;
-
-    background: #eaf6fa;
 
     border: none;
-    border-radius: 6px;
 
-    color: #278eae;
+    border-radius: 8px;
+
+    box-sizing: border-box;
+  }
+
+  .nav.open .navLink::after {
+    display: none;
+  }
+
+  .nav.open .navLink:hover {
+    background: #edf8fb;
+
+    color: #0783a8;
+  }
+
+  .nav.open .navLink.active {
+    background: #e8f6fa;
+
+    color: #0783a8;
   }
 
 
-  /* =========================================
-     MOBILE COMPANY MENU
-  ========================================= */
+  /* =====================================================
+     MOBILE DROPDOWN
+  ===================================================== */
 
-  .nav.open .companyMenu {
+  .nav.open .dropdown {
+    width: 100%;
+  }
+
+  .nav.open .dropdownButton {
+    width: 100%;
+
+    height: 48px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 0 14px;
+
+    color: #1d3342;
+
+    font-size: 15px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    text-align: left;
+
+    box-sizing: border-box;
+  }
+
+  .nav.open .dropdownButton:hover {
+    background: #edf8fb;
+
+    color: #0783a3;
+  }
+
+  .nav.open .dropdownButton.active {
+    background: #e8f6fa;
+
+    color: #0783a3;
+
+    border: none;
+  }
+
+
+  /* =====================================================
+     MOBILE DROPDOWN MENU
+  ===================================================== */
+
+  .nav.open .dropdownMenu {
     position: static;
 
     width: 100%;
 
+    transform: none;
+
+    margin:
+      2px 0
+      4px;
+
+    padding: 6px;
+
+    background: #f5f9fa;
+
+    border: none;
+
+    border-radius: 9px;
+
+    box-shadow: none;
+
+    animation: none;
+  }
+
+  .nav.open .dropdownMenu::before {
+    display: none;
+  }
+
+  .nav.open .menuHeading {
+    padding:
+      7px
+      10px
+      8px;
+  }
+
+  .nav.open .dropdownItem {
+    width: 100%;
+
+    padding:
+      9px
+      10px;
+
+    color: #52646e;
+
+    font-size: 14px;
+  }
+
+  .nav.open .dropdownItemIcon {
+    width: 28px;
+    height: 28px;
+  }
+
+
+  /* =====================================================
+     MOBILE COMPANY
+  ===================================================== */
+
+  .nav.open .companyMenu {
+    right: auto;
+
+    width: 100%;
+  }
+
+  .nav.open .companyMenu::before {
+    display: none;
+  }
+
+  .nav.open .companyItem {
+    width: 100%;
+
+    padding: 10px;
+
+    color: #52646e;
+  }
+
+
+  /* =====================================================
+     MOBILE COURSE FINDER
+  ===================================================== */
+
+  .nav.open .courseFinder {
+    width: 100%;
+
+    height: 48px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: flex-start;
+
+    gap: 8px;
+
+    padding: 0 14px;
+
     margin-top: 4px;
 
-    padding: 5px 0;
+    color: #0783a3;
 
-    background: #f6f8fa;
+    background: #ffffff;
+
+    border:
+      1px solid #9bcfdd;
 
     border-radius: 8px;
 
-    box-shadow: none;
-  }
-
-  .nav.open .companyMenu a {
-    padding: 12px 20px;
-
-    color: #555555 !important;
-
     font-size: 15px;
 
-    border-bottom: none;
+    box-sizing: border-box;
+  }
+
+  .nav.open .courseFinder:hover {
+    background: #edf8fb;
   }
 
 
-  /* =========================================
+  /* =====================================================
      MOBILE COUNSELLING
-  ========================================= */
+  ===================================================== */
 
   .nav.open .counselling {
     width: 100%;
 
-    margin-top: 10px;
+    height: 48px;
 
-    padding: 14px;
+    margin-top: 8px;
 
-    font-size: 16px !important;
+    padding: 0 15px;
+
+    font-size: 14px;
+
+    border-radius: 9px;
+
+    box-sizing: border-box;
   }
 }
 
@@ -748,32 +1248,103 @@
   .topbar {
     height: 64px;
 
-    padding: 0 5%;
+    min-height: 64px;
 
-    gap: 12px;
+    padding:
+      0 4.5%;
+
+    gap: 8px;
   }
 
   .brand {
-    font-size: 16px;
+    flex: 1 1 auto;
+
+    width: auto;
+
+    min-width: 0;
+  }
+
+  .brandName {
+    font-size: 17px;
+  }
+
+  .brandTagline {
+    font-size: 6.5px;
   }
 
   .user {
-    width: 32px;
-    height: 32px;
+    width: 35px;
+    height: 35px;
+  }
+
+  .hamburger {
+    width: 37px;
+    height: 37px;
   }
 
   .nav.open {
     top: 64px;
 
-    padding: 16px 6%;
+    max-height:
+      calc(100vh - 64px);
+
+    padding:
+      12px
+      4.5%
+      18px;
+  }
+}
+
+
+/* =========================================================
+   VERY SMALL MOBILE
+========================================================= */
+
+@media (max-width: 360px) {
+  .brandName {
+    font-size: 16px;
   }
 
-  .nav.open > a {
-    font-size: 15px;
+  .brandTagline {
+    font-size: 6px;
   }
 
-  .nav.open .studyAbroadDropdown > button,
-  .nav.open .companyDropdown > button {
-    font-size: 15px;
+  .user {
+    width: 33px;
+    height: 33px;
   }
+
+  .hamburger {
+    width: 35px;
+    height: 35px;
+  }
+}
+
+
+/* =========================================================
+   ACCESSIBILITY
+========================================================= */
+
+.navLink:focus-visible,
+.dropdownButton:focus-visible,
+.courseFinder:focus-visible,
+.counselling:focus-visible,
+.user:focus-visible,
+.hamburger:focus-visible {
+  outline:
+    2px solid #ffffff;
+
+  outline-offset: 2px;
+}
+
+
+/* =========================================================
+   MOBILE FOCUS
+========================================================= */
+
+.nav.open .navLink:focus-visible,
+.nav.open .dropdownButton:focus-visible,
+.nav.open .courseFinder:focus-visible,
+.nav.open .counselling:focus-visible {
+  outline-color: #0783a3;
 }

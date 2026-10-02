@@ -1,0 +1,667 @@
+/* =========================================================
+   PAGE
+========================================================= */
+
+.page {
+  width: 100%;
+  min-height: 100vh;
+  background: #f7f9fb;
+  padding: 35px 0 60px;
+  box-sizing: border-box;
+}
+
+.container {
+  width: 100%;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 0 30px;
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 25px;
+  margin-bottom: 28px;
+}
+
+.title {
+  margin: 0;
+  color: #0f3c5b;
+  font-size: 30px;
+  line-height: 1.2;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.searchSection {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 650px;
+}
+
+.searchBox {
+  flex: 1;
+  position: relative;
+}
+
+.searchInput {
+  width: 100%;
+  height: 44px;
+  padding: 0 45px;
+  border: 1px solid #d8e0e6;
+  border-radius: 7px;
+  outline: none;
+  background: #ffffff;
+  color: #1f2937;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.searchInput:focus {
+  border-color: #29a0c1;
+}
+
+.clearButton {
+  height: 44px;
+  padding: 0 20px;
+  border: 1px solid #29a0c1;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #1684a5;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* =========================================================
+   MAIN LAYOUT
+========================================================= */
+
+.layout {
+  display: grid;
+
+  /*
+     LEFT FILTER COLUMN
+     RIGHT RESULTS COLUMN
+  */
+  grid-template-columns: 280px minmax(0, 1fr);
+
+  gap: 28px;
+
+  width: 100%;
+  align-items: start;
+}
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+.sidebar {
+  position: sticky;
+  top: 95px;
+
+  width: 100%;
+
+  background: #ffffff;
+
+  border: 1px solid #e1e8ed;
+  border-radius: 12px;
+
+  padding: 20px;
+
+  box-sizing: border-box;
+
+  box-shadow:
+    0 3px 15px rgba(15, 60, 91, 0.05);
+
+  min-width: 0;
+}
+
+.filterHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding-bottom: 15px;
+  margin-bottom: 18px;
+
+  border-bottom: 1px solid #e8edf1;
+}
+
+.filterTitle {
+  margin: 0;
+
+  color: #0f3c5b;
+
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.filterReset {
+  border: 0;
+  background: transparent;
+
+  color: #29a0c1;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+/* MUI FILTER CONTROLS */
+
+.sidebar :global(.MuiFormControl-root) {
+  width: 100%;
+}
+
+.sidebar :global(.MuiInputLabel-root) {
+  color: #667085;
+  font-size: 13px;
+}
+
+.sidebar :global(.MuiInputLabel-root.Mui-focused) {
+  color: #1684a5;
+}
+
+.sidebar :global(.MuiOutlinedInput-root) {
+  min-height: 42px;
+
+  border-radius: 7px;
+
+  background: #ffffff;
+
+  font-size: 13px;
+}
+
+.sidebar
+  :global(
+    .MuiOutlinedInput-root:hover
+      .MuiOutlinedInput-notchedOutline
+  ) {
+  border-color: #9caeb9;
+}
+
+.sidebar
+  :global(
+    .MuiOutlinedInput-root.Mui-focused
+      .MuiOutlinedInput-notchedOutline
+  ) {
+  border-color: #29a0c1;
+  border-width: 1px;
+}
+
+.sidebar :global(.MuiSelect-select) {
+  font-size: 13px;
+}
+
+.sidebar :global(.MuiMenuItem-root) {
+  min-height: 38px;
+  font-size: 13px;
+}
+
+.sidebar :global(.MuiCheckbox-root) {
+  padding: 6px;
+}
+
+.sidebar :global(.MuiListItemText-primary) {
+  font-size: 13px;
+}
+
+/* =========================================================
+   RESULTS
+========================================================= */
+
+.results {
+  min-width: 0;
+  width: 100%;
+}
+
+.resultsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 18px;
+}
+
+.resultsTitle {
+  margin: 0;
+
+  color: #0f3c5b;
+
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.resultsCount {
+  color: #6b7280;
+  font-size: 13px;
+}
+
+/* =========================================================
+   UNIVERSITY
+========================================================= */
+
+.universityCard {
+  width: 100%;
+
+  margin-bottom: 25px;
+  padding: 22px;
+
+  background: #ffffff;
+
+  border: 1px solid #e1e8ed;
+  border-radius: 12px;
+
+  box-sizing: border-box;
+
+  box-shadow:
+    0 3px 15px rgba(15, 60, 91, 0.06);
+
+  transition:
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
+}
+
+.universityCard:hover {
+  box-shadow:
+    0 7px 25px rgba(15, 60, 91, 0.1);
+
+  transform: translateY(-1px);
+}
+
+.universityHeader {
+  display: flex;
+
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  padding-bottom: 18px;
+  margin-bottom: 20px;
+
+  border-bottom: 1px solid #e9eef2;
+}
+
+.universityName {
+  margin: 0 0 6px;
+
+  color: #0f3c5b;
+
+  font-size: 21px;
+  line-height: 1.3;
+
+  font-weight: 700;
+}
+
+.universityLocation {
+  margin: 0 0 5px;
+
+  color: #667085;
+
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.universityId {
+  margin: 0;
+
+  color: #98a2b3;
+
+  font-size: 12px;
+}
+
+/* =========================================================
+   COLLEGE
+========================================================= */
+
+.collegeSection {
+  width: 100%;
+
+  margin-bottom: 25px;
+}
+
+.collegeSection:last-child {
+  margin-bottom: 0;
+}
+
+.collegeName {
+  margin: 0 0 13px;
+
+  color: #1684a5;
+
+  font-size: 17px;
+  font-weight: 700;
+}
+
+/* =========================================================
+   COURSES
+========================================================= */
+
+/*
+   VERY IMPORTANT
+
+   flex-direction: column means:
+
+   Course 1
+   Course 2
+   Course 3
+   Course 4
+
+   instead of:
+
+   Course 1 | Course 2 | Course 3
+*/
+
+.courseGrid {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 16px;
+
+  width: 100%;
+
+  min-width: 0;
+}
+
+/*
+   Each course occupies the COMPLETE
+   available right-side width.
+*/
+
+.courseItem {
+  width: 100%;
+
+  min-width: 0;
+
+  display: block;
+}
+
+/* =========================================================
+   COURSE CARD
+========================================================= */
+
+.courseCard {
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+
+  min-width: 0;
+
+  height: 100%;
+
+  padding: 17px;
+
+  background: #ffffff;
+
+  border: 1px solid #dfe6eb;
+  border-radius: 9px;
+
+  box-sizing: border-box;
+}
+
+.courseCard:hover {
+  border-color: #29a0c1;
+
+  box-shadow:
+    0 5px 18px rgba(41, 160, 193, 0.12);
+}
+
+.courseName {
+  margin: 0 0 12px;
+
+  color: #0f3c5b;
+
+  font-size: 16px;
+  line-height: 1.4;
+
+  font-weight: 700;
+}
+
+.courseInfo {
+  display: flex;
+
+  align-items: flex-start;
+
+  justify-content: space-between;
+
+  gap: 12px;
+
+  margin-bottom: 8px;
+}
+
+.courseInfoLabel {
+  color: #7b8794;
+
+  font-size: 12px;
+}
+
+.courseInfoValue {
+  color: #344054;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  text-align: right;
+
+  word-break: break-word;
+}
+
+/* =========================================================
+   DESCRIPTION
+========================================================= */
+
+.descriptionRow {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 10px;
+
+  margin-bottom: 8px;
+}
+
+.descriptionButton {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 25px;
+  height: 25px;
+
+  padding: 0;
+
+  border: 0;
+
+  border-radius: 50%;
+
+  background: transparent;
+
+  color: #29a0c1;
+
+  cursor: pointer;
+}
+
+.descriptionBox {
+  padding: 10px;
+
+  margin: 5px 0 12px;
+
+  border-radius: 6px;
+
+  background: #f5f9fb;
+
+  color: #475467;
+
+  font-size: 12px;
+
+  line-height: 1.55;
+}
+
+/* =========================================================
+   COURSE LINKS
+========================================================= */
+
+.courseCard a {
+  color: #1684a5;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  text-decoration: none;
+}
+
+.courseCard a:hover {
+  color: #0f3c5b;
+
+  text-decoration: underline;
+}
+
+/* =========================================================
+   NO DATA
+========================================================= */
+
+.noData {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  min-height: 220px;
+
+  padding: 30px;
+
+  border: 1px dashed #ccd6dd;
+
+  border-radius: 10px;
+
+  background: #ffffff;
+
+  color: #667085;
+
+  text-align: center;
+
+  font-size: 14px;
+}
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.loading {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  min-height: 250px;
+
+  width: 100%;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1400px) {
+  .layout {
+    grid-template-columns:
+      260px minmax(0, 1fr);
+
+    gap: 22px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .layout {
+    grid-template-columns:
+      245px minmax(0, 1fr);
+
+    gap: 18px;
+  }
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: relative;
+    top: 0;
+  }
+
+  .universityHeader {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 600px) {
+  .sidebar {
+    padding: 15px;
+
+    border-radius: 9px;
+  }
+
+  .universityCard {
+    padding: 15px;
+
+    border-radius: 9px;
+  }
+
+  .universityName {
+    font-size: 18px;
+  }
+
+  .collegeName {
+    font-size: 15px;
+  }
+
+  .resultsHeader {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 5px;
+  }
+
+  .resultsTitle {
+    font-size: 18px;
+  }
+
+  .courseInfo {
+    flex-direction: column;
+
+    gap: 3px;
+  }
+
+  .courseInfoValue {
+    text-align: left;
+  }
+}
+
+@media (max-width: 400px) {
+  .sidebar {
+    padding: 12px;
+  }
+
+  .universityCard {
+    padding: 12px;
+  }
+}

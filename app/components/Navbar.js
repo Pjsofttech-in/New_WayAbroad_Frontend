@@ -1,17 +1,31 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+
 import {
   Menu,
   X,
   UserRound,
   ChevronDown,
+  Search,
+  CalendarDays,
+  Globe2,
+  MapPin,
+  Building2,
+  FileText,
+  Home,
+  BadgeCheck,
+  WalletCards,
 } from "lucide-react";
 
 import styles from "./Navbar.module.css";
 import LoginModal from "./LoginModal";
+
+/* =========================================================
+   NAVIGATION ITEMS
+========================================================= */
 
 const nav = [
   "Home",
@@ -20,17 +34,26 @@ const nav = [
   "Exams",
   "Scholarships",
   "Blogs",
+  "Course Finder",
 ];
 
+/* =========================================================
+   STUDY ABROAD
+========================================================= */
+
 const studyAbroadCountries = [
-  "USA",
-  "Canada",
-  "UK",
-  "Australia",
-  "Germany",
-  "Ireland",
-  "New Zealand",
+  { name: "USA", icon: Globe2 },
+  { name: "Canada", icon: MapPin },
+  { name: "UK", icon: Building2 },
+  { name: "Australia", icon: Globe2 },
+  { name: "Germany", icon: Building2 },
+  { name: "Ireland", icon: MapPin },
+  { name: "New Zealand", icon: Globe2 },
 ];
+
+/* =========================================================
+   NAVBAR
+========================================================= */
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -40,16 +63,12 @@ export default function Navbar() {
   const [companyOpen, setCompanyOpen] = useState(false);
   const [studyAbroadOpen, setStudyAbroadOpen] = useState(false);
 
-  /* ========================================
-     LOGIN / SIGNUP MODAL
-  ======================================== */
-
   const [loginOpen, setLoginOpen] = useState(false);
   const [authMode, setAuthMode] = useState("login");
 
-  /* ========================================
-     OPEN LOGIN / SIGNUP FROM ANY COMPONENT
-  ======================================== */
+  /* =======================================================
+     OPEN AUTH MODAL FROM OTHER COMPONENTS
+  ======================================================= */
 
   useEffect(() => {
     const openAuthModal = (event) => {
@@ -59,99 +78,89 @@ export default function Navbar() {
       setLoginOpen(true);
     };
 
-    window.addEventListener(
-      "open-auth-modal",
-      openAuthModal
-    );
+    window.addEventListener("open-auth-modal", openAuthModal);
 
     return () => {
-      window.removeEventListener(
-        "open-auth-modal",
-        openAuthModal
-      );
+      window.removeEventListener("open-auth-modal", openAuthModal);
     };
   }, []);
 
-  /* ========================================
+  /* =======================================================
+     CLOSE ALL MENUS
+  ======================================================= */
+
+  const closeMenus = () => {
+    setMenu(false);
+    setCompanyOpen(false);
+    setStudyAbroadOpen(false);
+  };
+
+  /* =======================================================
      NAVIGATION LINKS
-  ======================================== */
+  ======================================================= */
 
   const getHref = (item) => {
     switch (item) {
       case "Home":
         return "/";
-
       case "MBBS":
         return "/mbbs";
-
       case "Courses":
         return "/courses";
-
       case "Exams":
         return "/exams";
-
       case "Scholarships":
         return "/scholarships";
-
       case "Blogs":
         return "/blog";
-
+      case "Course Finder":
+        return "/course-finder";
       default:
         return "/";
     }
   };
 
-  /* ========================================
+  /* =======================================================
      ACTIVE NAVIGATION
-  ======================================== */
+  ======================================================= */
 
   const isActive = (item) => {
     switch (item) {
       case "Home":
         return pathname === "/";
-
       case "MBBS":
-        return pathname === "/mbbs";
-
+        return pathname.startsWith("/mbbs");
       case "Courses":
-        return pathname === "/courses";
-
+        return pathname.startsWith("/courses");
       case "Exams":
-        return pathname === "/exams";
-
+        return pathname.startsWith("/exams");
       case "Scholarships":
-        return pathname === "/scholarships";
-
+        return pathname.startsWith("/scholarships");
       case "Blogs":
         return pathname.startsWith("/blog");
-
+      case "Course Finder":
+        return pathname.startsWith("/course-finder");
       default:
         return false;
     }
   };
 
-  /* ========================================
-     STUDY ABROAD ACTIVE
-  ======================================== */
+  const isStudyAbroadActive = pathname.startsWith("/study-abroad");
 
-  const isStudyAbroadActive =
-    pathname.startsWith("/study-abroad");
+  const isCompanyActive =
+    pathname.startsWith("/become-partner") ||
+    pathname.startsWith("/about") ||
+    pathname.startsWith("/contact");
 
-  /* ========================================
+  /* =======================================================
      BOOK FREE COUNSELLING
-  ======================================== */
+  ======================================================= */
 
   const handleCounsellingClick = () => {
-    setMenu(false);
-    setCompanyOpen(false);
-    setStudyAbroadOpen(false);
-
-    /* If already on homepage */
+    closeMenus();
 
     if (pathname === "/") {
-      const section = document.getElementById(
-        "free-counselling"
-      );
+      const section = document.getElementById("free-counselling");
 
       if (section) {
         section.scrollIntoView({
@@ -163,23 +172,18 @@ export default function Navbar() {
       return;
     }
 
-    /* Go to homepage */
-
     router.push("/#free-counselling");
   };
 
-  /* ========================================
-     OPEN LOGIN
-  ======================================== */
+  /* =======================================================
+     LOGIN
+  ======================================================= */
 
   const handleLoginClick = () => {
+    closeMenus();
     setAuthMode("login");
     setLoginOpen(true);
   };
-
-  /* ========================================
-     CLOSE MODAL
-  ======================================== */
 
   const handleCloseModal = () => {
     setLoginOpen(false);
@@ -189,221 +193,210 @@ export default function Navbar() {
   return (
     <>
       <header className={styles.topbar}>
-
-        {/* =================================
+        {/* =================================================
             LOGO
-        ================================= */}
+        ================================================= */}
 
         <Link
           href="/"
           className={styles.brand}
-          onClick={() => {
-            setMenu(false);
-            setCompanyOpen(false);
-            setStudyAbroadOpen(false);
-          }}
+          onClick={closeMenus}
+          aria-label="WayAbroad Home"
         >
-          WAYABROAD
+          <span className={styles.brandName}>
+            WAYABROAD
+            <span className={styles.brandMark}>✈</span>
+          </span>
+
+          <span className={styles.brandTagline}>
+            Your Global Education Partner
+          </span>
         </Link>
 
-        {/* =================================
-            NAVIGATION
-        ================================= */}
+        {/* =================================================
+            DESKTOP / MOBILE NAVIGATION
+        ================================================= */}
 
         <nav
-          className={`${styles.nav} ${
-            menu ? styles.open : ""
-          }`}
+          className={`${styles.nav} ${menu ? styles.open : ""}`}
+          aria-label="Main navigation"
         >
-
-          {/* =================================
-              NORMAL NAVIGATION
-          ================================= */}
+          {/* HOME + MBBS */}
 
           {nav.slice(0, 2).map((item) => (
             <Link
               key={item}
               href={getHref(item)}
-              className={
-                isActive(item)
-                  ? styles.active
-                  : ""
-              }
-              onClick={() => {
-                setMenu(false);
-                setCompanyOpen(false);
-                setStudyAbroadOpen(false);
-              }}
+              className={`${styles.navLink} ${
+                isActive(item) ? styles.active : ""
+              }`}
+              onClick={closeMenus}
             >
               {item}
             </Link>
           ))}
 
-          {/* =================================
-              STUDY ABROAD DROPDOWN
-          ================================= */}
+          {/* =================================================
+              STUDY ABROAD
+          ================================================= */}
 
-          <div
-            className={styles.studyAbroadDropdown}
-          >
+          <div className={styles.dropdown}>
             <button
               type="button"
-              className={
-                isStudyAbroadActive
-                  ? styles.active
-                  : ""
-              }
-              aria-haspopup="menu"
-              aria-expanded={studyAbroadOpen}
-              aria-controls="study-abroad-menu"
+              className={`${styles.dropdownButton} ${
+                isStudyAbroadActive ? styles.active : ""
+              }`}
               onClick={() => {
-                setStudyAbroadOpen(
-                  (prev) => !prev
-                );
-
+                setStudyAbroadOpen((prev) => !prev);
                 setCompanyOpen(false);
               }}
+              aria-haspopup="menu"
+              aria-expanded={studyAbroadOpen}
             >
-              Study Abroad
+              <span>Study Abroad</span>
 
-              <ChevronDown size={12} />
+              <ChevronDown
+                size={14}
+                strokeWidth={2.2}
+                className={
+                  studyAbroadOpen ? styles.rotateIcon : styles.dropdownIcon
+                }
+              />
             </button>
 
             {studyAbroadOpen && (
-              <div
-                id="study-abroad-menu"
-                className={
-                  styles.studyAbroadMenu
-                }
-                role="menu"
-              >
-                {studyAbroadCountries.map(
-                  (country) => (
-                    <span
-                      key={country}
-                      className={styles.studyAbroadItem}
-                      role="menuitem"
-                      aria-disabled="true"
-                    >
-                      {country}
+              <div className={styles.dropdownMenu} role="menu">
+                <div className={styles.menuHeading}>
+                  <span>Study Abroad</span>
+                  <small>Explore destinations</small>
+                </div>
+
+                {studyAbroadCountries.map(({ name, icon: Icon }) => (
+                  <span
+                    key={name}
+                    className={styles.dropdownItem}
+                    role="menuitem"
+                  >
+                    <span className={styles.dropdownItemIcon}>
+                      <Icon size={16} />
                     </span>
-                  )
-                )}
+                    <span>{name}</span>
+                  </span>
+                ))}
               </div>
             )}
           </div>
 
-          {/* =================================
-              REMAINING NAVIGATION
-          ================================= */}
+          {/* COURSES, EXAMS, SCHOLARSHIPS, BLOGS */}
 
-          {nav.slice(2).map((item) => (
+          {nav.slice(2, 6).map((item) => (
             <Link
               key={item}
               href={getHref(item)}
-              className={
-                isActive(item)
-                  ? styles.active
-                  : ""
-              }
-              onClick={() => {
-                setMenu(false);
-                setCompanyOpen(false);
-                setStudyAbroadOpen(false);
-              }}
+              className={`${styles.navLink} ${
+                isActive(item) ? styles.active : ""
+              }`}
+              onClick={closeMenus}
             >
               {item}
             </Link>
           ))}
 
-          {/* =================================
-              COMPANY DROPDOWN
-          ================================= */}
+          {/* =================================================
+              COURSE FINDER
+          ================================================= */}
 
-          <div
-            className={styles.companyDropdown}
+          <Link
+            href={getHref("Course Finder")}
+            className={`${styles.courseFinder} ${
+              isActive("Course Finder") ? styles.finderActive : ""
+            }`}
+            onClick={closeMenus}
           >
+            <Search size={17} strokeWidth={2.2} />
+            <span>Course Finder</span>
+          </Link>
+
+          {/* =================================================
+              COMPANY
+          ================================================= */}
+
+          <div className={styles.dropdown}>
             <button
               type="button"
-              className={
-                pathname.startsWith(
-                  "/become-partner"
-                ) ||
-                pathname.startsWith("/about") ||
-                pathname.startsWith("/contact")
-                  ? styles.active
-                  : ""
-              }
-              aria-haspopup="menu"
-              aria-expanded={companyOpen}
-              aria-controls="company-menu"
+              className={`${styles.dropdownButton} ${
+                isCompanyActive ? styles.active : ""
+              }`}
               onClick={() => {
-                setCompanyOpen(
-                  (prev) => !prev
-                );
-
+                setCompanyOpen((prev) => !prev);
                 setStudyAbroadOpen(false);
               }}
+              aria-haspopup="menu"
+              aria-expanded={companyOpen}
             >
-              Company
+              <span>Company</span>
 
-              <ChevronDown size={12} />
+              <ChevronDown
+                size={14}
+                strokeWidth={2.2}
+                className={
+                  companyOpen ? styles.rotateIcon : styles.dropdownIcon
+                }
+              />
             </button>
 
             {companyOpen && (
               <div
-                className={styles.companyMenu}
+                className={`${styles.dropdownMenu} ${styles.companyMenu}`}
+                role="menu"
               >
                 <Link
                   href="/become-partner"
-                  onClick={() => {
-                    setCompanyOpen(false);
-                    setMenu(false);
-                  }}
+                  onClick={closeMenus}
+                  className={styles.companyItem}
                 >
-                  Become Partner
+                  <BadgeCheck size={16} />
+                  <span>Become Partner</span>
                 </Link>
 
                 <Link
                   href="/about"
-                  onClick={() => {
-                    setCompanyOpen(false);
-                    setMenu(false);
-                  }}
+                  onClick={closeMenus}
+                  className={styles.companyItem}
                 >
-                  About
+                  <FileText size={16} />
+                  <span>About</span>
                 </Link>
 
                 <Link
                   href="/contact"
-                  onClick={() => {
-                    setCompanyOpen(false);
-                    setMenu(false);
-                  }}
+                  onClick={closeMenus}
+                  className={styles.companyItem}
                 >
-                  Contact
+                  <Home size={16} />
+                  <span>Contact</span>
                 </Link>
               </div>
             )}
           </div>
 
-          {/* =================================
+          {/* =================================================
               BOOK FREE COUNSELLING
-          ================================= */}
+          ================================================= */}
 
           <button
             type="button"
             className={styles.counselling}
             onClick={handleCounsellingClick}
           >
-            Book Free Counselling
+            <CalendarDays size={16} strokeWidth={2.2} />
+            <span>Book Free Counselling</span>
           </button>
-
         </nav>
 
-        {/* =================================
-            USER / LOGIN
-        ================================= */}
+        {/* =================================================
+            USER LOGIN
+        ================================================= */}
 
         <button
           type="button"
@@ -411,12 +404,12 @@ export default function Navbar() {
           onClick={handleLoginClick}
           aria-label="Open Login"
         >
-          <UserRound size={18} />
+          <UserRound size={19} strokeWidth={2} />
         </button>
 
-        {/* =================================
+        {/* =================================================
             MOBILE MENU
-        ================================= */}
+        ================================================= */}
 
         <button
           type="button"
@@ -426,16 +419,14 @@ export default function Navbar() {
             setCompanyOpen(false);
             setStudyAbroadOpen(false);
           }}
-          aria-label="Toggle menu"
+          aria-label="Toggle navigation menu"
+          aria-expanded={menu}
         >
-          {menu ? <X /> : <Menu />}
+          {menu ? <X size={24} /> : <Menu size={24} />}
         </button>
-
       </header>
 
-      {/* =================================
-          LOGIN / SIGNUP MODAL
-      ================================= */}
+      {/* LOGIN MODAL */}
 
       {loginOpen && (
         <LoginModal

@@ -1,12 +1,16 @@
 // app/services/api.js
 
-import ExamRegistrationPage from "../exam-registration/page";
-
 const API_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:8097";
+  process.env.NEXT_PUBLIC_API_URL ||
+  "http://localhost:8097";
+
+/* =====================================================
+   COMMON RESPONSE HANDLER
+===================================================== */
 
 async function handleResponse(response) {
-  const contentType = response.headers.get("content-type") || "";
+  const contentType =
+    response.headers.get("content-type") || "";
 
   const data = contentType.includes("application/json")
     ? await response.json()
@@ -29,13 +33,16 @@ async function handleResponse(response) {
 ===================================================== */
 
 export async function submitFormSubmission(data) {
-  const response = await fetch(`${API_URL}/form-submission`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
+  const response = await fetch(
+    `${API_URL}/form-submission`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }
+  );
 
   return handleResponse(response);
 }
@@ -45,7 +52,9 @@ export async function submitFormSubmission(data) {
 ===================================================== */
 
 export async function getAllContinents() {
-  const response = await fetch(`${API_URL}/getAllContinents`);
+  const response = await fetch(
+    `${API_URL}/getAllContinents`
+  );
 
   return handleResponse(response);
 }
@@ -55,7 +64,9 @@ export async function getAllContinents() {
 ===================================================== */
 
 export async function getAllCourseNames() {
-  const response = await fetch(`${API_URL}/getAllCourseName`);
+  const response = await fetch(
+    `${API_URL}/getAllCourseName`
+  );
 
   return handleResponse(response);
 }
@@ -65,13 +76,16 @@ export async function getAllCourseNames() {
 ===================================================== */
 
 export async function submitPartnerForm(data) {
-  const response = await fetch(`${API_URL}/createPartner`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
+  const response = await fetch(
+    `${API_URL}/createPartner`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }
+  );
 
   return handleResponse(response);
 }
@@ -81,16 +95,19 @@ export async function submitPartnerForm(data) {
 ===================================================== */
 
 export async function loginUser(data) {
-  const response = await fetch(`${API_URL}/userLogin`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      email: data.email,
-      password: data.password,
-    }),
-  });
+  const response = await fetch(
+    `${API_URL}/userLogin`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: data.email,
+        password: data.password,
+      }),
+    }
+  );
 
   return handleResponse(response);
 }
@@ -100,13 +117,17 @@ export async function loginUser(data) {
 ===================================================== */
 
 export async function getAllBlogs() {
-  const response = await fetch(`${API_URL}/getAllBlogs`);
+  const response = await fetch(
+    `${API_URL}/getAllBlogs`
+  );
 
   return handleResponse(response);
 }
 
 export async function getBlogById(id) {
-  const response = await fetch(`${API_URL}/getBlogById/${id}`);
+  const response = await fetch(
+    `${API_URL}/getBlogById/${id}`
+  );
 
   return handleResponse(response);
 }
@@ -116,7 +137,10 @@ export async function getBlogById(id) {
 ===================================================== */
 
 export async function getAllScholarships() {
-  const response = await fetch(`${API_URL}/getAll`);
+  const response = await fetch(
+    `${API_URL}/getAll`
+  );
+
   return handleResponse(response);
 }
 
@@ -151,10 +175,9 @@ export async function submitScholarshipLead(data) {
   return handleResponse(response);
 }
 
-
-// -------------------------------------------------------
-// exama-ExamRegistration
-// -------------------------------------------------------
+/* =====================================================
+   EXAM REGISTRATION
+===================================================== */
 
 export async function createExamPreparation(data) {
   const response = await fetch(
@@ -166,6 +189,158 @@ export async function createExamPreparation(data) {
       },
       body: JSON.stringify(data),
     }
+  );
+
+  return handleResponse(response);
+}
+
+/* =====================================================
+   COURSE FINDER
+===================================================== */
+
+/* =====================================================
+   PUBLIC COURSE HIERARCHY
+
+   IMPORTANT:
+   Do NOT use /getAllCourses here.
+
+   /getAllCourses requires role + email.
+
+   Public Course Finder uses:
+   /hierarchy
+===================================================== */
+
+export async function getHierarchy(params = {}) {
+  const query = new URLSearchParams();
+
+  Object.entries(params).forEach(([key, value]) => {
+    if (
+      value !== undefined &&
+      value !== null &&
+      value !== ""
+    ) {
+      if (Array.isArray(value)) {
+        value.forEach((item) => {
+          if (
+            item !== undefined &&
+            item !== null &&
+            item !== ""
+          ) {
+            query.append(key, item);
+          }
+        });
+      } else {
+        query.append(key, value);
+      }
+    }
+  });
+
+  const queryString = query.toString();
+
+  const url = queryString
+    ? `${API_URL}/hierarchy?${queryString}`
+    : `${API_URL}/hierarchy`;
+
+  const response = await fetch(url);
+
+  return handleResponse(response);
+}
+
+/* =====================================================
+   PUBLIC COURSE NAMES
+===================================================== */
+
+export async function getAllCourses() {
+  const response = await fetch(
+    `${API_URL}/getAllCourseName`
+  );
+
+  return handleResponse(response);
+}
+
+/* =====================================================
+   PUBLIC STREAMS
+===================================================== */
+
+export async function getAllStreams() {
+  const response = await fetch(
+    `${API_URL}/getAllStreams`
+  );
+
+  return handleResponse(response);
+}
+
+/* =====================================================
+   COURSE FINDER SEARCH APIS
+===================================================== */
+
+export async function searchUniversities(
+  query = ""
+) {
+  const response = await fetch(
+    `${API_URL}/searchUniversities?name=${encodeURIComponent(
+      query
+    )}`
+  );
+
+  return handleResponse(response);
+}
+
+export async function searchStates(
+  query = ""
+) {
+  const response = await fetch(
+    `${API_URL}/searchStates?name=${encodeURIComponent(
+      query
+    )}`
+  );
+
+  return handleResponse(response);
+}
+
+export async function searchCities(
+  query = ""
+) {
+  const response = await fetch(
+    `${API_URL}/searchCities?name=${encodeURIComponent(
+      query
+    )}`
+  );
+
+  return handleResponse(response);
+}
+
+export async function searchColleges(
+  query = ""
+) {
+  const response = await fetch(
+    `${API_URL}/searchColleges?name=${encodeURIComponent(
+      query
+    )}`
+  );
+
+  return handleResponse(response);
+}
+
+export async function searchCountries(
+  query = ""
+) {
+  const response = await fetch(
+    `${API_URL}/searchCountries?name=${encodeURIComponent(
+      query
+    )}`
+  );
+
+  return handleResponse(response);
+}
+
+export async function searchStreams(
+  query = ""
+) {
+  const response = await fetch(
+    `${API_URL}/searchStreams?name=${encodeURIComponent(
+      query
+    )}`
   );
 
   return handleResponse(response);
