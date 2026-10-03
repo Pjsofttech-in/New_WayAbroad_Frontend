@@ -87,15 +87,8 @@
 
 .layout {
   display: grid;
-
-  /*
-     LEFT FILTER COLUMN
-     RIGHT RESULTS COLUMN
-  */
   grid-template-columns: 280px minmax(0, 1fr);
-
   gap: 28px;
-
   width: 100%;
   align-items: start;
 }
@@ -157,7 +150,9 @@
   cursor: pointer;
 }
 
-/* MUI FILTER CONTROLS */
+/* =========================================================
+   MUI FILTER CONTROLS
+========================================================= */
 
 .sidebar :global(.MuiFormControl-root) {
   width: 100%;
@@ -203,13 +198,27 @@
   font-size: 13px;
 }
 
-.sidebar :global(.MuiMenuItem-root) {
-  min-height: 38px;
-  font-size: 13px;
-}
+/*
+=========================================================
+   NOTE
+
+   Do NOT put standalone:
+
+   :global(.MuiMenuItem-root)
+
+   here.
+
+   MUI renders the dropdown menu outside the sidebar,
+   so dropdown popup styling belongs in globals.css.
+=========================================================
+*/
+
+/* =========================================================
+   SIDEBAR CHECKBOX DEFAULT
+========================================================= */
 
 .sidebar :global(.MuiCheckbox-root) {
-  padding: 6px;
+  padding: 3px;
 }
 
 .sidebar :global(.MuiListItemText-primary) {
@@ -223,6 +232,7 @@
 .results {
   min-width: 0;
   width: 100%;
+  max-width: none;
 }
 
 .resultsHeader {
@@ -253,6 +263,7 @@
 
 .universityCard {
   width: 100%;
+  min-width: 0;
 
   margin-bottom: 25px;
   padding: 22px;
@@ -281,27 +292,28 @@
 
 .universityHeader {
   display: flex;
-
   align-items: flex-start;
   justify-content: space-between;
-
   gap: 20px;
-
   padding-bottom: 18px;
   margin-bottom: 20px;
-
   border-bottom: 1px solid #e9eef2;
+  min-width: 0;
 }
 
 .universityName {
   margin: 0 0 6px;
-
   color: #0f3c5b;
-
   font-size: 21px;
   line-height: 1.3;
-
   font-weight: 700;
+
+  /* Important for long university names */
+  flex: 1;
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .universityLocation {
@@ -337,36 +349,23 @@
 
 .collegeName {
   margin: 0 0 13px;
-
   color: #1684a5;
-
   font-size: 17px;
+  line-height: 1.4;
   font-weight: 700;
+
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 /* =========================================================
    COURSES
 ========================================================= */
 
-/*
-   VERY IMPORTANT
-
-   flex-direction: column means:
-
-   Course 1
-   Course 2
-   Course 3
-   Course 4
-
-   instead of:
-
-   Course 1 | Course 2 | Course 3
-*/
-
 .courseGrid {
-  display: flex;
+  display: grid;
 
-  flex-direction: column;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 
   gap: 16px;
 
@@ -374,11 +373,6 @@
 
   min-width: 0;
 }
-
-/*
-   Each course occupies the COMPLETE
-   available right-side width.
-*/
 
 .courseItem {
   width: 100%;
@@ -402,7 +396,7 @@
 
   height: 100%;
 
-  padding: 17px;
+  padding: 20px;
 
   background: #ffffff;
 
@@ -437,7 +431,8 @@
 
   justify-content: space-between;
 
-  gap: 12px;
+  width: 100%;
+  gap: 20px;
 
   margin-bottom: 8px;
 }
@@ -456,6 +451,9 @@
   font-weight: 600;
 
   text-align: right;
+
+  min-width: 80px;
+  max-width: 55%;
 
   word-break: break-word;
 }
@@ -609,6 +607,10 @@
 
   .universityHeader {
     flex-direction: column;
+  }
+
+  .courseGrid {
+    grid-template-columns: 1fr;
   }
 }
 

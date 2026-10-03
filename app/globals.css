@@ -88,3 +88,45 @@ img {
     font-size: 15px;
   }
 }
+
+/* =========================================================
+   COURSE FINDER DROPDOWN OPTIONS
+========================================================= */
+
+.MuiMenuItem-root {
+  min-height: 30px !important;
+  height: 30px !important;
+
+  padding-top: 2px !important;
+  padding-bottom: 2px !important;
+
+  font-size: 11px !important;
+
+  line-height: 1.2 !important;
+}
+
+.MuiMenuItem-root .MuiListItemText-primary {
+  margin: 0 !important;
+
+  font-size: 11px !important;
+
+  line-height: 1.2 !important;
+}
+
+.MuiMenuItem-root .MuiCheckbox-root {
+  padding: 2px !important;
+
+  margin-right: 4px !important;
+}
+
+.MuiMenuItem-root .MuiCheckbox-root svg {
+  font-size: 18px !important;
+}
+
+.MuiMenuItem-root:hover {
+  min-height: 30px !important;
+}
+
+.MuiMenuItem-root.Mui-selected {
+  min-height: 30px !important;
+}
