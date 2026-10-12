@@ -245,20 +245,24 @@ export default function Footer() {
 
         <div className={styles.socialIcons}>
           <a
-            href="#"
+            href="https://www.instagram.com/wayabroadpune/"
             className={styles.instagram}
+            target="_blank"
+            rel="noopener noreferrer"
             aria-label="Instagram"
           >
             <Instagram size={22} />
           </a>
 
           <a
-            href="#"
-            className={styles.facebook}
-            aria-label="Facebook"
-          >
-            <Facebook size={22} />
-          </a>
+              href="https://www.facebook.com/Wayabrodpune/"
+              className={styles.facebook}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Facebook"
+            >
+              <Facebook size={22} />
+            </a>
 
           <a
             href="#"

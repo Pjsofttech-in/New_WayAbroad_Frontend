@@ -1,0 +1,568 @@
+/* =====================================================
+   CONTAINER AND LAYOUT
+===================================================== */
+
+.cf-container {
+  width: min(calc(100% - 32px), 1440px);
+  margin: 32px auto;
+  box-sizing: border-box;
+}
+
+.cf-box {
+  box-sizing: border-box;
+}
+
+/* =====================================================
+   TYPOGRAPHY
+===================================================== */
+
+.cf-typography {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.cf-h4 {
+  font-size: clamp(1.35rem, 2vw, 2.125rem);
+  line-height: 1.2;
+  margin: 0;
+  padding: 0;
+}
+
+.cf-h3 {
+  font-size: 1.5rem;
+  line-height: 1.25;
+}
+
+.cf-h2 {
+  font-size: 1.75rem;
+  line-height: 1.25;
+}
+
+.cf-subtitle1 {
+  font-size: 1rem;
+}
+
+.cf-body1 {
+  font-size: 1rem;
+}
+
+.cf-body2 {
+  font-size: 0.875rem;
+}
+
+.cf-caption {
+  font-size: 0.75rem;
+}
+
+.cf-muted {
+  color: #667085;
+}
+
+.cf-weight-bold {
+  font-weight: 700;
+}
+
+.cf-weight-medium {
+  font-weight: 600;
+}
+
+.cf-gutter-bottom {
+  margin-bottom: 0.35rem;
+}
+
+/* =====================================================
+   FORM CONTROLS
+===================================================== */
+
+.cf-form-control {
+  position: relative;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.cf-input-label {
+  display: block;
+  margin: 0 0 4px;
+  color: #555;
+  font-size: 0px;
+}
+
+/* =====================================================
+   SELECT AND DROPDOWN
+===================================================== */
+
+.cf-select-wrap {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.cf-select {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+
+  width: 100%;
+  min-height: 40px;
+  padding: 8px 10px;
+
+  border: 1px solid #c7cbd1;
+  border-radius: 5px;
+
+  background: #fff;
+  color: #202124;
+  font: inherit;
+  text-align: left;
+  font-size: 14px;
+
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.cf-select:focus,
+.cf-text-field:focus-within {
+  outline: 2px solid #9bbcf5;
+  outline-offset: 1px;
+}
+
+.cf-select:disabled {
+  background: #f2f3f5;
+  color: #999;
+  cursor: not-allowed;
+}
+
+.cf-select-value {
+  font-size: 11px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.cf-chevron {
+  flex: 0 0 auto;
+  color: #666;
+}
+
+.cf-dropdown {
+  position: absolute;
+  z-index: 1000;
+  top: calc(100% + 4px);
+  left: 0;
+
+  width: max(100%, 220px);
+  max-height: 300px;
+  overflow-y: auto;
+
+  padding: 4px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+
+  background: #fff;
+  box-shadow: 0 8px 24px #0002;
+
+  box-sizing: border-box;
+}
+
+.cf-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cf-menu-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  min-height: 36px;
+  padding: 6px 9px;
+
+  border-radius: 4px;
+
+  color: #222;
+  font-size: 0.9rem;
+
+  cursor: pointer;
+}
+
+.cf-menu-option:hover,
+.cf-menu-option.is-selected {
+  background: #eef4ff;
+}
+
+.cf-menu-option.is-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.cf-dropdown-custom {
+  padding: 4px;
+}
+
+/* =====================================================
+   CHECKBOX AND LIST ITEM
+===================================================== */
+
+.cf-checkbox {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+  accent-color: #245fc7;
+}
+
+.cf-list-item-text {
+  flex: 1;
+}
+
+/* =====================================================
+   TEXT FIELD AND SEARCH INPUT
+===================================================== */
+
+.cf-text-field {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  min-width: 0;
+  min-height: 20px;
+  padding: 0 8px;
+
+  border: 1px solid #c7cbd1;
+  border-radius: 5px;
+
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.cf-text-field input {
+  width: 100%;
+  min-width: 0;
+  padding: 5px 0;
+
+  border: 0;
+  outline: 0;
+
+  background: transparent;
+  color: #202124;
+  font: inherit;
+}
+
+.cf-text-field input::placeholder {
+  color: #858b95;
+  opacity: 1;
+}
+
+.cf-text-field input:disabled {
+  cursor: not-allowed;
+}
+
+.cf-text-field-small {
+  min-height: 36px;
+}
+
+.cf-full-width {
+  width: 100%;
+}
+
+.cf-adornment {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  color: #697386;
+}
+
+.cf-input-adornment {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+}
+
+.cf-adornment-start {
+  order: 0;
+}
+
+.cf-adornment-end {
+  order: 3;
+}
+
+/* =====================================================
+   BUTTONS
+===================================================== */
+
+.cf-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  padding: 8px 13px;
+  border: 1px solid transparent;
+  border-radius: 5px;
+
+  background: transparent;
+  color: #245fc7;
+  font: inherit;
+
+  cursor: pointer;
+}
+
+.cf-button-outlined {
+  border-color: #245fc7;
+  background: #fff;
+}
+
+.cf-button-text {
+  color: #245fc7;
+}
+
+.cf-button-contained {
+  border-color: #245fc7;
+  background: #245fc7;
+  color: #fff;
+}
+
+.cf-button-small {
+  padding: 4px 8px;
+  font-size: 0.8rem;
+}
+
+.cf-button:disabled,
+.cf-icon-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.cf-button-icon {
+  display: inline-flex;
+  align-items: center;
+}
+
+.cf-icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 3px 5px;
+  border: 0;
+
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  line-height: 1.2;
+
+  cursor: pointer;
+}
+
+.cf-icon-button:hover {
+  border-radius: 4px;
+  background: #f0f2f5;
+}
+
+/* =====================================================
+   TOOLTIP AND ALERT
+===================================================== */
+
+.cf-tooltip-wrap {
+  display: inline-flex;
+}
+
+.cf-alert {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+
+  margin-bottom: 16px;
+  padding: 10px 12px;
+
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.cf-alert-error {
+  border: 1px solid #f1b4b4;
+  background: #fff0f0;
+  color: #9f2020;
+}
+
+.cf-alert-info {
+  border: 1px solid #b7d1ff;
+  background: #eef5ff;
+  color: #214e91;
+}
+
+.cf-alert button {
+  border: 0;
+  background: transparent;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+/* =====================================================
+   LOADING SPINNER
+===================================================== */
+
+.cf-spinner {
+  display: inline-block;
+
+  width: 30px;
+  height: 30px;
+
+  border: 3px solid #d8e2f3;
+  border-top-color: #245fc7;
+  border-radius: 50%;
+
+  animation: cf-spin 0.8s linear infinite;
+}
+
+@keyframes cf-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =====================================================
+   CARDS
+===================================================== */
+
+.cf-card {
+  display: flex;
+  flex-direction: column;
+
+  height: 100%;
+  border: 1px solid #e0e3e8;
+  border-radius: 8px;
+
+  background: #fff;
+  box-sizing: border-box;
+
+  transition:
+    border-color 0.2s,
+    background 0.2s;
+}
+
+.cf-card:hover {
+  border-color: #245fc7;
+  background: #fafcff;
+}
+
+.cf-card-content {
+  flex-grow: 1;
+  padding: 10px;
+}
+
+/* =====================================================
+   PAGINATION
+===================================================== */
+
+.cf-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.cf-pagination button {
+  min-width: 34px;
+  height: 34px;
+
+  border: 1px solid #d7dce4;
+  border-radius: 6px;
+
+  background: #fff;
+  color: #333;
+
+  cursor: pointer;
+}
+
+.cf-pagination button.active {
+  border-color: #245fc7;
+  background: #245fc7;
+  color: #fff;
+}
+
+.cf-pagination button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* =====================================================
+   RESPONSIVE STYLES
+===================================================== */
+
+@media (max-width: 640px) {
+  .cf-container {
+    width: min(calc(100% - 20px), 1440px);
+    margin: 18px auto;
+  }
+
+  .cf-card-content {
+    padding: 12px;
+  }
+}
+
+
+/* Course card */
+.cf-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border: 1px solid #dfe3e8;
+  border-radius: 8px;
+  background: #fff;
+  box-sizing: border-box;
+  box-shadow: none;
+}
+
+/* Card content spacing */
+.cf-card-content {
+  flex-grow: 1;
+  padding: 12px;
+}
+
+/* Course name: MBBS */
+.cf-card-content > .cf-typography {
+  margin: 0 0 10px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* Label and value alignment */
+.cf-detail-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: start;
+  column-gap: 12px;
+  margin-bottom: 5px;
+  width: 100%;
+}
+
+/* Left-side labels */
+.cf-detail-label {
+  min-width: 0;
+  color: #667085;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+/* Right-side values */
+.cf-detail-value {
+  min-width: 0;
+  color: #202124;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+/* Keep the details button compact */
+.cf-card-content .cf-button {
+  margin-top: 6px;
+  margin-bottom: 0;
+  padding: 4px 8px;
+  font-size: 11px;
+}

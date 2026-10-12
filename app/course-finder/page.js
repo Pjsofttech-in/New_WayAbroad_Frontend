@@ -1,72 +1,180 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 import {
-  Container,
-  Typography,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
-  Box,
-  CircularProgress,
-  Card,
-  CardContent,
-  Button,
-  IconButton,
-  Tooltip,
-  Alert,
-  Checkbox,
-  ListItemText,
-  TextField,
-  InputAdornment
-} from "@mui/material";
+  Container, Typography, Select, MenuItem, FormControl, InputLabel, Box,
+  CircularProgress, Card, CardContent, Button, IconButton, Tooltip, Alert,
+  Checkbox, ListItemText, TextField, InputAdornment, Pagination,
+} from "./CourseFinderUI.js";
 
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import SearchIcon from "@mui/icons-material/Search";
-import ClearIcon from "@mui/icons-material/Clear";
+import {
+  InfoOutlinedIcon, ExpandMoreIcon, ExpandLessIcon, SearchIcon, ClearIcon,
+} from "./CourseFinderUI.js";
 
 import {
   getHierarchy,
+  getAllCourseNames,
   searchUniversities,
   searchStates,
   searchCities,
   searchColleges,
   searchCountries,
-  searchStreams
+  searchStreams,
 } from "../services/api";
 
-import styles from "./CourseFinder.module.css";
+import styles from "./coursefinder.module.css";
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+const getName = (item, type) => {
+  if (!item) return "";
+
+  const names = {
+    country: [
+      item.countryName,
+      item.country,
+      item.name,
+    ],
+
+    state: [
+      item.stateName,
+      item.state,
+      item.name,
+    ],
+
+    city: [
+      item.cityName,
+      item.city,
+      item.name,
+    ],
+
+    university: [
+      item.universityName,
+      item.name,
+      item.university,
+    ],
+
+    college: [
+      item.collegeName,
+      item.name,
+    ],
+
+    course: [
+      item.name,
+      item.courseName,
+    ],
+
+    stream: [
+      item.streamName,
+      item.stream,
+      item.name,
+    ],
+  };
+
+  return (
+    names[type]?.find(
+      (value) =>
+        value !== undefined &&
+        value !== null &&
+        String(value).trim() !== ""
+    ) || ""
+  );
+};
+
+
+const uniqueById = (items = []) => {
+  const map = new Map();
+
+  items.forEach((item) => {
+    if (!item?.id) return;
+
+    map.set(String(item.id), item);
+  });
+
+  return Array.from(map.values());
+};
+
+
+const normalizeCountries = (data) => {
+  if (!Array.isArray(data)) return [];
+
+  const countries = [];
+
+  data.forEach((item) => {
+    if (!item) return;
+
+    if (Array.isArray(item.abroadCountries)) {
+      item.abroadCountries.forEach((country) => {
+        if (country?.id) {
+          countries.push(country);
+        }
+      });
+
+      return;
+    }
+
+    /*
+      Otherwise it is already a country.
+    */
+    if (
+      item?.abroadStates &&
+      item?.id
+    ) {
+      countries.push(item);
+    }
+  });
+
+  return uniqueById(countries);
+};
+
+
+/* =========================================================
+   COMPONENT
+========================================================= */
 
 export default function CourseFinder() {
+  /* =======================================================
+     SEARCH TEXT
+  ======================================================= */
+
   const [searchTexts, setSearchTexts] = useState({
-    continent: "",
     country: "",
     state: "",
     city: "",
     university: "",
     college: "",
     stream: "",
-    course: ""
+    course: "",
   });
 
-  const [continents, setContinents] = useState([]);
+  const [globalSearch, setGlobalSearch] =
+    useState("");
+
+
+  /* =======================================================
+     DROPDOWN DATA
+  ======================================================= */
+
   const [countries, setCountries] = useState([]);
   const [states, setStates] = useState([]);
-  const [cities, setCity] = useState([]);
-  const [universities, setUniversities] = useState([]);
+  const [cities, setCities] = useState([]);
+  const [universities, setUniversities] =
+    useState([]);
   const [colleges, setColleges] = useState([]);
+
+  /*
+    Courses are now loaded from
+    getAllCourseNames() API.
+  */
   const [courses, setCourses] = useState([]);
-  const [allCourses, setAllCourses] = useState([]);
+
   const [streams, setStreams] = useState([]);
 
-  const [globalSearch, setGlobalSearch] = useState("");
 
-  const [filters, setFilters] = useState({
-    continentId: [],
+  const emptyFilters = {
     countryId: [],
     stateId: [],
     cityId: [],
@@ -74,613 +182,222 @@ export default function CourseFinder() {
     collegeId: [],
     courseId: [],
     streamName: [],
+
     scholarship: "",
     feesRange: "",
     examType: [],
     englishExamRequirements: "",
     academicRequirements: [],
-    intake: []
-  });
+    intake: [],
+  };
 
-  const [hierarchyData, setHierarchyData] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [expandedCourses, setExpandedCourses] = useState({});
-  const [showDescription, setShowDescription] = useState({});
-  const [error, setError] = useState(null);
+  const [filters, setFilters] =
+    useState(emptyFilters);
 
-  /* =========================================================
-     SEARCH TEXT
-  ========================================================= */
 
-  const handleFilterTextChange = (type, value) => {
+  /* =======================================================
+     HIERARCHY
+  ======================================================= */
+
+  const [masterHierarchyData, setMasterHierarchyData] =
+    useState([]);
+
+  const [hierarchyData, setHierarchyData] =
+    useState([]);
+
+  const [loading, setLoading] =
+    useState(false);
+
+  const [error, setError] =
+    useState(null);
+
+
+  /* =======================================================
+     COURSE UI STATES
+  ======================================================= */
+
+  const [expandedCourses, setExpandedCourses] =
+    useState({});
+
+  const [showDescription, setShowDescription] =
+    useState({});
+
+
+  /* =======================================================
+     PAGINATION AND RESULTS CONTROLS
+  ======================================================= */
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [universitiesPerPage, setUniversitiesPerPage] = useState(6);
+  const [sortOrder, setSortOrder] = useState("default");
+  const [showMoreFilters, setShowMoreFilters] = useState(false);
+
+
+  /* =======================================================
+     SEARCH TEXT CHANGE
+  ======================================================= */
+
+  const handleFilterTextChange = (
+    type,
+    value
+  ) => {
     setSearchTexts((prev) => ({
       ...prev,
-      [type]: value
+      [type]: value,
     }));
   };
+
+
+  /* =======================================================
+     SEARCH FIELD STYLE
+  ======================================================= */
 
   const searchFieldStyles = {
     "& .MuiInputBase-input": {
       color: "text.primary !important",
+
       "&::placeholder": {
         color: "text.secondary !important",
-        opacity: 1
-      }
+        opacity: 1,
+      },
     },
+
     "& .MuiInputBase-root": {
-      color: "text.primary !important"
+      color: "text.primary !important",
     },
+
     "& .MuiOutlinedInput-notchedOutline": {
-      borderColor: "rgba(0, 0, 0, 0.23) !important"
-    }
+      borderColor:
+        "rgba(0, 0, 0, 0.23) !important",
+    },
   };
 
-  /* =========================================================
-     FILTER OPTIONS SEARCH
-  ========================================================= */
 
-  const getFilteredOptions = (type, items = []) => {
+  /* =======================================================
+     FILTERED OPTIONS
+  ======================================================= */
+
+  const getFilteredOptions = (
+    type,
+    items = []
+  ) => {
     if (!Array.isArray(items)) return [];
 
-    const searchText = (searchTexts[type] || "")
-      .toLowerCase()
-      .trim();
+    const search =
+      (searchTexts[type] || "")
+        .toLowerCase()
+        .trim();
 
-    if (!searchText) return items;
+    if (!search) return items;
 
-    return items.filter((item) => {
-      if (!item) return false;
-
-      const name = (
-        item.name ||
-        item[`${type}Name`] ||
-        item[type] ||
-        item.title ||
-        item.label ||
-        ""
-      )
+    return items.filter((item) =>
+      getName(item, type)
         .toString()
-        .toLowerCase();
-
-      return name.includes(searchText);
-    });
+        .toLowerCase()
+        .includes(search)
+    );
   };
 
-  /* =========================================================
-     FETCH FILTERED DATA
-  ========================================================= */
 
-  const fetchFilteredData = async () => {
-    try {
-      setLoading(true);
-      setError(null);
+  /* =======================================================
+     LOAD INITIAL DATA
+     
+     COUNTRY / STATE / CITY / UNIVERSITY / COLLEGE
+     COME FROM getHierarchy()
 
-      const params = {};
-
-      if (filters.continentId?.length) {
-        params.continentId = filters.continentId;
-      }
-
-      if (filters.countryId?.length) {
-        const selectedCountries = countries
-          .filter((country) =>
-            filters.countryId.includes(country.id)
-          )
-          .map(
-            (country) =>
-              country.countryName || country.country
-          )
-          .filter(Boolean);
-
-        if (selectedCountries.length) {
-          params.countryName = selectedCountries;
-        }
-      }
-
-      if (filters.stateId?.length) {
-        const selectedStates = states
-          .filter((state) =>
-            filters.stateId.includes(state.id)
-          )
-          .map(
-            (state) =>
-              state.stateName || state.state
-          )
-          .filter(Boolean);
-
-        if (selectedStates.length) {
-          params.stateName = selectedStates;
-        }
-      }
-
-      if (filters.cityId?.length) {
-        const selectedCities = cities
-          .filter((city) =>
-            filters.cityId.includes(city.id)
-          )
-          .map(
-            (city) =>
-              city.cityName || city.city
-          )
-          .filter(Boolean);
-
-        if (selectedCities.length) {
-          params.cityName = selectedCities;
-        }
-      }
-
-      if (filters.universityId?.length) {
-        const selectedUniversities = universities
-          .filter((university) =>
-            filters.universityId.includes(university.id)
-          )
-          .map(
-            (university) =>
-              university.name ||
-              university.universityName
-          )
-          .filter(Boolean);
-
-        if (selectedUniversities.length) {
-          params.universityName = selectedUniversities;
-        }
-      }
-
-      if (filters.collegeId?.length) {
-        const selectedColleges = colleges
-          .filter((college) =>
-            filters.collegeId.includes(college.id)
-          )
-          .map(
-            (college) =>
-              college.name ||
-              college.collegeName
-          )
-          .filter(Boolean);
-
-        if (selectedColleges.length) {
-          params.collegeName = selectedColleges;
-        }
-      }
-
-      if (filters.courseId?.length) {
-        const selectedCourses = courses
-          .filter((course) =>
-            filters.courseId.includes(course.id)
-          )
-          .map(
-            (course) =>
-              course.name ||
-              course.courseName
-          )
-          .filter(Boolean);
-
-        if (selectedCourses.length) {
-          params.courseName = selectedCourses;
-        }
-      }
-
-      if (filters.streamName?.length) {
-        params.streamName = filters.streamName;
-      }
-
-      if (filters.scholarship) {
-        params.scholarship = filters.scholarship;
-      }
-
-      if (filters.feesRange) {
-        params.feesRange = filters.feesRange;
-      }
-
-      if (filters.examType?.length) {
-        params.examType = filters.examType;
-      }
-
-      if (filters.englishExamRequirements) {
-        params.englishExamRequirements =
-          filters.englishExamRequirements;
-      }
-
-      if (filters.academicRequirements?.length) {
-        params.academicRequirements =
-          filters.academicRequirements;
-      }
-
-      if (filters.intake?.length) {
-        params.intake = filters.intake;
-      }
-
-      const response = await getHierarchy(params);
-
-      setHierarchyData(
-        Array.isArray(response) ? response : []
-      );
-    } catch (err) {
-      console.error(
-        "Error fetching filtered data:",
-        err
-      );
-
-      setError(
-        err.message ||
-          "Failed to load filtered data."
-      );
-
-      setHierarchyData([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  /* =========================================================
-     GLOBAL SEARCH
-  ========================================================= */
+     COURSE NAMES COME FROM getAllCourseNames()
+  ======================================================= */
 
   useEffect(() => {
-    const run = async () => {
-      const q = (globalSearch || "").trim();
-
-      if (!q) return;
-
-      try {
-        const [
-          uniNames,
-          stateNames,
-          cityNames,
-          collegeNames,
-          countryNames,
-          streamNames
-        ] = await Promise.all([
-          searchUniversities(q),
-          searchStates(q),
-          searchCities(q),
-          searchColleges(q),
-          searchCountries(q),
-          searchStreams(q)
-        ]);
-
-        const toSet = (arr) =>
-          new Set(
-            (Array.isArray(arr) ? arr : []).map((s) =>
-              String(s).toLowerCase()
-            )
-          );
-
-        const uniSet = toSet(uniNames);
-        const stateSet = toSet(stateNames);
-        const citySet = toSet(cityNames);
-        const collegeSet = toSet(collegeNames);
-        const countrySet = toSet(countryNames);
-        const streamSet = toSet(streamNames);
-
-        const matchedCountryIds = countries
-          .filter((c) =>
-            countrySet.has(
-              String(
-                c.countryName ||
-                  c.country ||
-                  c.name
-              ).toLowerCase()
-            )
-          )
-          .map((c) => c.id);
-
-        const matchedStateIds = states
-          .filter((s) =>
-            stateSet.has(
-              String(
-                s.stateName ||
-                  s.state ||
-                  s.name
-              ).toLowerCase()
-            )
-          )
-          .map((s) => s.id);
-
-        const matchedCityIds = cities
-          .filter((c) =>
-            citySet.has(
-              String(
-                c.cityName ||
-                  c.city ||
-                  c.name
-              ).toLowerCase()
-            )
-          )
-          .map((c) => c.id);
-
-        const matchedUniversityIds = universities
-          .filter((u) =>
-            uniSet.has(
-              String(
-                u.universityName ||
-                  u.name ||
-                  u.university
-              ).toLowerCase()
-            )
-          )
-          .map((u) => u.id);
-
-        const matchedCollegeIds = colleges
-          .filter((c) =>
-            collegeSet.has(
-              String(
-                c.collegeName ||
-                  c.name
-              ).toLowerCase()
-            )
-          )
-          .map((c) => c.id);
-
-        const matchedStreamNames = streams
-          .map(
-            (s) =>
-              s.name ||
-              s.streamName
-          )
-          .filter(
-            (n) =>
-              n &&
-              streamSet.has(
-                String(n).toLowerCase()
-              )
-          );
-
-        setFilters((prev) => ({
-          ...prev,
-          countryId: matchedCountryIds,
-          stateId: matchedStateIds,
-          cityId: matchedCityIds,
-          universityId: matchedUniversityIds,
-          collegeId: matchedCollegeIds,
-          streamName: matchedStreamNames
-        }));
-      } catch (err) {
-        console.error(
-          "Global search failed:",
-          err
-        );
-      }
-    };
-
-    const timer = setTimeout(run, 400);
-
-    return () => clearTimeout(timer);
-  }, [
-    globalSearch,
-    countries,
-    states,
-    cities,
-    universities,
-    colleges,
-    streams
-  ]);
-
-  /* =========================================================
-     INITIAL DATA
-  ========================================================= */
-
-  useEffect(() => {
-    const fetchAllData = async () => {
+    const loadInitialData = async () => {
       try {
         setLoading(true);
         setError(null);
 
-        const hierarchy = await getHierarchy();
+        const hierarchyResponse = await getHierarchy();
 
-        const data = Array.isArray(hierarchy)
-          ? hierarchy
-          : [];
+        /* =================================================
+           HIERARCHY DATA
+        ================================================= */
 
-        setHierarchyData(data);
+        const rawData =
+          Array.isArray(hierarchyResponse)
+            ? hierarchyResponse
+            : [];
 
-        const continentMap = new Map();
-        const countryMap = new Map();
-        const stateMap = new Map();
-        const cityMap = new Map();
-        const universityMap = new Map();
-        const collegeMap = new Map();
-        const courseMap = new Map();
+        const countryData =
+          normalizeCountries(rawData);
+
+        setMasterHierarchyData(countryData);
+        setHierarchyData(countryData);
+
+        /*
+          Countries are available immediately.
+        */
+        setCountries(countryData);
+
+        /*
+          Child dropdowns start empty.
+        */
+        setStates([]);
+        setCities([]);
+        setUniversities([]);
+        setColleges([]);
+
+
+        /* =================================================
+           STREAMS
+           
+           Streams are still collected from hierarchy.
+        ================================================= */
+
         const streamMap = new Map();
 
-        data.forEach((continent) => {
-          if (continent?.id) {
-            continentMap.set(
-              continent.id,
-              {
-                id: continent.id,
-                continentName:
-                  continent.continentname ||
-                  continent.continentName ||
-                  continent.name ||
-                  continent.continent
-              }
-            );
-          }
+        countryData.forEach((country) => {
+          (country?.abroadStates || []).forEach(
+            (state) => {
+              (state?.abroadCities || []).forEach(
+                (city) => {
+                  (
+                    city?.abroadUniversities || []
+                  ).forEach((university) => {
+                    (
+                      university?.abroadColleges ||
+                      []
+                    ).forEach((college) => {
+                      (
+                        college?.abroadCourses ||
+                        []
+                      ).forEach((course) => {
+                        const streamName =
+                          course?.streamName ||
+                          course?.stream?.name ||
+                          course?.stream;
 
-          (
-            continent?.abroadCountries || []
-          ).forEach((country) => {
-            if (country?.id) {
-              countryMap.set(
-                country.id,
-                {
-                  id: country.id,
-                  countryName:
-                    country.countryName ||
-                    country.country ||
-                    country.name,
-                  country:
-                    country.countryName ||
-                    country.country ||
-                    country.name
+                        if (streamName) {
+                          streamMap.set(
+                            String(streamName),
+                            {
+                              id: String(streamName),
+                              name: String(streamName),
+                              streamName:
+                                String(streamName),
+                            }
+                          );
+                        }
+                      });
+                    });
+                  });
                 }
               );
             }
-
-            (
-              country?.abroadStates || []
-            ).forEach((state) => {
-              if (state?.id) {
-                stateMap.set(
-                  state.id,
-                  {
-                    id: state.id,
-                    stateName:
-                      state.stateName ||
-                      state.state ||
-                      state.name,
-                    state:
-                      state.stateName ||
-                      state.state ||
-                      state.name
-                  }
-                );
-              }
-
-              (
-                state?.abroadCities || []
-              ).forEach((city) => {
-                if (city?.id) {
-                  cityMap.set(
-                    city.id,
-                    {
-                      id: city.id,
-                      cityName:
-                        city.cityName ||
-                        city.city ||
-                        city.name,
-                      city:
-                        city.cityName ||
-                        city.city ||
-                        city.name
-                    }
-                  );
-                }
-
-                (
-                  city?.abroadUniversities || []
-                ).forEach((university) => {
-                  if (university?.id) {
-                    universityMap.set(
-                      university.id,
-                      {
-                        id: university.id,
-                        name:
-                          university.universityName ||
-                          university.name ||
-                          university.university,
-                        universityName:
-                          university.universityName ||
-                          university.name ||
-                          university.university
-                      }
-                    );
-                  }
-
-                  (
-                    university?.abroadColleges || []
-                  ).forEach((college) => {
-                    if (college?.id) {
-                      collegeMap.set(
-                        college.id,
-                        {
-                          id: college.id,
-                          name:
-                            college.collegeName ||
-                            college.name,
-                          collegeName:
-                            college.collegeName ||
-                            college.name
-                        }
-                      );
-                    }
-
-                    (
-                      college?.abroadCourses || []
-                    ).forEach((course) => {
-                      if (course?.id) {
-                        courseMap.set(
-                          course.id,
-                          course
-                        );
-                      }
-
-                      const streamName =
-                        course?.streamName ||
-                        course?.stream ||
-                        course?.stream?.name;
-
-                      if (streamName) {
-                        streamMap.set(
-                          String(streamName),
-                          {
-                            id: String(
-                              streamName
-                            ),
-                            name: streamName,
-                            streamName:
-                              streamName
-                          }
-                        );
-                      }
-                    });
-                  });
-                });
-              });
-            });
-          });
+          );
         });
 
-        setContinents(
-          Array.from(
-            continentMap.values()
-          )
-        );
-
-        setCountries(
-          Array.from(
-            countryMap.values()
-          )
-        );
-
-        setStates(
-          Array.from(
-            stateMap.values()
-          )
-        );
-
-        setCity(
-          Array.from(
-            cityMap.values()
-          )
-        );
-
-        setUniversities(
-          Array.from(
-            universityMap.values()
-          )
-        );
-
-        setColleges(
-          Array.from(
-            collegeMap.values()
-          )
-        );
-
-        const courseList =
-          Array.from(
-            courseMap.values()
-          );
-
-        setCourses(courseList);
-        setAllCourses(courseList);
-
         setStreams(
-          Array.from(
-            streamMap.values()
-          )
+          Array.from(streamMap.values())
         );
+
       } catch (err) {
         console.error(
           "Course Finder loading error:",
@@ -688,44 +405,376 @@ export default function CourseFinder() {
         );
 
         setError(
-          err.message ||
+          err?.message ||
             "Failed to load Course Finder data."
         );
 
+        setMasterHierarchyData([]);
         setHierarchyData([]);
+        setCountries([]);
+        setStates([]);
+        setCities([]);
+        setUniversities([]);
+        setColleges([]);
+        setStreams([]);
+
       } finally {
         setLoading(false);
       }
     };
 
-    fetchAllData();
+    loadInitialData();
   }, []);
 
-  /* =========================================================
-     FILTER CHANGE
-  ========================================================= */
 
-  const multipleSelectFilters = [
-    "continentId",
-    "countryId",
-    "stateId",
-    "cityId",
-    "universityId",
-    "collegeId",
-    "courseId",
-    "streamName",
-    "examType",
-    "academicRequirements",
-    "intake"
-  ];
+  useEffect(() => {
+  const loadCourseNames = async () => {
+    try {
+      const response = await getAllCourseNames();
+
+      // Handle common API response formats.
+      const courseNames = Array.isArray(response)
+        ? response
+        : Array.isArray(response?.data)
+        ? response.data
+        : Array.isArray(response?.courseNames)
+        ? response.courseNames
+        : [];
+
+      const courseList = courseNames
+        .map((item) => {
+          // API might return strings or objects.
+          const name =
+            typeof item === "string"
+              ? item
+              : item?.courseName ??
+                item?.name ??
+                item?.course ??
+                item?.course_name;
+
+          if (name == null || typeof name !== "string") {
+            return null;
+          }
+
+          const cleanName = name.trim();
+
+          if (!cleanName) return null;
+
+          return {
+            id: cleanName,
+            name: cleanName,
+            courseName: cleanName,
+          };
+        })
+        .filter(Boolean);
+
+      setCourses(courseList);
+    } catch (err) {
+      console.error("Failed to load course names:", err);
+      setCourses([]);
+    }
+  };
+
+  loadCourseNames();
+}, []);
+
+
+  /* =======================================================
+     COUNTRY → STATE
+  ======================================================= */
+
+  useEffect(() => {
+    if (!filters.countryId.length) {
+      setStates([]);
+      setCities([]);
+      setUniversities([]);
+      setColleges([]);
+
+      return;
+    }
+
+    const result = [];
+
+    masterHierarchyData.forEach(
+      (country) => {
+        if (
+          !filters.countryId.includes(
+            country?.id
+          )
+        ) {
+          return;
+        }
+
+        (
+          country?.abroadStates || []
+        ).forEach((state) => {
+          if (!state?.id) return;
+
+          result.push({
+            ...state,
+
+            stateName:
+              getName(state, "state"),
+
+            state:
+              getName(state, "state"),
+
+            abroadCities:
+              state.abroadCities || [],
+          });
+        });
+      }
+    );
+
+    setStates(uniqueById(result));
+
+    setCities([]);
+    setUniversities([]);
+    setColleges([]);
+  }, [
+    filters.countryId,
+    masterHierarchyData,
+  ]);
+
+
+  /* =======================================================
+     STATE → CITY
+  ======================================================= */
+
+  useEffect(() => {
+    if (!filters.stateId.length) {
+      setCities([]);
+      setUniversities([]);
+      setColleges([]);
+
+      return;
+    }
+
+    const result = [];
+
+    masterHierarchyData.forEach(
+      (country) => {
+        (
+          country?.abroadStates || []
+        ).forEach((state) => {
+          if (
+            !filters.stateId.includes(
+              state?.id
+            )
+          ) {
+            return;
+          }
+
+          (
+            state?.abroadCities || []
+          ).forEach((city) => {
+            if (!city?.id) return;
+
+            result.push({
+              ...city,
+
+              cityName:
+                getName(city, "city"),
+
+              city:
+                getName(city, "city"),
+
+              abroadUniversities:
+                city.abroadUniversities || [],
+            });
+          });
+        });
+      }
+    );
+
+    setCities(uniqueById(result));
+
+    setUniversities([]);
+    setColleges([]);
+  }, [
+    filters.stateId,
+    masterHierarchyData,
+  ]);
+
+
+  /* =======================================================
+     CITY → UNIVERSITY
+  ======================================================= */
+
+  useEffect(() => {
+    if (!filters.cityId.length) {
+      setUniversities([]);
+      setColleges([]);
+
+      return;
+    }
+
+    const result = [];
+
+    masterHierarchyData.forEach(
+      (country) => {
+        (
+          country?.abroadStates || []
+        ).forEach((state) => {
+          (
+            state?.abroadCities || []
+          ).forEach((city) => {
+            if (
+              !filters.cityId.includes(
+                city?.id
+              )
+            ) {
+              return;
+            }
+
+            (
+              city?.abroadUniversities || []
+            ).forEach((university) => {
+              if (!university?.id) return;
+
+              result.push({
+                ...university,
+
+                name:
+                  getName(
+                    university,
+                    "university"
+                  ),
+
+                universityName:
+                  getName(
+                    university,
+                    "university"
+                  ),
+
+                university:
+                  getName(
+                    university,
+                    "university"
+                  ),
+
+                abroadColleges:
+                  university.abroadColleges ||
+                  [],
+              });
+            });
+          });
+        });
+      }
+    );
+
+    setUniversities(
+      uniqueById(result)
+    );
+
+    setColleges([]);
+  }, [
+    filters.cityId,
+    masterHierarchyData,
+  ]);
+
+
+  /* =======================================================
+     UNIVERSITY → COLLEGE
+  ======================================================= */
+
+  useEffect(() => {
+    if (!filters.universityId.length) {
+      setColleges([]);
+
+      return;
+    }
+
+    const result = [];
+
+    masterHierarchyData.forEach(
+      (country) => {
+        (
+          country?.abroadStates || []
+        ).forEach((state) => {
+          (
+            state?.abroadCities || []
+          ).forEach((city) => {
+            (
+              city?.abroadUniversities || []
+            ).forEach((university) => {
+              if (
+                !filters.universityId.includes(
+                  university?.id
+                )
+              ) {
+                return;
+              }
+
+              (
+                university?.abroadColleges ||
+                []
+              ).forEach((college) => {
+                if (!college?.id) return;
+
+                result.push({
+                  ...college,
+
+                  name:
+                    getName(
+                      college,
+                      "college"
+                    ),
+
+                  collegeName:
+                    getName(
+                      college,
+                      "college"
+                    ),
+                });
+              });
+            });
+          });
+        });
+      }
+    );
+
+    setColleges(
+      uniqueById(result)
+    );
+  }, [
+    filters.universityId,
+    masterHierarchyData,
+  ]);
+
+
+  /* =======================================================
+     FILTER TYPES
+  ======================================================= */
+
+  const multipleSelectFilters = useMemo(
+    () => [
+      "countryId",
+      "stateId",
+      "cityId",
+      "universityId",
+      "collegeId",
+      "courseId",
+      "streamName",
+      "examType",
+      "academicRequirements",
+      "intake",
+    ],
+    []
+  );
+
+
+  /* =======================================================
+     FILTER CHANGE
+  ======================================================= */
 
   const handleFilterChange = (
     filterName,
     value
   ) => {
-    setFilters((prevFilters) => {
-      const updatedFilters = {
-        ...prevFilters
+    setFilters((prev) => {
+      const next = {
+        ...prev,
       };
 
       if (
@@ -733,38 +782,480 @@ export default function CourseFinder() {
           filterName
         )
       ) {
-        updatedFilters[filterName] =
+        next[filterName] =
           Array.isArray(value)
             ? value
             : [value];
       } else {
-        updatedFilters[filterName] =
-          value || "";
+        next[filterName] =
+          value ?? "";
       }
 
-      return updatedFilters;
+
+      /*
+        Country changed:
+        State → City → University → College
+        must be cleared.
+      */
+      if (
+        filterName === "countryId"
+      ) {
+        next.stateId = [];
+        next.cityId = [];
+        next.universityId = [];
+        next.collegeId = [];
+      }
+
+
+      /*
+        State changed:
+        City → University → College
+      */
+      if (
+        filterName === "stateId"
+      ) {
+        next.cityId = [];
+        next.universityId = [];
+        next.collegeId = [];
+      }
+
+
+      /*
+        City changed:
+        University → College
+      */
+      if (
+        filterName === "cityId"
+      ) {
+        next.universityId = [];
+        next.collegeId = [];
+      }
+
+
+      /*
+        University changed:
+        College
+      */
+      if (
+        filterName === "universityId"
+      ) {
+        next.collegeId = [];
+      }
+
+      return next;
     });
   };
 
-  /* =========================================================
+
+  /* =======================================================
+     BUILD FILTER PARAMS
+  ======================================================= */
+
+  const buildFilterParams = (
+    filters,
+    countries,
+    states,
+    cities,
+    universities,
+    colleges,
+    courses
+  ) => {
+    const params = {};
+
+
+    if (filters.countryId.length) {
+      const names = countries
+        .filter((item) =>
+          filters.countryId.includes(
+            item.id
+          )
+        )
+        .map((item) =>
+          getName(item, "country")
+        )
+        .filter(Boolean);
+
+      if (names.length) {
+        params.countryName = names;
+      }
+    }
+
+
+    if (filters.stateId.length) {
+      const names = states
+        .filter((item) =>
+          filters.stateId.includes(
+            item.id
+          )
+        )
+        .map((item) =>
+          getName(item, "state")
+        )
+        .filter(Boolean);
+
+      if (names.length) {
+        params.stateName = names;
+      }
+    }
+
+
+    if (filters.cityId.length) {
+      const names = cities
+        .filter((item) =>
+          filters.cityId.includes(
+            item.id
+          )
+        )
+        .map((item) =>
+          getName(item, "city")
+        )
+        .filter(Boolean);
+
+      if (names.length) {
+        params.cityName = names;
+      }
+    }
+
+
+    if (filters.universityId.length) {
+      const names = universities
+        .filter((item) =>
+          filters.universityId.includes(
+            item.id
+          )
+        )
+        .map((item) =>
+          getName(
+            item,
+            "university"
+          )
+        )
+        .filter(Boolean);
+
+      if (names.length) {
+        params.universityName = names;
+      }
+    }
+
+
+    if (filters.collegeId.length) {
+      const names = colleges
+        .filter((item) =>
+          filters.collegeId.includes(
+            item.id
+          )
+        )
+        .map((item) =>
+          getName(
+            item,
+            "college"
+          )
+        )
+        .filter(Boolean);
+
+      if (names.length) {
+        params.collegeName = names;
+      }
+    }
+
+
+    /*
+      IMPORTANT:
+      Course names now come directly
+      from getAllCourseNames().
+    */
+    if (filters.courseId.length) {
+      const names = courses
+        .filter((item) =>
+          filters.courseId.includes(
+            item.id
+          )
+        )
+        .map((item) =>
+          getName(item, "course")
+        )
+        .filter(Boolean);
+
+      if (names.length) {
+        params.courseName = names;
+      }
+    }
+
+
+    if (filters.streamName.length) {
+      params.streamName =
+        filters.streamName;
+    }
+
+
+    if (filters.scholarship) {
+      params.scholarship =
+        filters.scholarship;
+    }
+
+
+    if (filters.feesRange) {
+      params.feesRange =
+        filters.feesRange;
+    }
+
+
+    if (filters.examType.length) {
+      params.examType =
+        filters.examType;
+    }
+
+
+    if (filters.englishExamRequirements) {
+      params.englishExamRequirements =
+        filters.englishExamRequirements;
+    }
+
+
+    if (
+      filters.academicRequirements.length
+    ) {
+      params.academicRequirements =
+        filters.academicRequirements;
+    }
+
+
+    if (filters.intake.length) {
+      params.intake =
+        filters.intake;
+    }
+
+    return params;
+  };
+
+
+  /* =======================================================
+     FETCH FILTERED DATA
+  ======================================================= */
+
+  const fetchFilteredData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const params =
+        buildFilterParams(
+          filters,
+          countries,
+          states,
+          cities,
+          universities,
+          colleges,
+          courses
+        );
+
+      const response =
+        await getHierarchy(params);
+
+      const rawData =
+        Array.isArray(response)
+          ? response
+          : [];
+
+      const normalized =
+        normalizeCountries(rawData);
+
+      setHierarchyData(normalized);
+
+    } catch (err) {
+      console.error(
+        "Error fetching filtered data:",
+        err
+      );
+
+      setError(
+        err?.message ||
+          "Failed to load filtered data."
+      );
+
+      setHierarchyData([]);
+
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+  /* =======================================================
      APPLY FILTERS
-  ========================================================= */
+  ======================================================= */
 
   useEffect(() => {
+    if (!masterHierarchyData.length) {
+      return;
+    }
+
     const timer = setTimeout(() => {
       fetchFilteredData();
-    }, 500);
+    }, 400);
 
-    return () => clearTimeout(timer);
+    return () =>
+      clearTimeout(timer);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters]);
 
-  /* =========================================================
+
+  /* =======================================================
+     GLOBAL SEARCH
+  ======================================================= */
+
+
+useEffect(() => {
+  let cancelled = false;
+
+  const runSearch = async () => {
+    const query = globalSearch.trim();
+
+    // Do not search for empty input.
+    if (!query) return;
+
+    try {
+      const [
+        universityNames,
+        stateNames,
+        cityNames,
+        collegeNames,
+        countryNames,
+        streamNames,
+      ] = await Promise.all([
+        searchUniversities(query),
+        searchStates(query),
+        searchCities(query),
+        searchColleges(query),
+        searchCountries(query),
+        searchStreams(query),
+      ]);
+
+      // Ignore results from an outdated search.
+      if (cancelled) return;
+
+      
+const normalizeText = (value) =>
+  String(value ?? "")
+    .trim()
+    .toLowerCase();
+
+const makeSet = (items) =>
+  new Set(
+    (Array.isArray(items) ? items : [])
+      .map((item) => normalizeText(item))
+      .filter(Boolean)
+  );
+
+
+      const universitySet = makeSet(universityNames);
+      const stateSet = makeSet(stateNames);
+      const citySet = makeSet(cityNames);
+      const collegeSet = makeSet(collegeNames);
+      const countrySet = makeSet(countryNames);
+      const streamSet = makeSet(streamNames);
+
+      const matchedCountryIds = countries
+        .filter((item) =>
+          countrySet.has(
+            getName(item, "country").trim().toLowerCase()
+          )
+        )
+        .map((item) => item.id);
+
+      const matchedStateIds = states
+        .filter((item) =>
+          stateSet.has(
+            getName(item, "state").trim().toLowerCase()
+          )
+        )
+        .map((item) => item.id);
+
+      const matchedCityIds = cities
+        .filter((item) =>
+          citySet.has(
+            getName(item, "city").trim().toLowerCase()
+          )
+        )
+        .map((item) => item.id);
+
+      const matchedUniversityIds = universities
+        .filter((item) =>
+          universitySet.has(
+            getName(item, "university").trim().toLowerCase()
+          )
+        )
+        .map((item) => item.id);
+
+      const matchedCollegeIds = colleges
+        .filter((item) =>
+          collegeSet.has(
+            getName(item, "college").trim().toLowerCase()
+          )
+        )
+        .map((item) => item.id);
+
+      const matchedStreams = streams
+        .map((item) => item.name || item.streamName)
+        .filter(
+          (name) =>
+            name &&
+            streamSet.has(String(name).trim().toLowerCase())
+        );
+
+      if (cancelled) return;
+
+      setFilters((prev) => {
+        const sameValues = (a, b) =>
+          a.length === b.length &&
+          a.every((value, index) => value === b[index]);
+
+        // Avoid unnecessary state updates and effect loops.
+        if (
+          sameValues(prev.countryId, matchedCountryIds) &&
+          sameValues(prev.stateId, matchedStateIds) &&
+          sameValues(prev.cityId, matchedCityIds) &&
+          sameValues(prev.universityId, matchedUniversityIds) &&
+          sameValues(prev.collegeId, matchedCollegeIds) &&
+          sameValues(prev.streamName, matchedStreams)
+        ) {
+          return prev;
+        }
+
+        return {
+          ...prev,
+          countryId: matchedCountryIds,
+          stateId: matchedStateIds,
+          cityId: matchedCityIds,
+          universityId: matchedUniversityIds,
+          collegeId: matchedCollegeIds,
+          streamName: matchedStreams,
+        };
+      });
+    } catch (err) {
+      if (!cancelled) {
+        console.error("Global search failed:", err);
+      }
+    }
+  };
+
+  const timer = setTimeout(runSearch, 400);
+
+  return () => {
+    cancelled = true;
+    clearTimeout(timer);
+  };
+}, [globalSearch]);
+
+
+
+  /* =======================================================
      CLEAR FILTERS
-  ========================================================= */
+  ======================================================= */
 
   const clearAllFilters = () => {
     setFilters({
-      continentId: [],
       countryId: [],
       stateId: [],
       cityId: [],
@@ -772,61 +1263,285 @@ export default function CourseFinder() {
       collegeId: [],
       courseId: [],
       streamName: [],
+
       scholarship: "",
       feesRange: "",
       examType: [],
       englishExamRequirements: "",
       academicRequirements: [],
-      intake: []
+      intake: [],
     });
 
     setSearchTexts({
-      continent: "",
       country: "",
       state: "",
       city: "",
       university: "",
       college: "",
       stream: "",
-      course: ""
+      course: "",
     });
+
+    setGlobalSearch("");
+
+    setStates([]);
+    setCities([]);
+    setUniversities([]);
+    setColleges([]);
   };
 
-  /* =========================================================
+
+  /* =======================================================
      COURSE TOGGLES
-  ========================================================= */
+  ======================================================= */
 
   const toggleCourseExpansion = (
     courseKey
   ) => {
     setExpandedCourses((prev) => ({
       ...prev,
-      [courseKey]: !prev[courseKey]
+
+      [courseKey]:
+        !prev[courseKey],
     }));
   };
+
 
   const toggleDescription = (
     courseKey
   ) => {
     setShowDescription((prev) => ({
       ...prev,
-      [courseKey]: !prev[courseKey]
+
+      [courseKey]:
+        !prev[courseKey],
     }));
   };
 
-  /* =========================================================
+
+  /* =======================================================
+     SEARCH FIELD
+  ======================================================= */
+
+  const renderSearchField = (
+    type,
+    placeholder,
+    disabled = false
+  ) => (
+    <Box
+      className={styles.dropdownSearchBox}
+      sx={{ p: 1 }}
+      onClick={(e) => e.stopPropagation()}
+    >
+      <TextField
+        size="small"
+        fullWidth
+        placeholder={placeholder}
+        value={
+          searchTexts[type] || ""
+        }
+        onChange={(e) =>
+          handleFilterTextChange(
+            type,
+            e.target.value
+          )
+        }
+        disabled={disabled}
+        sx={searchFieldStyles}
+        slotProps={{
+          input: {
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon fontSize="small" />
+              </InputAdornment>
+            ),
+
+            endAdornment:
+              searchTexts[type] ? (
+                <InputAdornment position="end">
+                  <IconButton
+                    size="small"
+                    onClick={(e) => {
+                      e.stopPropagation();
+
+                      handleFilterTextChange(
+                        type,
+                        ""
+                      );
+                    }}
+                  >
+                    <ClearIcon fontSize="small" />
+                  </IconButton>
+                </InputAdornment>
+              ) : null,
+          },
+        }}
+      />
+    </Box>
+  );
+
+
+  /* =======================================================
+     REUSABLE MULTI SELECT
+  ======================================================= */
+
+  const renderMultiSelect = ({
+    name,
+    label,
+    searchType,
+    items,
+    getValue,
+    getLabel,
+    disabled = false,
+    emptyLabel,
+  }) => {
+    const selected =
+      filters[name] || [];
+
+    const filteredItems =
+      getFilteredOptions(
+        searchType,
+        items
+      );
+
+    return (
+      <FormControl
+        className={styles.horizontalFilter}
+        sx={{ mb: 0 }}
+      >
+        <InputLabel>
+          {label}
+        </InputLabel>
+
+        <Select
+          multiple
+          value={selected}
+          onChange={(e) =>
+            handleFilterChange(
+              name,
+              e.target.value
+            )
+          }
+          label={label}
+          disabled={
+            disabled || loading
+          }
+          renderValue={(values) =>
+            values.length
+              ? items
+                  .filter((item) =>
+                    values.includes(
+                      getValue(item)
+                    )
+                  )
+                  .map((item) =>
+                    getLabel(item)
+                  )
+                  .join(", ")
+              : emptyLabel
+          }
+          MenuProps={{
+            PaperProps: {
+              style: {
+                maxHeight: 300,
+              },
+            },
+          }}
+        >
+          {renderSearchField(
+            searchType,
+            `Search ${label.toLowerCase()}...`,
+            disabled || loading
+          )}
+
+          {filteredItems.map(
+            (item) => {
+              const value =
+                getValue(item);
+
+              return (
+                <MenuItem
+                  key={value}
+                  value={value}
+                >
+                  <Checkbox
+                    checked={selected.includes(
+                      value
+                    )}
+                  />
+
+                  <ListItemText
+                    primary={getLabel(item)}
+                  />
+                </MenuItem>
+              );
+            }
+          )}
+        </Select>
+      </FormControl>
+    );
+  };
+
+
+  /* =======================================================
      COURSE DETAILS
-  ========================================================= */
+  ======================================================= */
 
   const renderCourseDetails = (
     course,
     courseKey
   ) => {
-    const isExpanded =
+    const expanded =
       expandedCourses[courseKey];
 
-    const showDesc =
+    const descriptionVisible =
       showDescription[courseKey];
+
+    const extraDetails = [
+      [
+        "Academic Requirements",
+        course.academicRequirements,
+      ],
+
+      [
+        "English Exam Requirements",
+        course.englishExamRequirements,
+      ],
+
+      [
+        "Exam Score",
+        course.examScore,
+      ],
+
+      [
+        "Additional Requirements",
+        course.additionalRequirements,
+      ],
+
+      [
+        "Scholarship",
+        course.scholarship,
+      ],
+
+      [
+        "Hostel Available",
+        course.hostel,
+      ],
+
+      [
+        "Hostel Fees",
+        course.hostelFees
+          ? `₹${Number(
+              course.hostelFees
+            ).toLocaleString()}`
+          : null,
+      ],
+
+      [
+        "Exam Type",
+        course.examType,
+      ],
+    ];
 
     return (
       <Card
@@ -835,50 +1550,43 @@ export default function CourseFinder() {
           height: "100%",
           display: "flex",
           flexDirection: "column",
+
           "&:hover": {
-            borderColor: "primary.main",
-            backgroundColor: "action.hover"
+            borderColor:
+              "primary.main",
+            backgroundColor:
+              "action.hover",
           },
+
           transition:
-            "all 0.2s ease-in-out"
+            "all 0.2s ease-in-out",
         }}
       >
         <CardContent
-          sx={{ flexGrow: 1 }}
+          sx={{
+            flexGrow: 1,
+          }}
         >
           <Typography
             variant="subtitle1"
             fontWeight="bold"
             gutterBottom
           >
-            {course.courseName ||
+            {course.name ||
+              course.courseName ||
               "Course Name N/A"}
           </Typography>
 
-          <Box sx={{ mt: 1 }}>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent:
-                  "space-between",
-                mb: 0.5
-              }}
-            >
-              <Typography
-                variant="body2"
-                color="text.secondary"
-              >
-                Stream Name:
-              </Typography>
 
-              <Typography
-                variant="body2"
-                fontWeight="medium"
-              >
-                {course.streamName ||
-                  "N/A"}
-              </Typography>
-            </Box>
+          <Box sx={{ mt: 1 }}>
+            <DetailRow
+              label="Stream Name"
+              value={
+                course.streamName ||
+                "N/A"
+              }
+            />
+
 
             <Box
               sx={{
@@ -886,14 +1594,15 @@ export default function CourseFinder() {
                 justifyContent:
                   "space-between",
                 mb: 0.5,
-                alignItems: "center"
+                alignItems:
+                  "center",
               }}
             >
               <Box
                 sx={{
                   display: "flex",
                   alignItems:
-                    "center"
+                    "center",
                 }}
               >
                 <Typography
@@ -905,7 +1614,7 @@ export default function CourseFinder() {
 
                 <Tooltip
                   title={
-                    showDesc
+                    descriptionVisible
                       ? "Hide description"
                       : "Show description"
                   }
@@ -919,7 +1628,7 @@ export default function CourseFinder() {
                     }
                     sx={{
                       p: 0,
-                      ml: 0.5
+                      ml: 0.5,
                     }}
                   >
                     <InfoOutlinedIcon fontSize="small" />
@@ -928,14 +1637,15 @@ export default function CourseFinder() {
               </Box>
             </Box>
 
-            {showDesc && (
+
+            {descriptionVisible && (
               <Box
                 sx={{
                   mb: 1,
                   p: 1,
                   backgroundColor:
                     "grey.50",
-                  borderRadius: 1
+                  borderRadius: 1,
                 }}
               >
                 <Typography
@@ -948,139 +1658,65 @@ export default function CourseFinder() {
               </Box>
             )}
 
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent:
-                  "space-between",
-                mb: 0.5
-              }}
-            >
-              <Typography
-                variant="body2"
-                color="text.secondary"
-              >
-                Duration:
-              </Typography>
 
-              <Typography
-                variant="body2"
-                fontWeight="medium"
-              >
-                {course.duration ||
-                  "N/A"}
-              </Typography>
-            </Box>
+            <DetailRow
+              label="Duration"
+              value={
+                course.duration ||
+                "N/A"
+              }
+            />
 
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent:
-                  "space-between",
-                mb: 0.5
-              }}
-            >
-              <Typography
-                variant="body2"
-                color="text.secondary"
-              >
-                Institute Rank:
-              </Typography>
 
-              <Typography
-                variant="body2"
-                fontWeight="medium"
-              >
-                {course.institute_rank ||
-                  course.instituteRank ||
-                  "N/A"}
-              </Typography>
-            </Box>
+            <DetailRow
+              label="Institute Rank"
+              value={
+                course.institute_rank ||
+                course.instituteRank ||
+                "N/A"
+              }
+            />
 
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent:
-                  "space-between",
-                mb: 0.5
-              }}
-            >
-              <Typography
-                variant="body2"
-                color="text.secondary"
-              >
-                Intake:
-              </Typography>
 
-              <Typography
-                variant="body2"
-                fontWeight="medium"
-              >
-                {course.intake ||
-                  "N/A"}
-              </Typography>
-            </Box>
+            <DetailRow
+              label="Intake"
+              value={
+                course.intake ||
+                "N/A"
+              }
+            />
 
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent:
-                  "space-between",
-                mb: 0.5
-              }}
-            >
-              <Typography
-                variant="body2"
-                color="text.secondary"
-              >
-                Tuition Fees:
-              </Typography>
 
-              <Typography
-                variant="body2"
-                fontWeight="medium"
-              >
-                {course.tutionFees
+            <DetailRow
+              label="Tuition Fees"
+              value={
+                course.tutionFees
                   ? `₹${Number(
                       course.tutionFees
                     ).toLocaleString()}`
-                  : "N/A"}
-              </Typography>
-            </Box>
+                  : "N/A"
+              }
+            />
 
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent:
-                  "space-between",
-                mb: 0.5
-              }}
-            >
-              <Typography
-                variant="body2"
-                color="text.secondary"
-              >
-                Application Fees:
-              </Typography>
 
-              <Typography
-                variant="body2"
-                fontWeight="medium"
-              >
-                {course.applicationFees
+            <DetailRow
+              label="Application Fees"
+              value={
+                course.applicationFees
                   ? `₹${Number(
                       course.applicationFees
                     ).toLocaleString()}`
-                  : "N/A"}
-              </Typography>
-            </Box>
+                  : "N/A"
+              }
+            />
+
 
             <Box
               sx={{
                 display: "flex",
                 justifyContent:
                   "space-between",
-                mb: 0.5
+                mb: 0.5,
               }}
             >
               <Typography
@@ -1110,6 +1746,7 @@ export default function CourseFinder() {
               </Typography>
             </Box>
 
+
             <Button
               size="small"
               onClick={() =>
@@ -1118,7 +1755,7 @@ export default function CourseFinder() {
                 )
               }
               endIcon={
-                isExpanded ? (
+                expanded ? (
                   <ExpandLessIcon />
                 ) : (
                   <ExpandMoreIcon />
@@ -1132,109 +1769,41 @@ export default function CourseFinder() {
                 fontSize:
                   "0.75rem",
                 color:
-                  "primary.main"
+                  "primary.main",
               }}
             >
-              {isExpanded
+              {expanded
                 ? "Show Less"
                 : "View More Details"}
             </Button>
 
-            {isExpanded && (
+
+            {expanded && (
               <Box
                 sx={{
                   mt: 1,
                   pt: 1,
                   borderTop:
-                    "1px solid #eee"
+                    "1px solid #eee",
                 }}
               >
-                {[
-                  [
-                    "Academic Requirements",
-                    course.academicRequirements
-                  ],
-                  [
-                    "English Exam Requirements",
-                    course.englishExamRequirements
-                  ],
-                  [
-                    "Exam Score",
-                    course.examScore
-                  ],
-                  [
-                    "Additional Requirements",
-                    course.additionalRequirements
-                  ],
-                  [
-                    "Scholarship",
-                    course.scholarship
-                  ],
-                  [
-                    "Hostel Available",
-                    course.hostel
-                  ],
-                  [
-                    "Hostel Fees",
-                    course.hostelFees
-                      ? `₹${Number(
-                          course.hostelFees
-                        ).toLocaleString()}`
-                      : null
-                  ],
-                  [
-                    "Exam Type",
-                    course.examType
-                  ]
-                ].map(
+                {extraDetails.map(
                   ([label, value]) => (
-                    <Box
+                    <DetailRow
                       key={label}
-                      sx={{
-                        display:
-                          "flex",
-                        justifyContent:
-                          "space-between",
-                        mb: 0.5
-                      }}
-                    >
-                      <Typography
-                        variant="body2"
-                        color="text.secondary"
-                      >
-                        {label}:
-                      </Typography>
-
-                      <Typography
-                        variant="body2"
-                        fontWeight="medium"
-                      >
-                        {value || "N/A"}
-                      </Typography>
-                    </Box>
+                      label={label}
+                      value={
+                        value || "N/A"
+                      }
+                    />
                   )
                 )}
 
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent:
-                      "space-between",
-                    mb: 0.5
-                  }}
-                >
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                  >
-                    Application Link:
-                  </Typography>
 
-                  <Typography
-                    variant="body2"
-                    fontWeight="medium"
-                  >
-                    {course.applicationLink ? (
+                <DetailRow
+                  label="Application Link"
+                  value={
+                    course.applicationLink ? (
                       <a
                         href={
                           course.applicationLink
@@ -1246,63 +1815,33 @@ export default function CourseFinder() {
                       </a>
                     ) : (
                       "N/A"
-                    )}
-                  </Typography>
-                </Box>
+                    )
+                  }
+                />
 
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent:
-                      "space-between",
-                    mb: 0.5
-                  }}
-                >
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                  >
-                    Tuition Fees (INR):
-                  </Typography>
 
-                  <Typography
-                    variant="body2"
-                    fontWeight="medium"
-                  >
-                    {course.tutionFeesINR
+                <DetailRow
+                  label="Tuition Fees (INR)"
+                  value={
+                    course.tutionFeesINR
                       ? `₹${Number(
                           course.tutionFeesINR
                         ).toLocaleString()}`
-                      : "N/A"}
-                  </Typography>
-                </Box>
+                      : "N/A"
+                  }
+                />
 
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent:
-                      "space-between",
-                    mb: 0.5
-                  }}
-                >
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                  >
-                    Total Fees (INR):
-                  </Typography>
 
-                  <Typography
-                    variant="body2"
-                    fontWeight="medium"
-                  >
-                    {course.feesINR
+                <DetailRow
+                  label="Total Fees (INR)"
+                  value={
+                    course.feesINR
                       ? `₹${Number(
                           course.feesINR
                         ).toLocaleString()}`
-                      : "N/A"}
-                  </Typography>
-                </Box>
+                      : "N/A"
+                  }
+                />
               </Box>
             )}
           </Box>
@@ -1311,156 +1850,124 @@ export default function CourseFinder() {
     );
   };
 
-  /* =========================================================
-     FILTER COMPONENTS
-  ========================================================= */
 
-  const renderSearchField = (
-    type,
-    placeholder,
-    disabled = false
-  ) => (
-    <Box sx={{ p: 1 }}>
-      <TextField
-        size="small"
-        fullWidth
-        placeholder={placeholder}
-        value={searchTexts[type]}
-        onChange={(e) =>
-          handleFilterTextChange(
-            type,
-            e.target.value
-          )
-        }
-        onClick={(e) =>
-          e.stopPropagation()
-        }
-        disabled={disabled}
-        sx={searchFieldStyles}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <SearchIcon fontSize="small" />
-            </InputAdornment>
-          ),
-          endAdornment:
-            searchTexts[type] && (
-              <InputAdornment position="end">
-                <IconButton
-                  size="small"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleFilterTextChange(
-                      type,
-                      ""
-                    );
-                  }}
-                >
-                  <ClearIcon fontSize="small" />
-                </IconButton>
-              </InputAdornment>
-            )
-        }}
-      />
-    </Box>
+  /* =======================================================
+     FLATTEN UNIVERSITIES FOR PAGINATION
+  ======================================================= */
+
+  const allUniversities = useMemo(() => {
+    const result = [];
+
+    (hierarchyData || []).forEach(
+      (country) => {
+        (country?.abroadStates || []).forEach(
+          (state) => {
+            (state?.abroadCities || []).forEach(
+              (city) => {
+                (
+                  city?.abroadUniversities ||
+                  []
+                ).forEach(
+                  (university) => {
+                    result.push({
+                      country,
+                      state,
+                      city,
+                      university,
+                    });
+                  }
+                );
+              }
+            );
+          }
+        );
+      }
+    );
+
+    return result;
+  }, [hierarchyData]);
+
+
+  const totalCourses = allUniversities.reduce(
+    (total, item) =>
+      total +
+      (item.university.abroadColleges || []).reduce(
+        (collegeTotal, college) =>
+          collegeTotal + (college.abroadCourses || []).length,
+        0
+      ),
+    0
   );
 
-  /* =========================================================
+  const sortedUniversities = [...allUniversities].sort((a, b) => {
+    const nameA =
+      a.university.universityName || a.university.name || "";
+    const nameB =
+      b.university.universityName || b.university.name || "";
+
+    if (sortOrder === "name-asc") {
+      return nameA.localeCompare(nameB);
+    }
+
+    if (sortOrder === "name-desc") {
+      return nameB.localeCompare(nameA);
+    }
+
+    return 0;
+  });
+
+  const totalPages = Math.ceil(
+    sortedUniversities.length / universitiesPerPage
+  );
+
+  const paginatedUniversities = sortedUniversities.slice(
+    (currentPage - 1) * universitiesPerPage,
+    currentPage * universitiesPerPage
+  );
+
+
+  /* =======================================================
+     RESET PAGINATION WHEN FILTERED DATA CHANGES
+  ======================================================= */
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filters]);
+
+
+  /* =======================================================
      RENDER
-  ========================================================= */
+  ======================================================= */
 
   return (
     <Container
       maxWidth="xl"
       sx={{
         mt: 4,
-        mb: 4
+        mb: 4,
       }}
     >
-      {/* HEADER */}
+
+      {/* ===================================================
+          HEADER
+      =================================================== */}
+
       <Box
         sx={{
           display: "flex",
           alignItems: "center",
           gap: 2,
-          mb: 2
+          mb: 2,
         }}
       >
-        <Typography
-          variant="h4"
-          sx={{
-            fontWeight: "bold",
-            color: "primary.main",
-            whiteSpace: "nowrap"
-          }}
-        >
-          University Course Finder
-        </Typography>
 
-        <Box
-          sx={{
-            display: "flex",
-            gap: 1,
-            flexGrow: 1,
-            maxWidth: "600px"
-          }}
-        >
-          <TextField
-            fullWidth
-            placeholder="Search..."
-            value={globalSearch}
-            onChange={(e) =>
-              setGlobalSearch(
-                e.target.value
-              )
-            }
-            size="small"
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                height: "40px"
-              }
-            }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon fontSize="small" />
-                </InputAdornment>
-              ),
-              endAdornment:
-                globalSearch && (
-                  <InputAdornment position="end">
-                    <IconButton
-                      size="small"
-                      onClick={() =>
-                        setGlobalSearch(
-                          ""
-                        )
-                      }
-                    >
-                      <ClearIcon fontSize="small" />
-                    </IconButton>
-                  </InputAdornment>
-                )
-            }}
-          />
-
-          <Button
-            variant="outlined"
-            onClick={() => {
-              setGlobalSearch("");
-              clearAllFilters();
-            }}
-            sx={{
-              whiteSpace: "nowrap",
-              height: "40px"
-            }}
-          >
-            Clear
-          </Button>
-        </Box>
       </Box>
 
-      {/* ERROR */}
+
+      {/* ===================================================
+          ERROR
+      =================================================== */}
+
       {error && (
         <Alert
           severity="error"
@@ -1473,661 +1980,214 @@ export default function CourseFinder() {
         </Alert>
       )}
 
-      {/* =====================================================
-          IMPORTANT:
-          FILTERS LEFT
-          RESULTS RIGHT
-      ===================================================== */}
 
-      <div className={styles.layout}>
+      {/* ===================================================
+          MAIN LAYOUT
+      =================================================== */}
 
-        {/* ===================================================
-            LEFT SIDEBAR
-        =================================================== */}
+      <div
+        className={
+          styles.courseFinderContent
+        }
+      >
 
-        <aside className={styles.sidebar}>
+        {/* =================================================
+            HORIZONTAL FILTER BAR
+        ================================================= */}
 
-          <div className={styles.filterHeader}>
-            <h3 className={styles.filterTitle}>
-              Filters
-            </h3>
+        <div
+          className={
+            styles.horizontalFilters
+          }
+        >
 
-            <button
-              className={styles.filterReset}
-              onClick={clearAllFilters}
-              disabled={loading}
-            >
-              Reset
-            </button>
+          
+          <div className={styles.filterSearch}>
+            <TextField
+              fullWidth
+              placeholder="Search..."
+              value={globalSearch}
+              onChange={(e) => setGlobalSearch(e.target.value)}
+              size="small"
+              slotProps={{
+                input: {
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon />
+                    </InputAdornment>
+                  ),
+                  endAdornment: globalSearch ? (
+                    <InputAdornment position="end">
+                      <IconButton
+                        size="small"
+                        onClick={() => setGlobalSearch("")}
+                        aria-label="Clear search"
+                      >
+                        <ClearIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  ) : null,
+                },
+              }}
+            />
           </div>
 
-          {/* CONTINENT */}
-          <FormControl
-            fullWidth
-            sx={{ mb: 2 }}
-          >
-            <InputLabel>
-              Continent
-            </InputLabel>
 
-            <Select
-              multiple
-              value={filters.continentId}
-              onChange={(e) =>
-                handleFilterChange(
-                  "continentId",
-                  e.target.value
-                )
-              }
-              label="Continent"
-              disabled={loading}
-              renderValue={(selected) =>
-                selected.length
-                  ? continents
-                      .filter((c) =>
-                        selected.includes(
-                          c.id
-                        )
-                      )
-                      .map(
-                        (c) =>
-                          c.continentName ||
-                          c.continentname
-                      )
-                      .join(", ")
-                  : "All Continents"
-              }
-              MenuProps={{
-                PaperProps: {
-                  style: {
-                    maxHeight: 300
-                  }
+          {renderMultiSelect({
+            name: "countryId",
+            label: "Country",
+            searchType: "country",
+            items: countries,
+            getValue: (item) =>
+              item.id,
+            getLabel: (item) =>
+              getName(
+                item,
+                "country"
+              ),
+            emptyLabel: "Country",
+          })}
+
+
+          {renderMultiSelect({
+            name: "stateId",
+            label: "State",
+            searchType: "state",
+            items: states,
+            getValue: (item) =>
+              item.id,
+            getLabel: (item) =>
+              getName(
+                item,
+                "state"
+              ),
+            disabled:
+              !filters.countryId
+                .length,
+            emptyLabel: "State",
+          })}
+
+
+          {renderMultiSelect({
+            name: "cityId",
+            label: "City",
+            searchType: "city",
+            items: cities,
+            getValue: (item) =>
+              item.id,
+            getLabel: (item) =>
+              getName(
+                item,
+                "city"
+              ),
+            disabled:
+              !filters.stateId
+                .length,
+            emptyLabel: "City",
+          })}
+
+
+          {renderMultiSelect({
+            name: "universityId",
+            label: "University",
+            searchType: "university",
+            items: universities,
+            getValue: (item) =>
+              item.id,
+            getLabel: (item) =>
+              getName(
+                item,
+                "university"
+              ),
+            disabled:
+              !filters.cityId
+                .length,
+            emptyLabel: "University",
+          })}
+
+
+          {renderMultiSelect({
+            name: "collegeId",
+            label: "College",
+            searchType: "college",
+            items: colleges,
+            getValue: (item) =>
+              item.id,
+            getLabel: (item) =>
+              getName(
+                item,
+                "college"
+              ),
+            disabled:
+              !filters.universityId
+                .length,
+            emptyLabel: "College",
+          })}
+
+
+          {renderMultiSelect({
+            name: "streamName",
+            label: "Stream",
+            searchType: "stream",
+            items: streams,
+            getValue: (item) =>
+              item.name,
+            getLabel: (item) =>
+              item.name,
+            emptyLabel: "Stream",
+          })}
+
+
+          {/* =================================================
+              COURSE DROPDOWN
+              
+              NOW USES getAllCourseNames()
+          ================================================= */}
+
+          {renderMultiSelect({
+            name: "courseId",
+            label: "Course",
+            searchType: "course",
+
+            /*
+              courses now contains:
+
+              [
+                {
+                  id: "Computer Science",
+                  name: "Computer Science",
+                  courseName: "Computer Science"
+                },
+                {
+                  id: "Business Administration",
+                  name: "Business Administration",
+                  courseName: "Business Administration"
                 }
-              }}
-            >
-              {renderSearchField(
-                "continent",
-                "Search continents..."
-              )}
+              ]
+            */
+            items: courses,
 
-              {getFilteredOptions(
-                "continent",
-                continents
-              ).map((cont) => (
-                <MenuItem
-                  key={cont.id}
-                  value={cont.id}
-                >
-                  <Checkbox
-                    checked={
-                      filters.continentId.indexOf(
-                        cont.id
-                      ) > -1
-                    }
-                  />
+            getValue: (item) =>
+              item.id,
 
-                  <ListItemText
-                    primary={
-                      cont.continentName ||
-                      cont.continentname
-                    }
-                  />
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+            getLabel: (item) =>
+              getName(
+                item,
+                "course"
+              ),
 
-          {/* COUNTRY */}
+            emptyLabel: "Course",
+          })}
+
+
+          {/* =================================================
+              SCHOLARSHIP
+          ================================================= */}
+
           <FormControl
-            fullWidth
-            sx={{ mb: 2 }}
-          >
-            <InputLabel>
-              Country
-            </InputLabel>
-
-            <Select
-              multiple
-              value={filters.countryId}
-              onChange={(e) =>
-                handleFilterChange(
-                  "countryId",
-                  e.target.value
-                )
-              }
-              label="Country"
-              disabled={
-                !filters.continentId
-                  .length || loading
-              }
-              renderValue={(selected) =>
-                selected.length
-                  ? countries
-                      .filter((c) =>
-                        selected.includes(
-                          c.id
-                        )
-                      )
-                      .map(
-                        (c) =>
-                          c.countryName ||
-                          c.country
-                      )
-                      .join(", ")
-                  : "All Countries"
-              }
-              MenuProps={{
-                PaperProps: {
-                  style: {
-                    maxHeight: 300
-                  }
-                }
-              }}
-            >
-              {renderSearchField(
-                "country",
-                "Search countries...",
-                !filters.continentId
-                  .length
-              )}
-
-              {getFilteredOptions(
-                "country",
-                countries
-              ).map((country) => (
-                <MenuItem
-                  key={country.id}
-                  value={country.id}
-                >
-                  <Checkbox
-                    checked={
-                      filters.countryId.indexOf(
-                        country.id
-                      ) > -1
-                    }
-                  />
-
-                  <ListItemText
-                    primary={
-                      country.countryName ||
-                      country.country
-                    }
-                  />
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          {/* STATE */}
-          <FormControl
-            fullWidth
-            sx={{ mb: 2 }}
-          >
-            <InputLabel>
-              State
-            </InputLabel>
-
-            <Select
-              multiple
-              value={filters.stateId}
-              onChange={(e) =>
-                handleFilterChange(
-                  "stateId",
-                  e.target.value
-                )
-              }
-              label="State"
-              disabled={
-                !filters.countryId
-                  .length || loading
-              }
-              renderValue={(selected) =>
-                selected.length
-                  ? states
-                      .filter((s) =>
-                        selected.includes(
-                          s.id
-                        )
-                      )
-                      .map(
-                        (s) =>
-                          s.stateName ||
-                          s.state
-                      )
-                      .join(", ")
-                  : "All States"
-              }
-              MenuProps={{
-                PaperProps: {
-                  style: {
-                    maxHeight: 300
-                  }
-                }
-              }}
-            >
-              {renderSearchField(
-                "state",
-                "Search states...",
-                !filters.countryId
-                  .length
-              )}
-
-              {getFilteredOptions(
-                "state",
-                states
-              ).map((state) => (
-                <MenuItem
-                  key={state.id}
-                  value={state.id}
-                >
-                  <Checkbox
-                    checked={
-                      filters.stateId.indexOf(
-                        state.id
-                      ) > -1
-                    }
-                  />
-
-                  <ListItemText
-                    primary={
-                      state.stateName ||
-                      state.state
-                    }
-                  />
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          {/* CITY */}
-          <FormControl
-            fullWidth
-            sx={{ mb: 2 }}
-          >
-            <InputLabel>
-              City
-            </InputLabel>
-
-            <Select
-              multiple
-              value={filters.cityId}
-              onChange={(e) =>
-                handleFilterChange(
-                  "cityId",
-                  e.target.value
-                )
-              }
-              label="City"
-              disabled={
-                !filters.stateId
-                  .length || loading
-              }
-              renderValue={(selected) =>
-                selected.length
-                  ? cities
-                      .filter((c) =>
-                        selected.includes(
-                          c.id
-                        )
-                      )
-                      .map(
-                        (c) =>
-                          c.cityName ||
-                          c.city
-                      )
-                      .join(", ")
-                  : "All Cities"
-              }
-              MenuProps={{
-                PaperProps: {
-                  style: {
-                    maxHeight: 300
-                  }
-                }
-              }}
-            >
-              {renderSearchField(
-                "city",
-                "Search cities...",
-                !filters.stateId
-                  .length
-              )}
-
-              {getFilteredOptions(
-                "city",
-                cities
-              ).map((city) => (
-                <MenuItem
-                  key={city.id}
-                  value={city.id}
-                >
-                  <Checkbox
-                    checked={
-                      filters.cityId.indexOf(
-                        city.id
-                      ) > -1
-                    }
-                  />
-
-                  <ListItemText
-                    primary={
-                      city.cityName ||
-                      city.city
-                    }
-                  />
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          {/* UNIVERSITY */}
-          <FormControl
-            fullWidth
-            sx={{ mb: 2 }}
-          >
-            <InputLabel>
-              University
-            </InputLabel>
-
-            <Select
-              multiple
-              value={filters.universityId}
-              onChange={(e) =>
-                handleFilterChange(
-                  "universityId",
-                  e.target.value
-                )
-              }
-              label="University"
-              disabled={
-                !filters.cityId
-                  .length || loading
-              }
-              renderValue={(selected) =>
-                selected.length
-                  ? universities
-                      .filter((u) =>
-                        selected.includes(
-                          u.id
-                        )
-                      )
-                      .map(
-                        (u) =>
-                          u.universityName ||
-                          u.name ||
-                          u.university
-                      )
-                      .join(", ")
-                  : "All Universities"
-              }
-              MenuProps={{
-                PaperProps: {
-                  style: {
-                    maxHeight: 300
-                  }
-                }
-              }}
-            >
-              {renderSearchField(
-                "university",
-                "Search universities...",
-                !filters.cityId
-                  .length
-              )}
-
-              {getFilteredOptions(
-                "university",
-                universities
-              ).map((university) => (
-                <MenuItem
-                  key={university.id}
-                  value={university.id}
-                >
-                  <Checkbox
-                    checked={
-                      filters.universityId.indexOf(
-                        university.id
-                      ) > -1
-                    }
-                  />
-
-                  <ListItemText
-                    primary={
-                      university.universityName ||
-                      university.name ||
-                      university.university
-                    }
-                  />
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          {/* COLLEGE */}
-          <FormControl
-            fullWidth
-            sx={{ mb: 2 }}
-          >
-            <InputLabel>
-              College
-            </InputLabel>
-
-            <Select
-              multiple
-              value={filters.collegeId}
-              onChange={(e) =>
-                handleFilterChange(
-                  "collegeId",
-                  e.target.value
-                )
-              }
-              label="College"
-              disabled={
-                !filters.universityId
-                  .length || loading
-              }
-              renderValue={(selected) =>
-                selected.length
-                  ? colleges
-                      .filter((c) =>
-                        selected.includes(
-                          c.id
-                        )
-                      )
-                      .map(
-                        (c) =>
-                          c.name ||
-                          c.collegeName
-                      )
-                      .join(", ")
-                  : "All Colleges"
-              }
-              MenuProps={{
-                PaperProps: {
-                  style: {
-                    maxHeight: 300
-                  }
-                }
-              }}
-            >
-              {renderSearchField(
-                "college",
-                "Search colleges...",
-                !filters.universityId
-                  .length
-              )}
-
-              {getFilteredOptions(
-                "college",
-                colleges
-              ).map((college) => (
-                <MenuItem
-                  key={college.id}
-                  value={college.id}
-                >
-                  <Checkbox
-                    checked={
-                      filters.collegeId.indexOf(
-                        college.id
-                      ) > -1
-                    }
-                  />
-
-                  <ListItemText
-                    primary={
-                      college.name ||
-                      college.collegeName
-                    }
-                  />
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          {/* STREAM */}
-          <FormControl
-            fullWidth
-            sx={{ mb: 2 }}
-          >
-            <InputLabel>
-              Stream
-            </InputLabel>
-
-            <Select
-              multiple
-              value={filters.streamName}
-              onChange={(e) =>
-                handleFilterChange(
-                  "streamName",
-                  e.target.value
-                )
-              }
-              label="Stream"
-              disabled={loading}
-              renderValue={(selected) =>
-                selected.length
-                  ? selected.join(", ")
-                  : "All Streams"
-              }
-              MenuProps={{
-                PaperProps: {
-                  style: {
-                    maxHeight: 300
-                  }
-                }
-              }}
-            >
-              {renderSearchField(
-                "stream",
-                "Search streams..."
-              )}
-
-              {getFilteredOptions(
-                "stream",
-                streams
-              ).map((stream) => (
-                <MenuItem
-                  key={stream.id}
-                  value={stream.name}
-                >
-                  <Checkbox
-                    checked={
-                      filters.streamName.indexOf(
-                        stream.name
-                      ) > -1
-                    }
-                  />
-
-                  <ListItemText
-                    primary={
-                      stream.name
-                    }
-                  />
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          {/* COURSE */}
-          <FormControl
-            fullWidth
-            sx={{ mb: 2 }}
-          >
-            <InputLabel>
-              Course
-            </InputLabel>
-
-            <Select
-              multiple
-              value={filters.courseId}
-              onChange={(e) =>
-                handleFilterChange(
-                  "courseId",
-                  e.target.value
-                )
-              }
-              label="Course"
-              disabled={loading}
-              renderValue={(selected) =>
-                selected.length
-                  ? allCourses
-                      .filter((c) =>
-                        selected.includes(
-                          c.id
-                        )
-                      )
-                      .map(
-                        (c) =>
-                          c.name ||
-                          c.courseName
-                      )
-                      .join(", ")
-                  : "All Courses"
-              }
-              MenuProps={{
-                PaperProps: {
-                  style: {
-                    maxHeight: 300
-                  }
-                }
-              }}
-            >
-              {renderSearchField(
-                "course",
-                "Search courses..."
-              )}
-
-              {getFilteredOptions(
-                "course",
-                allCourses
-              ).map((course) => (
-                <MenuItem
-                  key={course.id}
-                  value={course.id}
-                >
-                  <Checkbox
-                    checked={
-                      filters.courseId.indexOf(
-                        course.id
-                      ) > -1
-                    }
-                  />
-
-                  <ListItemText
-                    primary={
-                      course.name ||
-                      course.courseName
-                    }
-                  />
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          {/* SCHOLARSHIP */}
-          <FormControl
-            fullWidth
-            sx={{ mb: 2 }}
+            className={
+              styles.horizontalFilter
+            }
           >
             <InputLabel>
               Scholarship
@@ -2147,21 +2207,28 @@ export default function CourseFinder() {
               disabled={loading}
             >
               <MenuItem value="">
-                Any
+                Scholarship
               </MenuItem>
+
               <MenuItem value="Yes">
                 Yes
               </MenuItem>
+
               <MenuItem value="No">
                 No
               </MenuItem>
             </Select>
           </FormControl>
 
-          {/* FEES */}
+
+          {/* =================================================
+              FEES RANGE
+          ================================================= */}
+
           <FormControl
-            fullWidth
-            sx={{ mb: 2 }}
+            className={
+              styles.horizontalFilter
+            }
           >
             <InputLabel>
               Fees Range
@@ -2181,27 +2248,36 @@ export default function CourseFinder() {
               disabled={loading}
             >
               <MenuItem value="">
-                Any
+                Fees Range
               </MenuItem>
+
               <MenuItem value="0-100000">
                 0-100000
               </MenuItem>
+
               <MenuItem value="100000-1000000">
                 100000-1000000
               </MenuItem>
+
               <MenuItem value="1000000-2000000">
                 1000000-2000000
               </MenuItem>
+
               <MenuItem value="2000000+">
                 2000000+
               </MenuItem>
             </Select>
           </FormControl>
 
-          {/* EXAM */}
+
+          {/* =================================================
+              EXAM TYPE
+          ================================================= */}
+
           <FormControl
-            fullWidth
-            sx={{ mb: 2 }}
+            className={
+              styles.horizontalFilter
+            }
           >
             <InputLabel>
               Exam Type
@@ -2209,7 +2285,9 @@ export default function CourseFinder() {
 
             <Select
               multiple
-              value={filters.examType}
+              value={
+                filters.examType
+              }
               onChange={(e) =>
                 handleFilterChange(
                   "examType",
@@ -2220,8 +2298,10 @@ export default function CourseFinder() {
               disabled={loading}
               renderValue={(selected) =>
                 selected.length
-                  ? selected.join(", ")
-                  : "All Exam Types"
+                  ? selected.join(
+                      ", "
+                    )
+                  : "Exam Type"
               }
             >
               {[
@@ -2229,18 +2309,16 @@ export default function CourseFinder() {
                 "TOEFL",
                 "PTE",
                 "GRE",
-                "GMAT"
+                "GMAT",
               ].map((exam) => (
                 <MenuItem
                   key={exam}
                   value={exam}
                 >
                   <Checkbox
-                    checked={
-                      filters.examType.indexOf(
-                        exam
-                      ) > -1
-                    }
+                    checked={filters.examType.includes(
+                      exam
+                    )}
                   />
 
                   <ListItemText
@@ -2251,10 +2329,15 @@ export default function CourseFinder() {
             </Select>
           </FormControl>
 
-          {/* ENGLISH */}
+
+          {/* =================================================
+              ENGLISH REQUIRED
+          ================================================= */}
+
           <FormControl
-            fullWidth
-            sx={{ mb: 2 }}
+            className={
+              styles.horizontalFilter
+            }
           >
             <InputLabel>
               English Required
@@ -2274,21 +2357,28 @@ export default function CourseFinder() {
               disabled={loading}
             >
               <MenuItem value="">
-                Any
+                English Required
               </MenuItem>
+
               <MenuItem value="Yes">
                 Yes
               </MenuItem>
+
               <MenuItem value="No">
                 No
               </MenuItem>
             </Select>
           </FormControl>
 
-          {/* ACADEMIC */}
+
+          {/* =================================================
+              ACADEMIC REQUIREMENTS
+          ================================================= */}
+
           <FormControl
-            fullWidth
-            sx={{ mb: 2 }}
+            className={
+              styles.horizontalFilter
+            }
           >
             <InputLabel>
               Academic Requirements
@@ -2309,19 +2399,24 @@ export default function CourseFinder() {
               disabled={loading}
               renderValue={(selected) =>
                 selected.length
-                  ? selected.join(", ")
-                  : "Any"
+                  ? selected.join(
+                      ", "
+                    )
+                  : "Academic"
               }
             >
               {Array.from(
                 { length: 10 },
-                (_, i) => {
+                (_, index) => {
                   const min =
-                    i * 10;
-                  const max =
-                    (i + 1) * 10;
+                    index * 10;
 
-                  const value = `${min}-${max}%`;
+                  const max =
+                    (index + 1) *
+                    10;
+
+                  const value =
+                    `${min}-${max}%`;
 
                   return (
                     <MenuItem
@@ -2329,15 +2424,13 @@ export default function CourseFinder() {
                       value={value}
                     >
                       <Checkbox
-                        checked={
-                          filters.academicRequirements.indexOf(
-                            value
-                          ) > -1
-                        }
+                        checked={filters.academicRequirements.includes(
+                          value
+                        )}
                       />
 
                       <ListItemText
-                        primary={`${min}-${max}%`}
+                        primary={value}
                       />
                     </MenuItem>
                   );
@@ -2346,10 +2439,15 @@ export default function CourseFinder() {
             </Select>
           </FormControl>
 
-          {/* INTAKE */}
+
+          {/* =================================================
+              INTAKE
+          ================================================= */}
+
           <FormControl
-            fullWidth
-            sx={{ mb: 2 }}
+            className={
+              styles.horizontalFilter
+            }
           >
             <InputLabel>
               Intake
@@ -2357,7 +2455,9 @@ export default function CourseFinder() {
 
             <Select
               multiple
-              value={filters.intake}
+              value={
+                filters.intake
+              }
               onChange={(e) =>
                 handleFilterChange(
                   "intake",
@@ -2368,25 +2468,25 @@ export default function CourseFinder() {
               disabled={loading}
               renderValue={(selected) =>
                 selected.length
-                  ? selected.join(", ")
-                  : "Any"
+                  ? selected.join(
+                      ", "
+                    )
+                  : "Intake"
               }
             >
               {[
                 "Summer",
                 "Winter",
-                "Spring"
+                "Spring",
               ].map((item) => (
                 <MenuItem
                   key={item}
                   value={item}
                 >
                   <Checkbox
-                    checked={
-                      filters.intake.indexOf(
-                        item
-                      ) > -1
-                    }
+                    checked={filters.intake.includes(
+                      item
+                    )}
                   />
 
                   <ListItemText
@@ -2397,47 +2497,373 @@ export default function CourseFinder() {
             </Select>
           </FormControl>
 
-          <Button
-            variant="outlined"
-            fullWidth
-            onClick={
-              clearAllFilters
-            }
-            disabled={loading}
-            sx={{ mt: 1 }}
-          >
-            Clear All Filters
-          </Button>
-        </aside>
+        </div>
 
-        {/* ===================================================
-            RIGHT RESULTS
-        =================================================== */}
 
-        <main className={styles.results}>
+        {/* =================================================
+            SELECTED FILTER CHIPS
+        ================================================= */}
 
-          <div
-            className={
-              styles.resultsHeader
-            }
-          >
-            <h2
-              className={
-                styles.resultsTitle
-              }
+        {Object.values(filters).some((value) =>
+          Array.isArray(value) ? value.length > 0 : Boolean(value)
+        ) && (
+          <div className={styles.selectedFilters}>
+            {filters.countryId.map((id) => {
+              const item = countries.find((country) => country.id === id);
+
+              return item ? (
+                <span
+                  key={`country-${id}`}
+                  className={styles.selectedFilterChip}
+                >
+                  {getName(item, "country")}
+                  <button
+                    type="button"
+                    onClick={() =>
+                      handleFilterChange(
+                        "countryId",
+                        filters.countryId.filter((value) => value !== id)
+                      )
+                    }
+                  >
+                    ×
+                  </button>
+                </span>
+              ) : null;
+            })}
+
+            {filters.stateId.map((id) => {
+              const item = states.find((state) => state.id === id);
+
+              return item ? (
+                <span
+                  key={`state-${id}`}
+                  className={styles.selectedFilterChip}
+                >
+                  {getName(item, "state")}
+                  <button
+                    type="button"
+                    onClick={() =>
+                      handleFilterChange(
+                        "stateId",
+                        filters.stateId.filter((value) => value !== id)
+                      )
+                    }
+                  >
+                    ×
+                  </button>
+                </span>
+              ) : null;
+            })}
+
+            {filters.cityId.map((id) => {
+              const item = cities.find((city) => city.id === id);
+
+              return item ? (
+                <span
+                  key={`city-${id}`}
+                  className={styles.selectedFilterChip}
+                >
+                  {getName(item, "city")}
+                  <button
+                    type="button"
+                    onClick={() =>
+                      handleFilterChange(
+                        "cityId",
+                        filters.cityId.filter((value) => value !== id)
+                      )
+                    }
+                  >
+                    ×
+                  </button>
+                </span>
+              ) : null;
+            })}
+
+            {filters.universityId.map((id) => {
+              const item = universities.find(
+                (university) => university.id === id
+              );
+
+              return item ? (
+                <span
+                  key={`university-${id}`}
+                  className={styles.selectedFilterChip}
+                >
+                  {getName(item, "university")}
+                  <button
+                    type="button"
+                    onClick={() =>
+                      handleFilterChange(
+                        "universityId",
+                        filters.universityId.filter((value) => value !== id)
+                      )
+                    }
+                  >
+                    ×
+                  </button>
+                </span>
+              ) : null;
+            })}
+
+            {filters.collegeId.map((id) => {
+              const item = colleges.find((college) => college.id === id);
+
+              return item ? (
+                <span
+                  key={`college-${id}`}
+                  className={styles.selectedFilterChip}
+                >
+                  {getName(item, "college")}
+                  <button
+                    type="button"
+                    onClick={() =>
+                      handleFilterChange(
+                        "collegeId",
+                        filters.collegeId.filter((value) => value !== id)
+                      )
+                    }
+                  >
+                    ×
+                  </button>
+                </span>
+              ) : null;
+            })}
+
+            {filters.streamName.map((stream) => (
+              <span
+                key={`stream-${stream}`}
+                className={styles.selectedFilterChip}
+              >
+                {stream}
+                <button
+                  type="button"
+                  onClick={() =>
+                    handleFilterChange(
+                      "streamName",
+                      filters.streamName.filter((value) => value !== stream)
+                    )
+                  }
+                >
+                  ×
+                </button>
+              </span>
+            ))}
+
+            {/* Course chips */}
+            {filters.courseId.map((id) => {
+              const item = courses.find((course) => course.id === id);
+
+              return item ? (
+                <span
+                  key={`course-${id}`}
+                  className={styles.selectedFilterChip}
+                >
+                  {getName(item, "course")}
+                  <button
+                    type="button"
+                    onClick={() =>
+                      handleFilterChange(
+                        "courseId",
+                        filters.courseId.filter((value) => value !== id)
+                      )
+                    }
+                  >
+                    ×
+                  </button>
+                </span>
+              ) : null;
+            })}
+
+            {filters.scholarship && (
+              <span className={styles.selectedFilterChip}>
+                Scholarship: {filters.scholarship}
+                <button
+                  type="button"
+                  onClick={() => handleFilterChange("scholarship", "")}
+                >
+                  ×
+                </button>
+              </span>
+            )}
+
+            {filters.feesRange && (
+              <span className={styles.selectedFilterChip}>
+                Fees: {filters.feesRange}
+                <button
+                  type="button"
+                  onClick={() => handleFilterChange("feesRange", "")}
+                >
+                  ×
+                </button>
+              </span>
+            )}
+
+            {filters.examType.map((exam) => (
+              <span
+                key={`exam-${exam}`}
+                className={styles.selectedFilterChip}
+              >
+                {exam}
+                <button
+                  type="button"
+                  onClick={() =>
+                    handleFilterChange(
+                      "examType",
+                      filters.examType.filter((value) => value !== exam)
+                    )
+                  }
+                >
+                  ×
+                </button>
+              </span>
+            ))}
+
+            {filters.englishExamRequirements && (
+              <span className={styles.selectedFilterChip}>
+                English: {filters.englishExamRequirements}
+                <button
+                  type="button"
+                  onClick={() =>
+                    handleFilterChange("englishExamRequirements", "")
+                  }
+                >
+                  ×
+                </button>
+              </span>
+            )}
+
+            {filters.academicRequirements.map((requirement) => (
+              <span
+                key={`academic-${requirement}`}
+                className={styles.selectedFilterChip}
+              >
+                {requirement}
+                <button
+                  type="button"
+                  onClick={() =>
+                    handleFilterChange(
+                      "academicRequirements",
+                      filters.academicRequirements.filter(
+                        (value) => value !== requirement
+                      )
+                    )
+                  }
+                >
+                  ×
+                </button>
+              </span>
+            ))}
+
+            {filters.intake.map((item) => (
+              <span
+                key={`intake-${item}`}
+                className={styles.selectedFilterChip}
+              >
+                {item}
+                <button
+                  type="button"
+                  onClick={() =>
+                    handleFilterChange(
+                      "intake",
+                      filters.intake.filter((value) => value !== item)
+                    )
+                  }
+                >
+                  ×
+                </button>
+              </span>
+            ))}
+
+            <button
+              type="button"
+              className={styles.clearSelectedFilters}
+              onClick={clearAllFilters}
             >
-              Universities & Courses
-            </h2>
-
-            <span
-              className={
-                styles.resultsCount
-              }
-            >
-              {hierarchyData?.length || 0}{" "}
-              results
-            </span>
+              Clear All
+            </button>
           </div>
+        )}
+
+
+        {/* =================================================
+            RESULTS
+        ================================================= */}
+
+        <main
+          className={
+            styles.results
+          }
+        >
+
+          <div className={styles.resultsToolbar}>
+            <div className={styles.resultsSummary}>
+              <strong>{totalCourses} courses</strong>
+              <span> across </span>
+              <strong>{allUniversities.length} universities</strong>
+
+              <small>
+                Showing universities{" "}
+                {allUniversities.length === 0
+                  ? 0
+                  : (currentPage - 1) * universitiesPerPage + 1}
+                {" - "}
+                {Math.min(
+                  currentPage * universitiesPerPage,
+                  allUniversities.length
+                )}
+                {" of "}
+                {allUniversities.length}
+              </small>
+            </div>
+
+            <div className={styles.resultsControls}>
+              <label>
+                <span>Sort universities</span>
+                <select
+                  value={sortOrder}
+                  onChange={(e) => {
+                    setSortOrder(e.target.value);
+                    setCurrentPage(1);
+                  }}
+                >
+                  <option value="default">Default order</option>
+                  <option value="name-asc">Name A–Z</option>
+                  <option value="name-desc">Name Z–A</option>
+                </select>
+              </label>
+
+              <label>
+                <span>Per page</span>
+                <select
+                  value={universitiesPerPage}
+                  onChange={(e) => {
+                    setUniversitiesPerPage(Number(e.target.value));
+                    setCurrentPage(1);
+                  }}
+                >
+                  <option value={6}>6 universities</option>
+                  <option value={12}>12 universities</option>
+                  <option value={24}>24 universities</option>
+                </select>
+              </label>
+
+            </div>
+          </div>
+
+          {showMoreFilters && (
+            <div className={styles.moreFiltersPanel}>
+              <p>
+                Use the filters above to narrow universities and courses.
+              </p>
+              <button
+                type="button"
+                onClick={clearAllFilters}
+              >
+                Clear All Filters
+              </button>
+            </div>
+          )}
 
           {loading ? (
             <div
@@ -2447,205 +2873,221 @@ export default function CourseFinder() {
             >
               <CircularProgress />
             </div>
-          ) : hierarchyData?.length >
-            0 ? (
-            hierarchyData.map(
-              (continent) =>
-                (
-                  continent.abroadCountries ||
-                  []
-                ).map((country) =>
-                  (
-                    country.abroadStates ||
-                    []
-                  ).map((state) =>
-                    (
-                      state.abroadCities ||
+          ) : allUniversities.length ? (
+            paginatedUniversities.map(
+              (
+                {
+                  country,
+                  state,
+                  city,
+                  university,
+                },
+                universityIndex
+              ) => (
+                <div
+                  className={
+                    styles.universityCard
+                  }
+                  key={`${country.id}-${state.id}-${city.id}-${university.id}-${universityIndex}`}
+                >
+
+                  {/* UNIVERSITY HEADER */}
+
+                  <div
+                    className={
+                      styles.universityHeader
+                    }
+                  >
+                    <div>
+
+                      <h3
+                        className={
+                          styles.universityName
+                        }
+                      >
+                        {
+                          university.universityName ||
+                          university.name ||
+                          "University"
+                        }
+                      </h3>
+
+
+                      <p
+                        className={
+                          styles.universityLocation
+                        }
+                      >
+                        {
+                          city.city ||
+                          city.cityName
+                        }
+                        ,{" "}
+                        {
+                          state.state ||
+                          state.stateName
+                        }
+                        ,{" "}
+                        {
+                          country.country ||
+                          country.countryName
+                        }
+                      </p>
+
+
+                      <p
+                        className={
+                          styles.universityId
+                        }
+                      >
+                        ID:{" "}
+                        {
+                          university.id
+                        }{" "}
+                        | Courses:{" "}
+                        {(
+                          university.abroadColleges ||
+                          []
+                        ).reduce(
+                          (
+                            total,
+                            college
+                          ) =>
+                            total +
+                            (
+                              college.abroadCourses ||
+                              []
+                            ).length,
+                          0
+                        )}
+                      </p>
+
+                    </div>
+                  </div>
+
+
+                  {/* COLLEGES */}
+
+                  <div>
+                    {(
+                      university.abroadColleges ||
                       []
-                    ).map((city) =>
+                    ).map(
                       (
-                        city.abroadUniversities ||
-                        []
-                      ).map(
-                        (
-                          university,
-                          uniIndex
-                        ) => (
+                        college,
+                        collegeIndex
+                      ) => (
+                        <div
+                          className={
+                            styles.collegeSection
+                          }
+                          key={`${university.id}-college-${collegeIndex}`}
+                        >
+
+                          <h4
+                            className={
+                              styles.collegeName
+                            }
+                          >
+                            {
+                              college.collegeName ||
+                              college.name ||
+                              "College"
+                            }
+                          </h4>
+
+
+                          {/* COURSES */}
+
                           <div
                             className={
-                              styles.universityCard
+                              styles.courseGrid
                             }
-                            key={`${continent.id}-${country.id}-${state.id}-${city.id}-${university.id}-${uniIndex}`}
                           >
-                            {/* UNIVERSITY HEADER */}
-                            <div
-                              className={
-                                styles.universityHeader
-                              }
-                            >
-                              <div>
-                                <h3
-                                  className={
-                                    styles.universityName
-                                  }
-                                >
-                                  {
-                                    university.universityName
-                                  }
-                                </h3>
+                            {(
+                              college.abroadCourses ||
+                              []
+                            ).map(
+                              (
+                                course,
+                                courseIndex
+                              ) => {
+                                const courseKey =
+                                  `${university.id}-${collegeIndex}-${courseIndex}`;
 
-                                <p
-                                  className={
-                                    styles.universityLocation
-                                  }
-                                >
-                                  {city.city},{" "}
-                                  {state.state},{" "}
-                                  {
-                                    country.country
-                                  }{" "}
-                                  (
-                                  {
-                                    continent.continentname
-                                  }
-                                  )
-                                </p>
-
-                                <p
-                                  className={
-                                    styles.universityId
-                                  }
-                                >
-                                  ID:{" "}
-                                  {
-                                    university.id
-                                  }{" "}
-                                  | Courses:{" "}
-                                  {university.abroadColleges?.reduce(
-                                    (
-                                      total,
-                                      college
-                                    ) =>
-                                      total +
-                                      (college.abroadCourses
-                                        ?.length ||
-                                        0),
-                                    0
-                                  ) || 0}
-                                </p>
-                              </div>
-                            </div>
-
-                            {/* COLLEGES */}
-                            <div>
-                              {university.abroadColleges?.map(
-                                (
-                                  college,
-                                  colIndex
-                                ) => (
+                                return (
                                   <div
                                     className={
-                                      styles.collegeSection
+                                      styles.courseItem
                                     }
-                                    key={`${university.id}-college-${colIndex}`}
+                                    key={
+                                      courseKey
+                                    }
                                   >
-                                    <h4
-                                      className={
-                                        styles.collegeName
-                                      }
-                                    >
-                                      {
-                                        college.collegeName
-                                      }
-                                    </h4>
-
-                                    {/* =================================================
-                                        THIS IS THE IMPORTANT CHANGE
-                                        ONE COURSE PER ROW
-                                    ================================================= */}
-
-                                    <div
-                                      className={
-                                        styles.courseGrid
-                                      }
-                                    >
-                                      {college.abroadCourses?.map(
-                                        (
-                                          course,
-                                          courseIndex
-                                        ) => {
-                                          const courseKey = `${university.id}-${colIndex}-${courseIndex}`;
-
-                                          return (
-                                            <div
-                                              className={
-                                                styles.courseItem
-                                              }
-                                              key={
-                                                courseKey
-                                              }
-                                            >
-                                              {renderCourseDetails(
-                                                course,
-                                                courseKey
-                                              )}
-                                            </div>
-                                          );
-                                        }
-                                      )}
-                                    </div>
-
-                                    {(!college.abroadCourses ||
-                                      college.abroadCourses
-                                        .length ===
-                                        0) && (
-                                      <Typography
-                                        variant="body2"
-                                        color="text.secondary"
-                                        sx={{
-                                          fontStyle:
-                                            "italic"
-                                        }}
-                                      >
-                                        No courses available for this college
-                                      </Typography>
+                                    {renderCourseDetails(
+                                      course,
+                                      courseKey
                                     )}
                                   </div>
-                                )
-                              )}
-
-                              {(!university.abroadColleges ||
-                                university.abroadColleges
-                                  .length ===
-                                  0) && (
-                                <Typography
-                                  variant="body2"
-                                  color="text.secondary"
-                                  sx={{
-                                    fontStyle:
-                                      "italic"
-                                  }}
-                                >
-                                  No colleges available for this university
-                                </Typography>
-                              )}
-                            </div>
+                                );
+                              }
+                            )}
                           </div>
-                        )
+
+
+                          {!(
+                            college.abroadCourses ||
+                            []
+                          ).length && (
+                            <Typography
+                              variant="body2"
+                              color="text.secondary"
+                              sx={{
+                                fontStyle:
+                                  "italic",
+                              }}
+                            >
+                              No courses available
+                              for this college
+                            </Typography>
+                          )}
+
+                        </div>
                       )
-                    )
-                  )
-                )
+                    )}
+
+
+                    {!(
+                      university.abroadColleges ||
+                      []
+                    ).length && (
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        sx={{
+                          fontStyle:
+                            "italic",
+                        }}
+                      >
+                        No colleges available
+                        for this university
+                      </Typography>
+                    )}
+
+                  </div>
+
+                </div>
+              )
             )
+
           ) : (
             <div
               className={
                 styles.noData
               }
             >
-              {filters.examType &&
-              filters.examType.length >
-                0 ? (
+
+              {filters.examType.length ? (
                 <Typography>
                   No course found with
                   this exam.
@@ -2658,15 +3100,77 @@ export default function CourseFinder() {
               ) : (
                 <Typography>
                   No data available.
-                  Please check if there
-                  are any continents and
-                  countries added.
+                  Please check if
+                  countries, states,
+                  cities, universities
+                  and colleges are added.
                 </Typography>
               )}
+
             </div>
           )}
+
+
+          {!loading &&
+            allUniversities.length >
+              0 &&
+            totalPages > 1 && (
+              <div
+                className={
+                  styles.paginationWrapper
+                }
+              >
+                <Pagination
+                  count={totalPages}
+                  page={currentPage}
+                  onChange={(_, page) =>
+                    setCurrentPage(
+                      page
+                    )
+                  }
+                  color="primary"
+                  shape="rounded"
+                  showFirstButton
+                  showLastButton
+                  siblingCount={1}
+                  boundaryCount={1}
+                />
+              </div>
+            )}
+
         </main>
+
       </div>
+
     </Container>
+  );
+}
+
+
+/* =========================================================
+   SMALL DETAIL COMPONENT
+
+   Keeps course detail JSX short.
+========================================================= */
+
+function DetailRow({ label, value }) {
+  return (
+    <Box className="cf-detail-row">
+      <Typography
+        variant="body2"
+        color="text.secondary"
+        className="cf-detail-label"
+      >
+        {label}:
+      </Typography>
+
+      <Typography
+        variant="body2"
+        fontWeight="medium"
+        className="cf-detail-value"
+      >
+        {value || "N/A"}
+      </Typography>
+    </Box>
   );
 }

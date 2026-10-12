@@ -1,5 +1,5 @@
 .blogSection {
-  padding: 90px 20px;
+  padding: 10px 20px;
   background: #ffffff;
   text-align: center;
 }
@@ -11,6 +11,7 @@
 .blogTitle {
   color: #0f3c5b;
   margin-bottom: 30px;
+  
 }
 
 .blogTitle h1 {
@@ -75,7 +76,7 @@
   background-color: #1da1f2;
   color: white;
   padding: 15px 10px;
-  font-size: 13px;
+  font-size: 0px;
 }
 
 .blogCaption h2 {

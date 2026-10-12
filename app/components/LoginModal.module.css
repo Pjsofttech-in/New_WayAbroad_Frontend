@@ -1,100 +1,141 @@
-/* =========================================
+/* =========================================================
    OVERLAY
-========================================= */
+========================================================= */
 
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.55);
+
+  z-index: 9999;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  padding: 20px;
-  z-index: 9999;
+  padding: 18px;
+
+  background: rgba(16, 29, 45, 0.62);
+
+  backdrop-filter: blur(4px);
 
   overflow-y: auto;
 }
 
 
-/* =========================================
+/* =========================================================
    LOGIN MODAL
-========================================= */
+========================================================= */
 
 .loginModal {
   position: relative;
 
   width: 100%;
-  max-width: 400px;
+  max-width: 430px;
 
-  background: #9199d6;
+  background: #ffffff;
 
-  border-radius: 8px;
+  border: 1px solid rgba(40, 65, 92, 0.08);
 
-  padding: 28px 30px 20px;
+  border-radius: 16px;
 
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  padding: 34px 34px 28px;
+
+  box-shadow:
+    0 25px 70px rgba(0, 0, 0, 0.22);
+
+  animation: modalAppear 0.2s ease;
 }
 
 
-/* =========================================
+/* =========================================================
    CLOSE BUTTON
-========================================= */
+========================================================= */
 
 .closeButton {
   position: absolute;
 
   top: 14px;
-  right: 18px;
+  right: 16px;
+
+  width: 38px;
+  height: 38px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   border: none;
+  border-radius: 50%;
+
   background: transparent;
 
-  color: #3e4148;
+  color: #536173;
 
   cursor: pointer;
 
   padding: 0;
 
   z-index: 20;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.closeButton:hover {
+  background: #f1f4f7;
+
+  color: #25384e;
+
+  transform: rotate(3deg);
 }
 
 
-/* =========================================
-   LOGIN
-========================================= */
+/* =========================================================
+   LOGIN TITLE
+========================================================= */
 
 .loginTitle {
   text-align: center;
 
-  font-size: 26px;
+  font-size: 28px;
 
-  font-weight: 700;
+  font-weight: 750;
 
-  color: #3d3f46;
+  letter-spacing: -0.4px;
 
-  margin: 0 0 25px;
+  color: #294667;
+
+  margin: 5px 0 30px;
 }
 
+
+/* =========================================================
+   LOGIN FORM
+========================================================= */
 
 .loginModal form {
   display: flex;
   flex-direction: column;
+
   gap: 10px;
 }
-
 
 .loginModal form > label {
   font-size: 14px;
 
-  font-weight: 600;
+  font-weight: 650;
 
-  color: #303746;
+  color: #344b65;
 
-  margin-top: 2px;
+  margin-top: 4px;
 }
 
+
+/* =========================================================
+   LOGIN INPUTS
+========================================================= */
 
 .loginModal input[type="email"],
 .loginModal input[type="password"] {
@@ -102,47 +143,53 @@
 
   height: 52px;
 
-  padding: 0 14px;
+  padding: 0 15px;
 
-  border: 1px solid #d6d6d6;
+  box-sizing: border-box;
 
-  border-radius: 10px;
+  border: 1px solid #d3dae3;
+
+  border-radius: 8px;
 
   background: #ffffff;
+
+  color: #263b52;
 
   font-size: 15px;
 
   outline: none;
 
-  box-sizing: border-box;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
 }
-
 
 .loginModal input::placeholder {
-  color: #777d87;
+  color: #8792a0;
 }
-
 
 .loginModal input[type="email"]:focus,
 .loginModal input[type="password"]:focus {
-  border-color: #299fc0;
+  border-color: #4d79b5;
+
+  box-shadow:
+    0 0 0 3px rgba(77, 121, 181, 0.11);
 }
 
 
-/* =========================================
+/* =========================================================
    LOGIN OPTIONS
-========================================= */
+========================================================= */
 
 .loginOptions {
   display: flex;
 
   align-items: center;
-
   justify-content: space-between;
 
-  margin: 2px 0 4px;
+  margin: 5px 0 7px;
 }
-
 
 .remember {
   display: flex;
@@ -151,89 +198,110 @@
 
   gap: 7px;
 
-  color: #505869;
+  color: #687689;
 
-  font-size: 14px;
+  font-size: 13px;
 
   cursor: pointer;
 }
 
-
 .remember input {
-  width: 14px !important;
-  height: 14px !important;
+  width: 15px !important;
+  height: 15px !important;
 
   margin: 0;
-}
 
+  accent-color: #4d76b4;
+}
 
 .forgot {
   border: none;
 
   background: transparent;
 
-  color: #f1f1f1;
+  color: #4d76b4;
 
-  font-size: 14px;
+  font-size: 13px;
+
+  font-weight: 600;
 
   cursor: pointer;
 
   padding: 0;
 }
 
+.forgot:hover {
+  color: #345b91;
+}
 
-/* =========================================
+
+/* =========================================================
    LOGIN BUTTON
-========================================= */
+========================================================= */
 
 .loginButton {
   width: 100%;
 
-  height: 50px;
+  height: 51px;
 
   border: none;
 
-  border-radius: 6px;
+  border-radius: 8px;
 
-  background: #278f8d;
+  background: linear-gradient(
+    135deg,
+    #4b70aa,
+    #5f83bd
+  );
 
   color: #ffffff;
 
-  font-size: 16px;
+  font-size: 15px;
 
-  font-weight: 500;
+  font-weight: 700;
 
   cursor: pointer;
 
-  margin-top: 2px;
-}
+  margin-top: 7px;
 
+  box-shadow:
+    0 7px 17px rgba(62, 95, 143, 0.20);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
 
 .loginButton:hover {
-  background: #207d7b;
-}
+  transform: translateY(-2px);
 
+  box-shadow:
+    0 10px 22px rgba(62, 95, 143, 0.28);
+}
 
 .loginButton:disabled {
   opacity: 0.6;
+
   cursor: not-allowed;
+
+  transform: none;
 }
 
 
-/* =========================================
+/* =========================================================
    LOGIN SIGNUP TEXT
-========================================= */
+========================================================= */
 
 .switchText {
   text-align: center;
 
-  margin: 0;
+  margin: 17px 0 0;
 
-  font-size: 15px;
+  font-size: 14px;
 
-  color: #505869;
+  color: #6b7787;
 }
-
 
 .switchText button {
   border: none;
@@ -242,461 +310,833 @@
 
   padding: 0;
 
-  color: #287ca8;
+  color: #426da7;
 
-  font-size: 15px;
+  font-size: 14px;
+
+  font-weight: 650;
 
   font-family: inherit;
 
   cursor: pointer;
 }
 
+.switchText button:hover {
+  text-decoration: underline;
+}
 
-/* =========================================
+
+/* =========================================================
    SIGNUP MODAL
-========================================= */
+========================================================= */
 
 .signupModal {
   position: relative;
 
   width: min(100%, 1000px);
 
-  max-height: 90vh;
-
-  overflow-y: auto;
+  height: min(680px, calc(100vh - 36px));
 
   background: #ffffff;
 
-  border-radius: 12px;
+  border-radius: 16px;
 
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(40, 65, 92, 0.08);
+
+  box-shadow:
+    0 28px 80px rgba(0, 0, 0, 0.25);
+
+  overflow: hidden;
+
+  animation: modalAppear 0.2s ease;
 }
 
 
-/* =========================================
+/* =========================================================
+   MODAL ANIMATION
+========================================================= */
+
+@keyframes modalAppear {
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(12px)
+      scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0)
+      scale(1);
+  }
+}
+
+
+/* =========================================================
    SIGNUP CONTAINER
-========================================= */
+========================================================= */
 
 .container {
   display: grid;
 
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 48% 52%;
 
-  min-height: 500px;
+  width: 100%;
+  height: 100%;
 }
 
 
-/* =========================================
+/* =========================================================
    SIGNUP LEFT SIDE
-========================================= */
+========================================================= */
 
 .leftSide {
-  padding: 40px;
+  position: relative;
+
+  padding: 38px 42px;
 
   text-align: center;
 
-  background: #f8f9fc;
+  background:
+    linear-gradient(
+      145deg,
+      #f5f8fc 0%,
+      #eef3f8 100%
+    );
 
   display: flex;
+
   flex-direction: column;
+
   align-items: center;
+
+  overflow-y: auto;
+
+  border-right: 1px solid #e5eaf0;
+}
+
+.leftSide::before {
+  content: "";
+
+  position: absolute;
+
+  top: -100px;
+  left: -100px;
+
+  width: 240px;
+  height: 240px;
+
+  background: rgba(89, 133, 186, 0.08);
+
+  border-radius: 50%;
+
+  pointer-events: none;
+}
+
+.leftSide::after {
+  content: "";
+
+  position: absolute;
+
+  right: -80px;
+  bottom: -100px;
+
+  width: 260px;
+  height: 260px;
+
+  background: rgba(48, 153, 182, 0.06);
+
+  border-radius: 50%;
+
+  pointer-events: none;
 }
 
 
+/* =========================================================
+   SIGNUP IMAGE
+========================================================= */
+
 .accountImage {
+  position: relative;
+  z-index: 1;
+
   width: 100%;
 
   max-width: 320px;
 
-  height: 210px;
+  height: 205px;
 
   object-fit: cover;
 
-  border-radius: 24px;
+  border-radius: 20px;
 
-  margin-bottom: 20px;
+  margin: 2px 0 20px;
+
+  box-shadow:
+    0 12px 25px rgba(35, 57, 80, 0.14);
 }
 
+
+/* =========================================================
+   LEFT HEADING
+========================================================= */
 
 .leftSide h2 {
-  font-size: 27px;
+  position: relative;
+  z-index: 1;
 
-  font-weight: 500;
+  max-width: 370px;
 
-  color: #2d3b55;
+  font-size: 28px;
 
-  margin: 10px 0;
+  font-weight: 700;
+
+  line-height: 1.25;
+
+  letter-spacing: -0.5px;
+
+  color: #294667;
+
+  margin: 5px 0 11px;
 }
 
+
+/* =========================================================
+   SUBTITLE
+========================================================= */
 
 .subtitle {
-  color: #596273;
+  position: relative;
+  z-index: 1;
 
-  font-size: 17px;
+  max-width: 390px;
 
-  line-height: 1.5;
+  color: #617187;
 
-  margin: 10px 0;
+  font-size: 15px;
+
+  line-height: 1.65;
+
+  margin: 0;
 }
 
 
+/* =========================================================
+   BENEFITS
+========================================================= */
+
 .benefits {
+  position: relative;
+  z-index: 1;
+
+  width: 100%;
+
+  max-width: 400px;
+
   text-align: left;
 
   list-style: none;
 
-  padding: 10px 0;
+  padding: 0;
 
-  margin: 20px 0;
+  margin: 21px 0 0;
 }
-
 
 .benefits li {
-  margin: 14px 0;
+  position: relative;
 
-  color: #3d4758;
+  margin: 12px 0;
 
-  font-size: 16px;
+  padding-left: 25px;
 
-  line-height: 1.4;
-}
+  color: #40556d;
 
-
-.note {
-  font-size: 13px;
+  font-size: 14px;
 
   line-height: 1.5;
+}
 
-  color: #737b89;
+.benefits li::before {
+  content: "✓";
 
-  margin-top: 20px;
+  position: absolute;
+
+  left: 0;
+  top: 0;
+
+  width: 18px;
+  height: 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #3da45a;
+
+  color: #ffffff;
+
+  border-radius: 50%;
+
+  font-size: 10px;
+
+  font-weight: 800;
 }
 
 
-/* =========================================
+/* =========================================================
+   NOTE
+========================================================= */
+
+.note {
+  position: relative;
+  z-index: 1;
+
+  max-width: 390px;
+
+  font-size: 12px;
+
+  line-height: 1.55;
+
+  color: #7a8795;
+
+  margin: 16px 0 0;
+}
+
+
+/* =========================================================
    SIGNUP RIGHT SIDE
-========================================= */
+========================================================= */
 
 .rightSide {
-  padding: 40px 35px;
+  position: relative;
+
+  padding: 38px 42px 30px;
 
   background: #ffffff;
+
+  overflow-y: auto;
 }
 
+
+/* =========================================================
+   SIGNUP TITLE
+========================================================= */
 
 .signupTitle {
-  text-align: center;
+  text-align: left;
 
-  color: #3d4d6a;
+  color: #294667;
 
-  font-size: 26px;
+  font-size: 28px;
 
-  margin: 5px 0 25px;
+  font-weight: 750;
+
+  letter-spacing: -0.5px;
+
+  line-height: 1.2;
+
+  margin: 2px 0 25px;
 }
 
+
+/* =========================================================
+   SIGNUP FORM
+========================================================= */
 
 .rightSide form {
   display: flex;
 
   flex-direction: column;
 
-  gap: 14px;
+  gap: 13px;
 }
 
 
-/* =========================================
-   SIGNUP INPUTS AND SELECTS
-========================================= */
+/* =========================================================
+   SIGNUP INPUTS + SELECTS
+========================================================= */
 
 .rightSide input,
 .rightSide select {
   width: 100%;
 
-  height: 48px;
+  height: 50px;
 
-  border: 1px solid #c9d0da;
+  box-sizing: border-box;
 
-  border-radius: 7px;
+  padding: 0 15px;
 
-  padding: 0 14px;
+  border: 1px solid #d1d9e3;
 
-  font-size: 15px;
+  border-radius: 8px;
 
-  color: #394252;
+  color: #334960;
 
   background: #ffffff;
 
+  font-family: inherit;
+
+  font-size: 15px;
+
   outline: none;
 
-  box-sizing: border-box;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
 }
-
 
 .rightSide input::placeholder {
-  color: #777d87;
+  color: #8793a1;
 }
 
+.rightSide input:hover,
+.rightSide select:hover {
+  border-color: #b8c5d4;
+}
 
 .rightSide input:focus,
 .rightSide select:focus {
-  border-color: #299fc0;
+  border-color: #527ab5;
 
-  box-shadow: 0 0 0 3px rgba(41, 159, 192, 0.1);
+  box-shadow:
+    0 0 0 3px rgba(82, 122, 181, 0.10);
 }
 
 
-/* =========================================
-   SIGNUP NAME
-========================================= */
+/* =========================================================
+   BROWSER AUTOFILL
+========================================================= */
 
-.nameInput {
-  width: 100%;
+.rightSide input:-webkit-autofill,
+.rightSide input:-webkit-autofill:hover,
+.rightSide input:-webkit-autofill:focus {
+  -webkit-text-fill-color: #334960;
+
+  -webkit-box-shadow:
+    0 0 0 1000px #ffffff inset;
+
+  box-shadow:
+    0 0 0 1000px #ffffff inset;
+
+  transition:
+    background-color 5000s ease-in-out 0s;
 }
 
 
-/* =========================================
-   SIGNUP PHONE
-========================================= */
+/* =========================================================
+   SELECT
+========================================================= */
 
-.phoneInput {
-  width: 100%;
+.rightSide select {
+  cursor: pointer;
+
+  appearance: auto;
+}
+
+.rightSide select:invalid {
+  color: #8793a1;
+}
+
+.rightSide select option {
+  color: #334960;
 }
 
 
-/* =========================================
-   SIGNUP PASSWORD
-========================================= */
+/* =========================================================
+   INPUT GROUP CLASSES
+========================================================= */
 
+.nameInput,
+.phoneInput,
 .passwordInput {
   width: 100%;
 }
 
 
-/* =========================================
-   SIGNUP CHECKBOXES
-========================================= */
+/* =========================================================
+   CHECKBOXES
+========================================================= */
 
 .checkboxes {
   display: flex;
 
   flex-direction: column;
 
-  gap: 10px;
+  gap: 9px;
 
-  margin-top: 2px;
+  margin-top: 3px;
+
+  padding: 2px 0;
 }
-
 
 .checkboxes label {
   display: flex;
 
   align-items: flex-start;
 
-  gap: 8px;
+  gap: 9px;
 
-  color: #596273;
+  color: #697789;
 
-  font-size: 14px;
+  font-size: 12.5px;
 
-  line-height: 1.45;
+  line-height: 1.5;
+
+  cursor: pointer;
 }
-
 
 .checkboxes input[type="checkbox"] {
-  width: 14px !important;
+  width: 16px !important;
+  height: 16px !important;
 
-  height: 14px !important;
-
-  margin-top: 3px;
+  margin: 1px 0 0;
 
   flex-shrink: 0;
+
+  accent-color: #4d76b3;
+
+  cursor: pointer;
+}
+
+.checkboxes label:hover {
+  color: #455a71;
 }
 
 
-/* =========================================
+/* =========================================================
    SIGNUP BUTTON
-========================================= */
+========================================================= */
 
 .signupButton {
   width: 100%;
 
-  height: 48px;
+  height: 51px;
 
   border: none;
 
-  border-radius: 7px;
+  border-radius: 8px;
 
-  background: #41679e;
+  background:
+    linear-gradient(
+      135deg,
+      #4b70aa,
+      #6084be
+    );
 
   color: #ffffff;
 
-  font-size: 16px;
+  font-size: 15px;
+
+  font-weight: 700;
+
+  font-family: inherit;
 
   cursor: pointer;
 
   margin-top: 5px;
 
+  box-shadow:
+    0 7px 18px rgba(62, 95, 143, 0.20);
+
   transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
     background 0.2s ease,
     opacity 0.2s ease;
 }
 
-
 .signupButton:hover {
-  background: #345889;
-}
+  transform: translateY(-2px);
 
+  box-shadow:
+    0 10px 24px rgba(62, 95, 143, 0.28);
+}
 
 .signupButton:disabled {
   opacity: 0.6;
 
   cursor: not-allowed;
+
+  transform: none;
+
+  box-shadow: none;
 }
 
 
-/* =========================================
+/* =========================================================
    SIGNUP SWITCH
-========================================= */
+========================================================= */
 
 .signupSwitch {
   text-align: center;
 
-  color: #596273;
+  color: #718093;
 
-  margin: 0;
+  margin: 13px 0 0;
 
-  font-size: 15px;
+  font-size: 13px;
 }
-
 
 .signupSwitch button {
   border: none;
 
   background: transparent;
 
-  color: #41679e;
+  color: #426da7;
 
   cursor: pointer;
 
-  font-size: 15px;
+  font-size: 13px;
+
+  font-weight: 650;
 
   font-family: inherit;
 
   padding: 0;
 }
 
+.signupSwitch button:hover {
+  text-decoration: underline;
+}
 
-/* =========================================
-   SUCCESS MESSAGE
-========================================= */
+
+/* =========================================================
+   SUCCESS / ERROR MESSAGES
+========================================================= */
 
 .successMessage {
   text-align: center;
 
   color: #278f8d;
 
-  font-size: 14px;
+  font-size: 13px;
 
   margin: 5px 0 0;
 }
-
-
-/* =========================================
-   ERROR MESSAGE
-========================================= */
 
 .errorMessage {
   text-align: center;
 
   color: #c0392b;
 
-  font-size: 14px;
+  font-size: 13px;
 
   margin: 5px 0 0;
 }
 
 
-/* =========================================
-   MOBILE
-========================================= */
+/*
+   Your JSX currently renders message/error as plain <p>
+   elements, so style them inside the signup form as well.
+*/
 
-@media (max-width: 768px) {
-  .overlay {
-    align-items: flex-start;
+.rightSide form > p {
+  text-align: center;
 
-    padding: 15px;
-  }
+  margin: 3px 0;
+
+  font-size: 13px;
+
+  line-height: 1.4;
+}
 
 
-  .loginModal {
-    margin-top: 40px;
+/* =========================================================
+   TABLET
+========================================================= */
 
-    max-width: 400px;
-  }
-
+@media (max-width: 900px) {
 
   .signupModal {
-    margin-top: 20px;
+    width: min(100%, 760px);
 
-    max-height: none;
+    height: min(700px, calc(100vh - 30px));
   }
-
 
   .container {
-    grid-template-columns: 1fr;
+    grid-template-columns: 44% 56%;
   }
-
 
   .leftSide {
-    padding: 35px 25px;
+    padding: 32px 27px;
   }
-
 
   .rightSide {
-    padding: 35px 25px;
+    padding: 32px 28px 26px;
   }
-
 
   .accountImage {
     height: 180px;
   }
-}
-
-
-/* =========================================
-   SMALL MOBILE
-========================================= */
-
-@media (max-width: 480px) {
-  .loginModal {
-    padding: 28px 20px 20px;
-  }
-
-
-  .leftSide,
-  .rightSide {
-    padding: 30px 20px;
-  }
-
-
-  .signupTitle {
-    font-size: 23px;
-
-    margin-bottom: 20px;
-  }
-
 
   .leftSide h2 {
     font-size: 24px;
   }
 
+  .signupTitle {
+    font-size: 25px;
+  }
+}
 
-  .subtitle {
-    font-size: 15px;
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+
+  .overlay {
+    align-items: flex-start;
+
+    padding: 12px;
   }
 
+  .signupModal {
+    width: 100%;
+
+    height: auto;
+
+    max-height: calc(100vh - 24px);
+
+    border-radius: 14px;
+
+    overflow-y: auto;
+  }
+
+  .container {
+    display: block;
+
+    height: auto;
+  }
+
+  .leftSide {
+    padding: 28px 22px 25px;
+
+    border-right: none;
+
+    border-bottom: 1px solid #e5eaf0;
+
+    overflow: visible;
+  }
+
+  .rightSide {
+    padding: 28px 22px 25px;
+
+    overflow: visible;
+  }
+
+  .accountImage {
+    max-width: 300px;
+
+    height: 170px;
+
+    border-radius: 16px;
+  }
+
+  .leftSide h2 {
+    font-size: 25px;
+  }
+
+  .subtitle {
+    font-size: 14px;
+  }
+
+  .benefits {
+    margin-top: 17px;
+  }
 
   .benefits li {
-    font-size: 15px;
+    font-size: 13.5px;
+
+    margin: 10px 0;
+  }
+
+  .note {
+    font-size: 11.5px;
+
+    margin-top: 13px;
+  }
+
+  .signupTitle {
+    font-size: 24px;
+
+    text-align: center;
+
+    margin-bottom: 21px;
+  }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 480px) {
+
+  .overlay {
+    padding: 8px;
+  }
+
+  .loginModal {
+    margin-top: 20px;
+
+    padding: 30px 21px 23px;
+
+    border-radius: 13px;
+  }
+
+  .loginTitle {
+    font-size: 25px;
+
+    margin-bottom: 25px;
+  }
+
+  .signupModal {
+    max-height: calc(100vh - 16px);
+
+    border-radius: 12px;
+  }
+
+  .leftSide {
+    padding: 23px 18px 22px;
+  }
+
+  .rightSide {
+    padding: 24px 18px 23px;
+  }
+
+  .accountImage {
+    height: 155px;
+
+    border-radius: 14px;
+  }
+
+  .leftSide h2 {
+    font-size: 23px;
+  }
+
+  .rightSide input,
+  .rightSide select {
+    height: 49px;
+
+    font-size: 14px;
+  }
+
+  .signupTitle {
+    font-size: 22px;
+  }
+
+  .checkboxes label {
+    font-size: 12px;
+  }
+
+  .signupButton {
+    height: 49px;
+
+    font-size: 14px;
   }
 }

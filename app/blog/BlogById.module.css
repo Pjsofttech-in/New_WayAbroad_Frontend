@@ -4,22 +4,35 @@
 
 .blogPage {
   width: 100%;
+
   background: #ffffff;
 }
 
+
+/* =========================================================
+   BLOG LAYOUT
+========================================================= */
+
 .blogLayout {
   width: 100%;
+
   max-width: 1400px;
+
   margin: 0 auto;
 
   padding: 40px 32px 80px;
 
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 380px;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    380px;
 
   gap: 40px;
 
   align-items: start;
+
+  box-sizing: border-box;
 }
 
 
@@ -29,6 +42,7 @@
 
 .blogMain {
   width: 100%;
+
   min-width: 0;
 }
 
@@ -41,6 +55,7 @@
   width: 100%;
 
   display: flex;
+
   align-items: center;
 
   gap: 9px;
@@ -123,11 +138,11 @@
 
   color: #102a43;
 
-  font-size: 44px;
+  font-size: 30px;
 
   line-height: 1.16;
 
-  font-weight: 800;
+  font-weight: 700;
 
   letter-spacing: -0.8px;
 }
@@ -193,7 +208,7 @@
 
   width: 100%;
 
-  max-height: 600px;
+  max-height: 450px;
 
   object-fit: cover;
 
@@ -472,13 +487,17 @@
 
   position: sticky;
 
-  top: 25px;
+  top: 90px;
+
+  align-self: flex-start;
 
   display: flex;
 
   flex-direction: column;
 
   gap: 24px;
+
+  min-width: 0;
 }
 
 
@@ -493,12 +512,15 @@
 
   border-radius: 18px;
 
+  box-sizing: border-box;
+
   overflow: hidden;
 }
 
 
 /* =========================================================
    SUGGESTIONS BOX
+   OWN INDEPENDENT SCROLL
 ========================================================= */
 
 .suggestionsBox {
@@ -509,11 +531,28 @@
   );
 
   border: 1px solid #d9ebfb;
+
+  /*
+    The suggestions box itself has a fixed height.
+    Its header remains visible.
+    Only .sidebarBlogList scrolls.
+  */
+
+  height: 430px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  overflow: hidden;
+
+  box-sizing: border-box;
 }
 
 
 /* =========================================================
    RELATED BLOGS BOX
+   OWN INDEPENDENT SCROLL
 ========================================================= */
 
 .relatedBox {
@@ -524,6 +563,21 @@
   );
 
   border: 1px solid #d8eee5;
+
+  /*
+    Related Blogs gets its own
+    completely separate scroll area.
+  */
+
+  height: 600px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  overflow: hidden;
+
+  box-sizing: border-box;
 }
 
 
@@ -541,6 +595,8 @@
   gap: 10px;
 
   margin-bottom: 18px;
+
+  flex-shrink: 0;
 }
 
 .sidebarTitleWrapper {
@@ -641,6 +697,102 @@
   display: flex;
 
   flex-direction: column;
+
+  min-height: 0;
+}
+
+
+/* =========================================================
+   SUGGESTIONS BLOG LIST
+   INDEPENDENT SCROLLBAR
+========================================================= */
+
+.suggestionsBox .sidebarBlogList {
+  flex: 1;
+
+  min-height: 0;
+
+  overflow-y: auto;
+
+  overflow-x: hidden;
+
+  padding-right: 7px;
+
+  scrollbar-width: thin;
+
+  scrollbar-color:
+    #aebfd2
+    transparent;
+}
+
+
+/* =========================================================
+   RELATED BLOG LIST
+   INDEPENDENT SCROLLBAR
+========================================================= */
+
+.relatedBox .sidebarBlogList {
+  flex: 1;
+
+  min-height: 0;
+
+  overflow-y: auto;
+
+  overflow-x: hidden;
+
+  padding-right: 7px;
+
+  scrollbar-width: thin;
+
+  scrollbar-color:
+    #aebfd2
+    transparent;
+}
+
+
+/* =========================================================
+   SUGGESTIONS SCROLLBAR
+========================================================= */
+
+.suggestionsBox .sidebarBlogList::-webkit-scrollbar {
+  width: 6px;
+}
+
+.suggestionsBox .sidebarBlogList::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.suggestionsBox .sidebarBlogList::-webkit-scrollbar-thumb {
+  background: #aebfd2;
+
+  border-radius: 10px;
+}
+
+.suggestionsBox .sidebarBlogList::-webkit-scrollbar-thumb:hover {
+  background: #879db5;
+}
+
+
+/* =========================================================
+   RELATED BLOGS SCROLLBAR
+========================================================= */
+
+.relatedBox .sidebarBlogList::-webkit-scrollbar {
+  width: 6px;
+}
+
+.relatedBox .sidebarBlogList::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.relatedBox .sidebarBlogList::-webkit-scrollbar-thumb {
+  background: #aebfd2;
+
+  border-radius: 10px;
+}
+
+.relatedBox .sidebarBlogList::-webkit-scrollbar-thumb:hover {
+  background: #879db5;
 }
 
 
@@ -665,6 +817,10 @@
     153,
     0.18
   );
+
+  flex-shrink: 0;
+
+  box-sizing: border-box;
 
   cursor: pointer;
 
@@ -960,6 +1116,7 @@
 ========================================================= */
 
 @media (max-width: 1100px) {
+
   .blogLayout {
     grid-template-columns:
       minmax(0, 1fr)
@@ -997,6 +1154,7 @@
 ========================================================= */
 
 @media (max-width: 900px) {
+
   .blogLayout {
     grid-template-columns: 1fr;
 
@@ -1015,6 +1173,30 @@
     gap: 20px;
   }
 
+
+  /*
+    On tablet there is no nested scrolling.
+    Both boxes expand naturally.
+  */
+
+  .suggestionsBox,
+  .relatedBox {
+    height: auto;
+
+    max-height: none;
+
+    overflow: visible;
+  }
+
+  .suggestionsBox .sidebarBlogList,
+  .relatedBox .sidebarBlogList {
+    overflow: visible;
+
+    max-height: none;
+
+    padding-right: 0;
+  }
+
   .sidebarBox {
     height: fit-content;
   }
@@ -1030,6 +1212,7 @@
 ========================================================= */
 
 @media (max-width: 768px) {
+
   .blogLayout {
     padding: 25px 16px 50px;
 
@@ -1114,17 +1297,43 @@
     white-space: nowrap;
   }
 
-  /*
-  Sidebar becomes single column
-  on mobile.
-  */
+
+  /* -----------------------------------------
+     MOBILE SIDEBAR
+  ----------------------------------------- */
 
   .blogSidebar {
+    position: static;
+
     display: flex;
 
     flex-direction: column;
 
     gap: 18px;
+  }
+
+
+  /*
+    On mobile, both boxes expand naturally.
+    The page itself handles scrolling.
+  */
+
+  .suggestionsBox,
+  .relatedBox {
+    height: auto;
+
+    max-height: none;
+
+    overflow: visible;
+  }
+
+  .suggestionsBox .sidebarBlogList,
+  .relatedBox .sidebarBlogList {
+    overflow: visible;
+
+    max-height: none;
+
+    padding-right: 0;
   }
 
   .sidebarBox {
@@ -1174,6 +1383,7 @@
 ========================================================= */
 
 @media (max-width: 480px) {
+
   .blogLayout {
     padding: 22px 14px 45px;
   }

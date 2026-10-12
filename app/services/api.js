@@ -175,6 +175,37 @@ export async function submitScholarshipLead(data) {
   return handleResponse(response);
 }
 
+
+/*==================================================
+universities
+===================================================*/
+
+export async function getAllUniversities({ cityId } = {}) {
+  const role =
+    typeof window !== "undefined"
+      ? sessionStorage.getItem("role") || localStorage.getItem("role")
+      : null;
+
+  const email =
+    typeof window !== "undefined"
+      ? sessionStorage.getItem("email") || localStorage.getItem("email")
+      : null;
+
+  const params = new URLSearchParams();
+
+  if (role) params.append("role", role);
+  if (email) params.append("email", email);
+  if (cityId !== undefined && cityId !== null && cityId !== "") {
+    params.append("cityId", cityId);
+  }
+
+  const response = await fetch(
+    `${API_URL}/getAllUniversities?${params.toString()}`
+  );
+
+  return handleResponse(response);
+}
+
 /* =====================================================
    EXAM REGISTRATION
 ===================================================== */
@@ -247,18 +278,6 @@ export async function getHierarchy(params = {}) {
 }
 
 /* =====================================================
-   PUBLIC COURSE NAMES
-===================================================== */
-
-export async function getAllCourses() {
-  const response = await fetch(
-    `${API_URL}/getAllCourseName`
-  );
-
-  return handleResponse(response);
-}
-
-/* =====================================================
    PUBLIC STREAMS
 ===================================================== */
 
@@ -270,78 +289,173 @@ export async function getAllStreams() {
   return handleResponse(response);
 }
 
+export async function searchUniversities(query = "") {
+  return get("/searchUniversities", { name: query });
+}
+
+export async function searchStates(query = "") {
+  return get("/searchStates", { name: query });
+}
+
+export async function searchCities(query = "") {
+  return get("/searchCities", { name: query });
+}
+
+export async function searchColleges(query = "") {
+  return get("/searchColleges", { name: query });
+}
+
+export async function searchCountries(query = "") {
+  return get("/searchCountries", { name: query });
+}
+
+export async function searchStreams(query = "") {
+  return get("/searchStreams", { name: query });
+}
+/*================================================
+get all states
+======================================================*/
+export async function getAllStates({ countryId } = {}) {
+  const role =
+    typeof window !== "undefined"
+      ? sessionStorage.getItem("role") || localStorage.getItem("role")
+      : null;
+
+  const email =
+    typeof window !== "undefined"
+      ? sessionStorage.getItem("email") || localStorage.getItem("email")
+      : null;
+
+  const params = new URLSearchParams();
+
+  if (role) params.append("role", role);
+  if (email) params.append("email", email);
+
+  if (countryId !== undefined && countryId !== null && countryId !== "") {
+    params.append("countryId", countryId);
+  }
+
+  const response = await fetch(
+    `${API_URL}/getAllStates?${params.toString()}`
+  );
+
+  return handleResponse(response);
+}
+
 /* =====================================================
-   COURSE FINDER SEARCH APIS
-===================================================== */
+   GET ALL COUNTRIES
+   ===================================================== */
 
-export async function searchUniversities(
-  query = ""
-) {
+export async function getAllCountries() {
+  const role =
+    typeof window !== "undefined"
+      ? sessionStorage.getItem("role") || localStorage.getItem("role")
+      : null;
+
+  const email =
+    typeof window !== "undefined"
+      ? sessionStorage.getItem("email") || localStorage.getItem("email")
+      : null;
+
+  const params = new URLSearchParams();
+
+  if (role) params.append("role", role);
+  if (email) params.append("email", email);
+
   const response = await fetch(
-    `${API_URL}/searchUniversities?name=${encodeURIComponent(
-      query
-    )}`
+    `${API_URL}/getAllCountries?${params.toString()}`
   );
 
   return handleResponse(response);
 }
 
-export async function searchStates(
-  query = ""
-) {
+
+/* =====================================================
+   GET ALL CITIES
+   ===================================================== */
+
+export async function getAllCities({ stateId } = {}) {
+  const role =
+    typeof window !== "undefined"
+      ? sessionStorage.getItem("role") || localStorage.getItem("role")
+      : null;
+
+  const email =
+    typeof window !== "undefined"
+      ? sessionStorage.getItem("email") || localStorage.getItem("email")
+      : null;
+
+  const params = new URLSearchParams();
+
+  if (role) params.append("role", role);
+  if (email) params.append("email", email);
+
+  if (stateId !== undefined && stateId !== null && stateId !== "") {
+    params.append("stateId", stateId);
+  }
+
   const response = await fetch(
-    `${API_URL}/searchStates?name=${encodeURIComponent(
-      query
-    )}`
+    `${API_URL}/getAllCities?${params.toString()}`
   );
 
   return handleResponse(response);
 }
 
-export async function searchCities(
-  query = ""
-) {
+
+/* =====================================================
+   GET ALL COLLEGES
+   ===================================================== */
+
+export async function getAllColleges({ universityId } = {}) {
+  const role =
+    typeof window !== "undefined"
+      ? sessionStorage.getItem("role") || localStorage.getItem("role")
+      : null;
+
+  const email =
+    typeof window !== "undefined"
+      ? sessionStorage.getItem("email") || localStorage.getItem("email")
+      : null;
+
+  const params = new URLSearchParams();
+
+  if (role) params.append("role", role);
+  if (email) params.append("email", email);
+
+  if (
+    universityId !== undefined &&
+    universityId !== null &&
+    universityId !== ""
+  ) {
+    params.append("universityId", universityId);
+  }
+
   const response = await fetch(
-    `${API_URL}/searchCities?name=${encodeURIComponent(
-      query
-    )}`
+    `${API_URL}/getAllColleges?${params.toString()}`
   );
 
   return handleResponse(response);
 }
 
-export async function searchColleges(
-  query = ""
-) {
-  const response = await fetch(
-    `${API_URL}/searchColleges?name=${encodeURIComponent(
-      query
-    )}`
-  );
 
-  return handleResponse(response);
-}
 
-export async function searchCountries(
-  query = ""
-) {
-  const response = await fetch(
-    `${API_URL}/searchCountries?name=${encodeURIComponent(
-      query
-    )}`
-  );
 
-  return handleResponse(response);
-}
 
-export async function searchStreams(
-  query = ""
-) {
-  const response = await fetch(
-    `${API_URL}/searchStreams?name=${encodeURIComponent(
-      query
-    )}`
-  );
+async function get(endpoint, params = {}) {
+  const queryString = new URLSearchParams(
+    Object.entries(params).filter(
+      ([, value]) => value !== undefined && value !== null
+    ).map(([key, value]) => [
+      key,
+      Array.isArray(value) ? value.join(",") : String(value)
+    ])
+  ).toString();
+
+  const url = `${API_URL}${endpoint}${
+    queryString ? `?${queryString}` : ""
+  }`;
+
+  const response = await fetch(url);
 
   return handleResponse(response);
 }
