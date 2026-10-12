@@ -23,7 +23,7 @@ import {
   searchStreams,
 } from "../services/api";
 
-import styles from "./coursefinder.module.css";
+import styles from "./CourseFinder.module.css";
 
 /* =========================================================
    HELPERS
