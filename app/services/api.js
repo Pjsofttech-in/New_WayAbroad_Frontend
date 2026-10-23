@@ -1,26 +1,87 @@
-// app/services/api.js
-
 const API_URL =
-  process.env.NEXT_PUBLIC_API_URL ||
-  "http://localhost:8097";
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:8097";
 
 /* =====================================================
-   COMMON RESPONSE HANDLER
+   COMMON HELPERS
 ===================================================== */
 
+// Get logged-in user details from browser storage.
+function getStoredUserDetails() {
+  if (typeof window === "undefined") {
+    return { role: null, email: null, token: null };
+  }
+
+  return {
+    role:
+      sessionStorage.getItem("role") ||
+      localStorage.getItem("role"),
+
+    email:
+      sessionStorage.getItem("email") ||
+      localStorage.getItem("email"),
+
+    token:
+      sessionStorage.getItem("authToken") ||
+      localStorage.getItem("authToken"),
+  };
+}
+
+// Create query parameters for admin requests.
+function getAdminParams(extraParams = {}) {
+  const { role, email } = getStoredUserDetails();
+  const params = new URLSearchParams();
+
+  if (role) params.append("role", role);
+  if (email) params.append("email", email);
+
+  Object.entries(extraParams).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && value !== "") {
+      params.append(key, String(value));
+    }
+  });
+
+  return params.toString();
+}
+
+// Create request headers.
+function getRequestHeaders(extraHeaders = {}) {
+  const { token } = getStoredUserDetails();
+
+  const headers = {
+    Accept: "application/json",
+    ...extraHeaders,
+  };
+
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
+  return headers;
+}
+
+// Read and validate API responses.
 async function handleResponse(response) {
   const contentType =
     response.headers.get("content-type") || "";
 
-  const data = contentType.includes("application/json")
-    ? await response.json()
-    : await response.text();
+  let data = null;
+
+  if (response.status !== 204) {
+    if (contentType.includes("application/json")) {
+      data = await response.json().catch(() => null);
+    } else {
+      data = await response.text().catch(() => "");
+    }
+  }
 
   if (!response.ok) {
     const message =
       typeof data === "string"
         ? data
-        : data?.message || "Something went wrong";
+        : data?.message ||
+          data?.error ||
+          data?.detail ||
+          `Request failed with status ${response.status}`;
 
     throw new Error(message);
   }
@@ -28,23 +89,65 @@ async function handleResponse(response) {
   return data;
 }
 
+// Build a URL with optional query parameters.
+function buildUrl(endpoint, params = {}) {
+  const query = new URLSearchParams();
+
+  Object.entries(params).forEach(([key, value]) => {
+    if (value === undefined || value === null || value === "") {
+      return;
+    }
+
+    if (Array.isArray(value)) {
+      value.forEach((item) => {
+        if (item !== undefined && item !== null && item !== "") {
+          query.append(key, String(item));
+        }
+      });
+    } else {
+      query.append(key, String(value));
+    }
+  });
+
+  const queryString = query.toString();
+
+  return `${API_URL}${endpoint}${
+    queryString ? `?${queryString}` : ""
+  }`;
+}
+
+// Common GET helper.
+async function get(endpoint, params = {}, options = {}) {
+  const response = await fetch(buildUrl(endpoint, params), {
+    method: "GET",
+    headers: getRequestHeaders(),
+    cache: "no-store",
+    ...options,
+  });
+
+  return handleResponse(response);
+}
+
+// Common JSON POST helper.
+async function post(endpoint, data, options = {}) {
+  const response = await fetch(`${API_URL}${endpoint}`, {
+    method: "POST",
+    headers: getRequestHeaders({
+      "Content-Type": "application/json",
+    }),
+    body: JSON.stringify(data),
+    ...options,
+  });
+
+  return handleResponse(response);
+}
+
 /* =====================================================
    FORM SUBMISSION
 ===================================================== */
 
 export async function submitFormSubmission(data) {
-  const response = await fetch(
-    `${API_URL}/form-submission`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    }
-  );
-
-  return handleResponse(response);
+  return post("/form-submission", data);
 }
 
 /* =====================================================
@@ -52,11 +155,7 @@ export async function submitFormSubmission(data) {
 ===================================================== */
 
 export async function getAllContinents() {
-  const response = await fetch(
-    `${API_URL}/getAllContinents`
-  );
-
-  return handleResponse(response);
+  return get("/getAllContinents");
 }
 
 /* =====================================================
@@ -64,11 +163,7 @@ export async function getAllContinents() {
 ===================================================== */
 
 export async function getAllCourseNames() {
-  const response = await fetch(
-    `${API_URL}/getAllCourseName`
-  );
-
-  return handleResponse(response);
+  return get("/getAllCourseName");
 }
 
 /* =====================================================
@@ -76,18 +171,7 @@ export async function getAllCourseNames() {
 ===================================================== */
 
 export async function submitPartnerForm(data) {
-  const response = await fetch(
-    `${API_URL}/createPartner`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    }
-  );
-
-  return handleResponse(response);
+  return post("/createPartner", data);
 }
 
 /* =====================================================
@@ -95,19 +179,17 @@ export async function submitPartnerForm(data) {
 ===================================================== */
 
 export async function loginUser(data) {
-  const response = await fetch(
-    `${API_URL}/userLogin`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: data.email,
-        password: data.password,
-      }),
-    }
-  );
+  const response = await fetch(`${API_URL}/userLogin`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email: data.email,
+      password: data.password,
+    }),
+  });
 
   return handleResponse(response);
 }
@@ -117,19 +199,11 @@ export async function loginUser(data) {
 ===================================================== */
 
 export async function getAllBlogs() {
-  const response = await fetch(
-    `${API_URL}/getAllBlogs`
-  );
-
-  return handleResponse(response);
+  return get("/getAllBlogs");
 }
 
 export async function getBlogById(id) {
-  const response = await fetch(
-    `${API_URL}/getBlogById/${id}`
-  );
-
-  return handleResponse(response);
+  return get(`/getBlogById/${encodeURIComponent(id)}`);
 }
 
 /* =====================================================
@@ -137,73 +211,33 @@ export async function getBlogById(id) {
 ===================================================== */
 
 export async function getAllScholarships() {
-  const response = await fetch(
-    `${API_URL}/getAll`
-  );
-
-  return handleResponse(response);
+  return get("/getAll");
 }
 
 export async function getScholarshipById(id) {
-  const response = await fetch(
-    `${API_URL}/getById/${id}`
-  );
-
-  return handleResponse(response);
+  return get(`/getById/${encodeURIComponent(id)}`);
 }
 
 export async function getScholarshipLocations() {
-  const response = await fetch(
-    `${API_URL}/getAllScholarshipStudyLocation`
-  );
-
-  return handleResponse(response);
+  return get("/getAllScholarshipStudyLocation");
 }
 
 export async function submitScholarshipLead(data) {
-  const response = await fetch(
-    `${API_URL}/leads/create`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    }
-  );
-
-  return handleResponse(response);
+  return post("/leads/create", data);
 }
 
-
-/*==================================================
-universities
-===================================================*/
+/* =====================================================
+   UNIVERSITIES
+===================================================== */
 
 export async function getAllUniversities({ cityId } = {}) {
-  const role =
-    typeof window !== "undefined"
-      ? sessionStorage.getItem("role") || localStorage.getItem("role")
-      : null;
-
-  const email =
-    typeof window !== "undefined"
-      ? sessionStorage.getItem("email") || localStorage.getItem("email")
-      : null;
-
-  const params = new URLSearchParams();
-
-  if (role) params.append("role", role);
-  if (email) params.append("email", email);
-  if (cityId !== undefined && cityId !== null && cityId !== "") {
-    params.append("cityId", cityId);
-  }
-
-  const response = await fetch(
-    `${API_URL}/getAllUniversities?${params.toString()}`
+  return get(
+    "/getAllUniversities",
+    {
+      ...getUserParams(),
+      cityId,
+    }
   );
-
-  return handleResponse(response);
 }
 
 /* =====================================================
@@ -211,70 +245,15 @@ export async function getAllUniversities({ cityId } = {}) {
 ===================================================== */
 
 export async function createExamPreparation(data) {
-  const response = await fetch(
-    `${API_URL}/createExamPreparation`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    }
-  );
-
-  return handleResponse(response);
+  return post("/createExamPreparation", data);
 }
 
 /* =====================================================
-   COURSE FINDER
-===================================================== */
-
-/* =====================================================
-   PUBLIC COURSE HIERARCHY
-
-   IMPORTANT:
-   Do NOT use /getAllCourses here.
-
-   /getAllCourses requires role + email.
-
-   Public Course Finder uses:
-   /hierarchy
+   COURSE FINDER - PUBLIC COURSE HIERARCHY
 ===================================================== */
 
 export async function getHierarchy(params = {}) {
-  const query = new URLSearchParams();
-
-  Object.entries(params).forEach(([key, value]) => {
-    if (
-      value !== undefined &&
-      value !== null &&
-      value !== ""
-    ) {
-      if (Array.isArray(value)) {
-        value.forEach((item) => {
-          if (
-            item !== undefined &&
-            item !== null &&
-            item !== ""
-          ) {
-            query.append(key, item);
-          }
-        });
-      } else {
-        query.append(key, value);
-      }
-    }
-  });
-
-  const queryString = query.toString();
-
-  const url = queryString
-    ? `${API_URL}/hierarchy?${queryString}`
-    : `${API_URL}/hierarchy`;
-
-  const response = await fetch(url);
-
-  return handleResponse(response);
+  return get("/hierarchy", params);
 }
 
 /* =====================================================
@@ -282,11 +261,7 @@ export async function getHierarchy(params = {}) {
 ===================================================== */
 
 export async function getAllStreams() {
-  const response = await fetch(
-    `${API_URL}/getAllStreams`
-  );
-
-  return handleResponse(response);
+  return get("/getAllStreams");
 }
 
 export async function searchUniversities(query = "") {
@@ -312,150 +287,341 @@ export async function searchCountries(query = "") {
 export async function searchStreams(query = "") {
   return get("/searchStreams", { name: query });
 }
-/*================================================
-get all states
-======================================================*/
-export async function getAllStates({ countryId } = {}) {
-  const role =
-    typeof window !== "undefined"
-      ? sessionStorage.getItem("role") || localStorage.getItem("role")
-      : null;
 
-  const email =
-    typeof window !== "undefined"
-      ? sessionStorage.getItem("email") || localStorage.getItem("email")
-      : null;
+/* =====================================================
+   USER QUERY PARAMETERS
+===================================================== */
 
-  const params = new URLSearchParams();
+function getUserParams() {
+  const { role, email } = getStoredUserDetails();
 
-  if (role) params.append("role", role);
-  if (email) params.append("email", email);
+  const params = {};
 
-  if (countryId !== undefined && countryId !== null && countryId !== "") {
-    params.append("countryId", countryId);
-  }
+  if (role) params.role = role;
+  if (email) params.email = email;
 
-  const response = await fetch(
-    `${API_URL}/getAllStates?${params.toString()}`
-  );
-
-  return handleResponse(response);
+  return params;
 }
 
 /* =====================================================
-   GET ALL COUNTRIES
-   ===================================================== */
+   STATES
+===================================================== */
+
+export async function getAllStates({ countryId } = {}) {
+  return get("/getAllStates", {
+    ...getUserParams(),
+    countryId,
+  });
+}
+
+/* =====================================================
+   COUNTRIES
+===================================================== */
 
 export async function getAllCountries() {
-  const role =
-    typeof window !== "undefined"
-      ? sessionStorage.getItem("role") || localStorage.getItem("role")
-      : null;
-
-  const email =
-    typeof window !== "undefined"
-      ? sessionStorage.getItem("email") || localStorage.getItem("email")
-      : null;
-
-  const params = new URLSearchParams();
-
-  if (role) params.append("role", role);
-  if (email) params.append("email", email);
-
-  const response = await fetch(
-    `${API_URL}/getAllCountries?${params.toString()}`
-  );
-
-  return handleResponse(response);
+  return get("/getAllCountries");
 }
 
-
 /* =====================================================
-   GET ALL CITIES
-   ===================================================== */
+   CITIES
+===================================================== */
 
 export async function getAllCities({ stateId } = {}) {
-  const role =
-    typeof window !== "undefined"
-      ? sessionStorage.getItem("role") || localStorage.getItem("role")
-      : null;
-
-  const email =
-    typeof window !== "undefined"
-      ? sessionStorage.getItem("email") || localStorage.getItem("email")
-      : null;
-
-  const params = new URLSearchParams();
-
-  if (role) params.append("role", role);
-  if (email) params.append("email", email);
-
-  if (stateId !== undefined && stateId !== null && stateId !== "") {
-    params.append("stateId", stateId);
-  }
-
-  const response = await fetch(
-    `${API_URL}/getAllCities?${params.toString()}`
-  );
-
-  return handleResponse(response);
+  return get("/getAllCities", {
+    ...getUserParams(),
+    stateId,
+  });
 }
-
 
 /* =====================================================
-   GET ALL COLLEGES
-   ===================================================== */
+   COLLEGES
+===================================================== */
 
 export async function getAllColleges({ universityId } = {}) {
-  const role =
-    typeof window !== "undefined"
-      ? sessionStorage.getItem("role") || localStorage.getItem("role")
-      : null;
+  return get("/getAllColleges", {
+    ...getUserParams(),
+    universityId,
+  });
+}
 
-  const email =
-    typeof window !== "undefined"
-      ? sessionStorage.getItem("email") || localStorage.getItem("email")
-      : null;
+/* =====================================================
+   STUDY ABROAD
+===================================================== */
 
-  const params = new URLSearchParams();
+export async function getAllStudyAbroad() {
+  return get("/getAllStudyAbroad", getUserParams());
+}
 
-  if (role) params.append("role", role);
-  if (email) params.append("email", email);
+/* =====================================================
+   JOB FINDER - GET ALL JOBS
+===================================================== */
 
-  if (
-    universityId !== undefined &&
-    universityId !== null &&
-    universityId !== ""
-  ) {
-    params.append("universityId", universityId);
+// Public endpoint: role and email are not required.
+
+export async function getAllJobs() {
+  const response = await fetch(
+    `${API_URL}/admin/jobs/getAllJobs`,
+    {
+      method: "GET",
+      headers: getRequestHeaders(),
+      cache: "no-store",
+    }
+  );
+
+  const data = await handleResponse(response);
+
+  // Backend returns List<AbroadJobResponseDTO>.
+  if (Array.isArray(data)) {
+    return data;
+  }
+
+  // Handle alternative response wrappers if present.
+  if (Array.isArray(data?.content)) {
+    return data.content;
+  }
+
+  if (Array.isArray(data?.data)) {
+    return data.data;
+  }
+
+  return [];
+}
+
+/* =====================================================
+   JOB FINDER - GET JOB DETAILS
+===================================================== */
+
+// Public endpoint: role and email are not required.
+
+export async function getJobById(id) {
+  if (id === undefined || id === null || id === "") {
+    throw new Error("A valid job ID is required.");
   }
 
   const response = await fetch(
-    `${API_URL}/getAllColleges?${params.toString()}`
+    `${API_URL}/admin/jobs/${encodeURIComponent(id)}`,
+    {
+      method: "GET",
+      headers: getRequestHeaders(),
+      cache: "no-store",
+    }
   );
 
   return handleResponse(response);
 }
 
+/* =====================================================
+   JOB FINDER - APPLY FOR JOB
+===================================================== */
 
+// Backend: POST /job-applications/apply
+// Multipart fields: application and resume.
+// Your backend security configuration currently requires
+// authentication for this endpoint.
 
+export async function applyForJob({ application, resume }) {
+  if (!application) {
+    throw new Error("Application details are required.");
+  }
 
+  if (!resume) {
+    throw new Error("Please select a resume file.");
+  }
 
-async function get(endpoint, params = {}) {
-  const queryString = new URLSearchParams(
-    Object.entries(params).filter(
-      ([, value]) => value !== undefined && value !== null
-    ).map(([key, value]) => [
-      key,
-      Array.isArray(value) ? value.join(",") : String(value)
-    ])
-  ).toString();
+  const formData = new FormData();
 
-  const url = `${API_URL}${endpoint}${
-    queryString ? `?${queryString}` : ""
-  }`;
+  formData.append(
+    "application",
+    new Blob([JSON.stringify(application)], {
+      type: "application/json",
+    })
+  );
 
-  const response = await fetch(url);
+  formData.append("resume", resume);
+
+  const response = await fetch(
+    `${API_URL}/job-applications/apply`,
+    {
+      method: "POST",
+      headers: getRequestHeaders(),
+      body: formData,
+    }
+  );
 
   return handleResponse(response);
 }
+
+/* =====================================================
+   JOB FINDER - JOB COUNTRY API
+===================================================== */
+
+// Get all countries configured for Job Finder
+export async function getAllJobCountries() {
+  const query = getAdminParams();
+
+  if (!query) {
+    throw new Error(
+      "Role and email are required to fetch job countries."
+    );
+  }
+
+  return get(
+    "/admin/job-settings/country",
+    Object.fromEntries(new URLSearchParams(query))
+  );
+}
+
+// Get a job country by ID
+export async function getJobCountryById(id) {
+  if (id === undefined || id === null || id === "") {
+    throw new Error("A valid job country ID is required.");
+  }
+
+  const query = getAdminParams();
+
+  if (!query) {
+    throw new Error(
+      "Role and email are required to fetch the job country."
+    );
+  }
+
+  return get(
+    `/admin/job-settings/country/${encodeURIComponent(id)}`,
+    Object.fromEntries(new URLSearchParams(query))
+  );
+}
+
+/* =====================================================
+   JOB FINDER - JOB WORK TYPE API
+===================================================== */
+
+// Get all work types
+export async function getAllJobWorkTypes() {
+  const query = getAdminParams();
+
+  if (!query) {
+    throw new Error(
+      "Role and email are required to fetch job work types."
+    );
+  }
+
+  return get(
+    "/admin/job-settings/work-type",
+    Object.fromEntries(new URLSearchParams(query))
+  );
+}
+
+// Get a work type by ID
+export async function getJobWorkTypeById(id) {
+  if (id === undefined || id === null || id === "") {
+    throw new Error("A valid work type ID is required.");
+  }
+
+  const query = getAdminParams();
+
+  if (!query) {
+    throw new Error(
+      "Role and email are required to fetch the work type."
+    );
+  }
+
+  return get(
+    `/admin/job-settings/work-type/${encodeURIComponent(id)}`,
+    Object.fromEntries(new URLSearchParams(query))
+  );
+}
+
+// Create a work type
+export async function createJobWorkType(data) {
+  const query = getAdminParams();
+
+  if (!query) {
+    throw new Error(
+      "Role and email are required to create a work type."
+    );
+  }
+
+  return post(
+    `/admin/job-settings/work-type?${query}`,
+    data
+  );
+}
+
+// Update a work type
+export async function updateJobWorkType(id, data) {
+  if (id === undefined || id === null || id === "") {
+    throw new Error("A valid work type ID is required.");
+  }
+
+  const query = getAdminParams();
+
+  if (!query) {
+    throw new Error(
+      "Role and email are required to update a work type."
+    );
+  }
+
+  const response = await fetch(
+    `${API_URL}/admin/job-settings/work-type/${encodeURIComponent(id)}?${query}`,
+    {
+      method: "PUT",
+      headers: getRequestHeaders({
+        "Content-Type": "application/json",
+      }),
+      body: JSON.stringify(data),
+    }
+  );
+
+  return handleResponse(response);
+}
+
+// Delete a work type
+export async function deleteJobWorkType(id) {
+  if (id === undefined || id === null || id === "") {
+    throw new Error("A valid work type ID is required.");
+  }
+
+  const query = getAdminParams();
+
+  if (!query) {
+    throw new Error(
+      "Role and email are required to delete a work type."
+    );
+  }
+
+  const response = await fetch(
+    `${API_URL}/admin/job-settings/work-type/${encodeURIComponent(id)}?${query}`,
+    {
+      method: "DELETE",
+      headers: getRequestHeaders(),
+    }
+  );
+
+  return handleResponse(response);
+}
+
+/* =====================================================
+   JOB FINDER - JOB LOCATION API
+===================================================== */
+
+// Get all job locations
+export async function getAllJobLocations() {
+  const query = getAdminParams();
+
+  if (!query) {
+    throw new Error(
+      "Role and email are required to fetch job locations."
+    );
+  }
+
+  return get(
+    "/admin/job-settings/location",
+    Object.fromEntries(new URLSearchParams(query))
+  );
+}
+
+/* =====================================================
+   EXPORT API BASE URL
+===================================================== */
+
+export { API_URL };
