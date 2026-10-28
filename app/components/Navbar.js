@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -12,16 +13,14 @@ import {
   Search,
   CalendarDays,
   Globe2,
-  MapPin,
-  Building2,
   FileText,
   Home,
   BadgeCheck,
-  WalletCards,
 } from "lucide-react";
 
 import styles from "./Navbar.module.css";
 import LoginModal from "./LoginModal";
+import { getAllCountries } from "../services/api";
 
 /* =========================================================
    NAVIGATION ITEMS
@@ -35,20 +34,7 @@ const nav = [
   "Scholarships",
   "Blogs",
   "Course Finder",
-];
-
-/* =========================================================
-   STUDY ABROAD
-========================================================= */
-
-const studyAbroadCountries = [
-  { name: "USA", icon: Globe2 },
-  { name: "Canada", icon: MapPin },
-  { name: "UK", icon: Building2 },
-  { name: "Australia", icon: Globe2 },
-  { name: "Germany", icon: Building2 },
-  { name: "Ireland", icon: MapPin },
-  { name: "New Zealand", icon: Globe2 },
+  "Job Finder"
 ];
 
 /* =========================================================
@@ -63,8 +49,68 @@ export default function Navbar() {
   const [companyOpen, setCompanyOpen] = useState(false);
   const [studyAbroadOpen, setStudyAbroadOpen] = useState(false);
 
+  const [studyAbroadCountries, setStudyAbroadCountries] = useState([]);
+  const [studyAbroadLoading, setStudyAbroadLoading] = useState(true);
+  const [studyAbroadError, setStudyAbroadError] = useState("");
+
   const [loginOpen, setLoginOpen] = useState(false);
   const [authMode, setAuthMode] = useState("login");
+
+  /* =======================================================
+     LOAD COUNTRIES FROM BACKEND
+  ======================================================= */
+
+  
+useEffect(() => {
+  let cancelled = false;
+
+  async function loadCountries() {
+    try {
+      setStudyAbroadLoading(true);
+      setStudyAbroadError("");
+
+      const response = await getAllCountries();
+
+      if (cancelled) return;
+
+      // Support common API response formats.
+      const countries = Array.isArray(response)
+        ? response
+        : Array.isArray(response?.data)
+          ? response.data
+          : Array.isArray(response?.countries)
+            ? response.countries
+            : Array.isArray(response?.content)
+              ? response.content
+              : [];
+
+      setStudyAbroadCountries(countries);
+
+      if (countries.length === 0) {
+        console.warn("getAllCountries returned no country records:", response);
+      }
+    } catch (error) {
+      if (!cancelled) {
+        console.error("Failed to load countries:", error);
+        setStudyAbroadError(
+          "Unable to load destinations. Please try again later."
+        );
+        setStudyAbroadCountries([]);
+      }
+    } finally {
+      if (!cancelled) {
+        setStudyAbroadLoading(false);
+      }
+    }
+  }
+
+  loadCountries();
+
+  return () => {
+    cancelled = true;
+  };
+}, []);
+
 
   /* =======================================================
      OPEN AUTH MODAL FROM OTHER COMPONENTS
@@ -115,6 +161,8 @@ export default function Navbar() {
         return "/blog";
       case "Course Finder":
         return "/course-finder";
+      case "Job Finder":
+        return "/job-finder";
       default:
         return "/";
     }
@@ -140,12 +188,15 @@ export default function Navbar() {
         return pathname.startsWith("/blog");
       case "Course Finder":
         return pathname.startsWith("/course-finder");
+      case "Job Finder":
+        return pathname.startsWith("/job-finder")
       default:
         return false;
     }
   };
 
-  const isStudyAbroadActive = pathname.startsWith("/study-abroad");
+  const isStudyAbroadActive =
+    pathname.startsWith("/study-abroad");
 
   const isCompanyActive =
     pathname.startsWith("/become-partner") ||
@@ -190,12 +241,14 @@ export default function Navbar() {
     setAuthMode("login");
   };
 
+  /* =======================================================
+     RENDER
+  ======================================================= */
+
   return (
     <>
       <header className={styles.topbar}>
-        {/* =================================================
-            LOGO
-        ================================================= */}
+        {/* LOGO */}
 
         <Link
           href="/"
@@ -213,9 +266,7 @@ export default function Navbar() {
           </span>
         </Link>
 
-        {/* =================================================
-            DESKTOP / MOBILE NAVIGATION
-        ================================================= */}
+        {/* DESKTOP / MOBILE NAVIGATION */}
 
         <nav
           className={`${styles.nav} ${menu ? styles.open : ""}`}
@@ -236,9 +287,7 @@ export default function Navbar() {
             </Link>
           ))}
 
-          {/* =================================================
-              STUDY ABROAD
-          ================================================= */}
+          {/* STUDY ABROAD DROPDOWN */}
 
           <div className={styles.dropdown}>
             <button
@@ -259,7 +308,9 @@ export default function Navbar() {
                 size={14}
                 strokeWidth={2.2}
                 className={
-                  studyAbroadOpen ? styles.rotateIcon : styles.dropdownIcon
+                  studyAbroadOpen
+                    ? styles.rotateIcon
+                    : styles.dropdownIcon
                 }
               />
             </button>
@@ -271,18 +322,38 @@ export default function Navbar() {
                   <small>Explore destinations</small>
                 </div>
 
-                {studyAbroadCountries.map(({ name, icon: Icon }) => (
-                  <span
-                    key={name}
+                {studyAbroadLoading ? (
+                  <div className={styles.dropdownItem}>
+                    Loading destinations...
+                  </div>
+                ) : studyAbroadError ? (
+                  <div
+                    className={styles.dropdownItem}
+                    role="status"
+                  >
+                    {studyAbroadError}
+                  </div>
+                ) : studyAbroadCountries.length === 0 ? (
+                  <div className={styles.dropdownItem}>
+                    No destinations available
+                  </div>
+                ) : (
+                  studyAbroadCountries.map((country) => (
+                  <Link
+                    key={country.id}
+                    href={`/study-abroad/${country.id}`}
                     className={styles.dropdownItem}
                     role="menuitem"
+                    onClick={closeMenus}
                   >
                     <span className={styles.dropdownItemIcon}>
-                      <Icon size={16} />
+                      <Globe2 size={16} />
                     </span>
-                    <span>{name}</span>
-                  </span>
-                ))}
+
+                    <span>{country.country}</span>
+                  </Link>
+                ))
+                )}
               </div>
             )}
           </div>
@@ -302,24 +373,35 @@ export default function Navbar() {
             </Link>
           ))}
 
-          {/* =================================================
-              COURSE FINDER
-          ================================================= */}
+          {/* COURSE FINDER */}
 
           <Link
             href={getHref("Course Finder")}
             className={`${styles.courseFinder} ${
-              isActive("Course Finder") ? styles.finderActive : ""
+              isActive("Course Finder")
+                ? styles.finderActive
+                : ""
             }`}
             onClick={closeMenus}
           >
-            <Search size={17} strokeWidth={2.2} />
             <span>Course Finder</span>
           </Link>
+          
+          {/* JOB FINDER */}
 
-          {/* =================================================
-              COMPANY
-          ================================================= */}
+          <Link
+            href={getHref("Job Finder")}
+            className={`${styles.jobFinder} ${
+              isActive("Job Finder")
+                ? styles.finderActive
+                : ""
+            }`}
+            onClick={closeMenus}
+          >
+            <span>Job Finder</span>
+          </Link>
+
+          {/* COMPANY */}
 
           <div className={styles.dropdown}>
             <button
@@ -340,7 +422,9 @@ export default function Navbar() {
                 size={14}
                 strokeWidth={2.2}
                 className={
-                  companyOpen ? styles.rotateIcon : styles.dropdownIcon
+                  companyOpen
+                    ? styles.rotateIcon
+                    : styles.dropdownIcon
                 }
               />
             </button>
@@ -380,9 +464,7 @@ export default function Navbar() {
             )}
           </div>
 
-          {/* =================================================
-              BOOK FREE COUNSELLING
-          ================================================= */}
+          {/* BOOK FREE COUNSELLING */}
 
           <button
             type="button"
@@ -390,13 +472,11 @@ export default function Navbar() {
             onClick={handleCounsellingClick}
           >
             <CalendarDays size={16} strokeWidth={2.2} />
-            <span>Book Free Counselling</span>
+            <span>Book Counselling</span>
           </button>
         </nav>
 
-        {/* =================================================
-            USER LOGIN
-        ================================================= */}
+        {/* USER LOGIN */}
 
         <button
           type="button"
@@ -407,9 +487,7 @@ export default function Navbar() {
           <UserRound size={19} strokeWidth={2} />
         </button>
 
-        {/* =================================================
-            MOBILE MENU
-        ================================================= */}
+        {/* MOBILE MENU */}
 
         <button
           type="button"

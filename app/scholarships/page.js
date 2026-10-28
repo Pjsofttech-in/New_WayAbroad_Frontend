@@ -16,7 +16,7 @@ export default function Scholarships() {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const scholarshipsPerPage = 10;
+  const scholarshipsPerPage = 12;
 
   const [showFilters, setShowFilters] = useState(false);
 
@@ -183,12 +183,8 @@ export default function Scholarships() {
       <div className={styles.titleBanner}>
 
         <h1 className={styles.scholarshipsTitle}>
-          Way Abroad
+          Way Abroad Scholarships
         </h1>
-
-        <h2>
-          Scholarships
-        </h2>
 
         <p className={styles.bannerPara}>
           Maximize Savings! Explore and apply
