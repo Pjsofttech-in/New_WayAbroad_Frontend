@@ -7,6 +7,10 @@ export const metadata = {
   title: "Wayabroad",
   description: "Study abroad website",
 
+  verification: {
+    google: "AEYznB4tT0Wz1aBXErnytcqZ9018dSJ__HX5fZei9CY",
+  },
+
   icons: {
     icon: "/favicon.png",
   },
