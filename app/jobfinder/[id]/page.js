@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -14,10 +13,12 @@ const EMPTY_APPLICATION = {
 };
 
 function unwrapResponse(response) {
-  return response?.data?.job ??
+  return (
+    response?.data?.job ??
     response?.data ??
     response?.job ??
-    response;
+    response
+  );
 }
 
 export default function JobDetailsPage() {
@@ -77,7 +78,9 @@ export default function JobDetailsPage() {
           setError(err.message || "Unable to load job details.");
         }
       } finally {
-        if (!cancelled) setLoading(false);
+        if (!cancelled) {
+          setLoading(false);
+        }
       }
     }
 
@@ -134,55 +137,108 @@ export default function JobDetailsPage() {
 
   return (
     <main className={styles.page}>
+      <header className={styles.detailsHeader}>
+        <button
+          type="button"
+          className={styles.backButton}
+          onClick={() => router.back()}
+        >
+          <span aria-hidden="true">←</span>
+          Back
+        </button>
+
+        <div className={styles.headerTitleRow}>
+          <span className={styles.titleAccent} aria-hidden="true" />
+          <h1>{job.jobTitle || "Job Details"}</h1>
+        </div>
+
+        <div className={styles.detailsBadge}>
+          <span className={styles.badgeIcon} aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <rect x="3" y="7" width="18" height="14" rx="2" />
+              <path d="M8 7V4h8v3M3 12h18" />
+            </svg>
+          </span>
+          <span>JOB DETAILS</span>
+        </div>
+
+        <div className={styles.headerDecoration} aria-hidden="true">
+          <svg viewBox="0 0 500 300" fill="none">
+            <path
+              className={styles.heroWave}
+              d="M0 258c83-7 125-91 242-75 87 12 111 68 258 43v74H0z"
+            />
+            <path
+              className={styles.heroBuilding}
+              d="M367 149h38v92h-38zm48-16h33v108h-33zm-95 48h39v60h-39"
+            />
+            <path
+              className={styles.heroCrane}
+              d="M304 78h164m-133 0 50-25 46 25m-66 0 20 18 20-18m-20 0v144m-43-144v26h107V78m-88 26v14m45-14v14m-45 0h45m-26 0-19 104m26-104 19 104m-37-104h28"
+            />
+            <path className={styles.heroHook} d="M335 104v31m0 0-7 8m7-8 7 8" />
+            <path
+              className={styles.heroHelmet}
+              d="M284 228c2-42 24-67 57-67s55 25 57 67l-10 8h-94z"
+            />
+            <path
+              className={styles.heroHelmetDetail}
+              d="M303 224c2-28 15-46 38-52m-30 58h61m-61-10h61m-52-43 9 14m36-14-9 14"
+            />
+            <path
+              className={styles.heroCone}
+              d="m407 235 24-65 24 65z"
+            />
+            <path className={styles.heroConeStripe} d="m417 208 28 0m-34 18h40" />
+            <path className={styles.heroGround} d="M275 240h192" />
+          </svg>
+        </div>
+      </header>
+
       <div className={styles.jobDetailsLayout}>
-        {/* LEFT: FULL JOB DETAILS */}
         <article className={styles.detailsModal}>
-          <div className={styles.detailsHeader}>
-            <div>
-              <p className={styles.detailsEyebrow}>JOB DETAILS</p>
-
-              <h1>{job.jobTitle || "Job Details"}</h1>
-
-              <p className={styles.companyName}>
-                {job.sectorName || "Career opportunity"}
-              </p>
-            </div>
-          </div>
-
           <div className={styles.detailsContent}>
+            {/* JOB INFORMATION CARDS */}
+
             <div className={styles.detailsFacts}>
               <div>
-                <span>Location</span>
+                <span>Location :</span>
                 <strong>{job.locationName || "Not specified"}</strong>
               </div>
 
               <div>
-                <span>Salary</span>
+                <span>Salary :</span>
                 <strong>{formatSalary(job)}</strong>
               </div>
 
               <div>
-                <span>Job type</span>
+                <span>Job type :</span>
                 <strong>{job.jobTypeName || "Not specified"}</strong>
               </div>
 
               <div>
-                <span>Openings</span>
+                <span>Openings :</span>
                 <strong>{job.openings ?? "Not specified"}</strong>
               </div>
 
               <div>
-                <span>Education</span>
+                <span>Education :</span>
                 <strong>{job.educationName || "Not specified"}</strong>
               </div>
 
               <div>
-                <span>Role</span>
+                <span>Sector :</span>
+                <strong>{job.sectorName || "Not specified"}</strong>
+              </div>
+
+              <div>
+                <span>Role :</span>
                 <strong>{job.jobRoleName || "Not specified"}</strong>
               </div>
+
             </div>
 
-
+            {/* REQUIRED SKILLS */}
             <section className={styles.detailSection}>
               <h2>Required Skills</h2>
               <p className={styles.description}>
@@ -190,13 +246,7 @@ export default function JobDetailsPage() {
               </p>
             </section>
 
-            <section className={styles.detailSection}>
-              <h2>Sector</h2>
-              <p className={styles.description}>
-                {job.sectorName || "Not specified"}
-              </p>
-            </section>
-
+            {/* ABOUT THE JOB */}
             <section className={styles.detailSection}>
               <h2>About the Job</h2>
               <p className={styles.description}>
@@ -204,13 +254,14 @@ export default function JobDetailsPage() {
               </p>
             </section>
 
+            {/* APPLICATION FORM */}
             <JobApplicationForm jobId={job.id ?? jobId} />
           </div>
         </article>
 
-        {/* RIGHT: RELATED JOBS */}
         <aside className={styles.relatedJobs}>
           <h2>Related Jobs</h2>
+
           <p className={styles.relatedSubtitle}>
             Explore other opportunities
           </p>
@@ -234,9 +285,7 @@ export default function JobDetailsPage() {
                     {relatedJob.locationName || "Location not specified"}
                   </span>
 
-                  <span>
-                    {formatSalary(relatedJob)}
-                  </span>
+                  <span>{formatSalary(relatedJob)}</span>
 
                   <button
                     type="button"
@@ -274,11 +323,16 @@ function JobApplicationForm({ jobId }) {
 
   const handleApplicationChange = (event) => {
     const { name, value } = event.target;
-    setApplication((previous) => ({ ...previous, [name]: value }));
+
+    setApplication((previous) => ({
+      ...previous,
+      [name]: value,
+    }));
   };
 
   const handleResumeChange = (event) => {
     const file = event.target.files?.[0] || null;
+
     setResume(null);
     setMessage("");
     setSuccess(false);
@@ -302,12 +356,14 @@ function JobApplicationForm({ jobId }) {
 
   const closeApplicationForm = () => {
     if (submitting) return;
+
     setShowApplicationForm(false);
     setMessage("");
   };
 
   const handleApply = async (event) => {
     event.preventDefault();
+
     if (submitting) return;
 
     setMessage("");
@@ -353,6 +409,7 @@ function JobApplicationForm({ jobId }) {
       setResume(null);
     } catch (err) {
       console.error("Application submission failed:", err);
+
       setMessage(
         err.message || "Unable to submit your application. Please try again."
       );
@@ -364,7 +421,10 @@ function JobApplicationForm({ jobId }) {
   return (
     <section className={styles.applicationSection}>
       <h2>Apply for this Job</h2>
-      <p>Interested in this opportunity? Send your application now.</p>
+
+      <p>
+        Interested in this opportunity? Send your application now.
+      </p>
 
       <button
         type="button"
@@ -412,7 +472,10 @@ function JobApplicationForm({ jobId }) {
             </button>
 
             <h2 id="applicationModalTitle">Apply for this Job</h2>
-            <p>Enter your details and upload your resume to apply.</p>
+
+            <p>
+              Enter your details and upload your resume to apply.
+            </p>
 
             {message && (
               <p
