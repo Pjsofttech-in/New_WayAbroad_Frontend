@@ -26,23 +26,6 @@ function getStoredUserDetails() {
   };
 }
 
-// Create query parameters for admin requests.
-function getAdminParams(extraParams = {}) {
-  const { role, email } = getStoredUserDetails();
-  const params = new URLSearchParams();
-
-  if (role) params.append("role", role);
-  if (email) params.append("email", email);
-
-  Object.entries(extraParams).forEach(([key, value]) => {
-    if (value !== undefined && value !== null && value !== "") {
-      params.append(key, String(value));
-    }
-  });
-
-  return params.toString();
-}
-
 // Create request headers.
 function getRequestHeaders(extraHeaders = {}) {
   const { token } = getStoredUserDetails();
@@ -230,15 +213,16 @@ export async function submitScholarshipLead(data) {
    UNIVERSITIES
 ===================================================== */
 
-export async function getAllUniversities({ cityId } = {}) {
-  return get(
-    "/getAllUniversities",
-    {
-      ...getUserParams(),
-      cityId,
-    }
-  );
-}
+// Currently unused by the application.
+// export async function getAllUniversities({ cityId } = {}) {
+//   return get(
+//     "/getAllUniversities",
+//     {
+//       ...getUserParams(),
+//       cityId,
+//     }
+//   );
+// }
 
 /* =====================================================
    EXAM REGISTRATION
@@ -260,9 +244,10 @@ export async function getHierarchy(params = {}) {
    PUBLIC STREAMS
 ===================================================== */
 
-export async function getAllStreams() {
-  return get("/getAllStreams");
-}
+// Currently unused by the application.
+// export async function getAllStreams() {
+//   return get("/getAllStreams");
+// }
 
 export async function searchUniversities(query = "") {
   return get("/searchUniversities", { name: query });
@@ -289,30 +274,16 @@ export async function searchStreams(query = "") {
 }
 
 /* =====================================================
-   USER QUERY PARAMETERS
-===================================================== */
-
-function getUserParams() {
-  const { role, email } = getStoredUserDetails();
-
-  const params = {};
-
-  if (role) params.role = role;
-  if (email) params.email = email;
-
-  return params;
-}
-
-/* =====================================================
    STATES
 ===================================================== */
 
-export async function getAllStates({ countryId } = {}) {
-  return get("/getAllStates", {
-    ...getUserParams(),
-    countryId,
-  });
-}
+// Currently unused by the application.
+// export async function getAllStates({ countryId } = {}) {
+//   return get("/getAllStates", {
+//     ...getUserParams(),
+//     countryId,
+//   });
+// }
 
 /* =====================================================
    COUNTRIES
@@ -326,31 +297,34 @@ export async function getAllCountries() {
    CITIES
 ===================================================== */
 
-export async function getAllCities({ stateId } = {}) {
-  return get("/getAllCities", {
-    ...getUserParams(),
-    stateId,
-  });
-}
+// Currently unused by the application.
+// export async function getAllCities({ stateId } = {}) {
+//   return get("/getAllCities", {
+//     ...getUserParams(),
+//     stateId,
+//   });
+// }
 
 /* =====================================================
    COLLEGES
 ===================================================== */
 
-export async function getAllColleges({ universityId } = {}) {
-  return get("/getAllColleges", {
-    ...getUserParams(),
-    universityId,
-  });
-}
+// Currently unused by the application.
+// export async function getAllColleges({ universityId } = {}) {
+//   return get("/getAllColleges", {
+//     ...getUserParams(),
+//     universityId,
+//   });
+// }
 
 /* =====================================================
    STUDY ABROAD
 ===================================================== */
 
-export async function getAllStudyAbroad() {
-  return get("/getAllStudyAbroad", getUserParams());
-}
+// Currently unused by the application.
+// export async function getAllStudyAbroad() {
+//   return get("/getAllStudyAbroad", getUserParams());
+// }
 
 /* =====================================================
    JOB FINDER - GET ALL JOBS
@@ -451,175 +425,37 @@ export async function applyForJob({ application, resume }) {
   return handleResponse(response);
 }
 
-/* =====================================================
-   JOB FINDER - JOB COUNTRY API
-===================================================== */
-
-// Get all countries configured for Job Finder
 export async function getAllJobCountries() {
-  const query = getAdminParams();
-
-  if (!query) {
-    throw new Error(
-      "Role and email are required to fetch job countries."
-    );
-  }
-
-  return get(
-    "/admin/job-settings/country",
-    Object.fromEntries(new URLSearchParams(query))
-  );
+  return get("/admin/job-settings/country");
 }
 
-// Get a job country by ID
-export async function getJobCountryById(id) {
-  if (id === undefined || id === null || id === "") {
-    throw new Error("A valid job country ID is required.");
-  }
-
-  const query = getAdminParams();
-
-  if (!query) {
-    throw new Error(
-      "Role and email are required to fetch the job country."
-    );
-  }
-
-  return get(
-    `/admin/job-settings/country/${encodeURIComponent(id)}`,
-    Object.fromEntries(new URLSearchParams(query))
-  );
-}
-
-/* =====================================================
-   JOB FINDER - JOB WORK TYPE API
-===================================================== */
-
-// Get all work types
-export async function getAllJobWorkTypes() {
-  const query = getAdminParams();
-
-  if (!query) {
-    throw new Error(
-      "Role and email are required to fetch job work types."
-    );
-  }
-
-  return get(
-    "/admin/job-settings/work-type",
-    Object.fromEntries(new URLSearchParams(query))
-  );
-}
-
-// Get a work type by ID
-export async function getJobWorkTypeById(id) {
-  if (id === undefined || id === null || id === "") {
-    throw new Error("A valid work type ID is required.");
-  }
-
-  const query = getAdminParams();
-
-  if (!query) {
-    throw new Error(
-      "Role and email are required to fetch the work type."
-    );
-  }
-
-  return get(
-    `/admin/job-settings/work-type/${encodeURIComponent(id)}`,
-    Object.fromEntries(new URLSearchParams(query))
-  );
-}
-
-// Create a work type
-export async function createJobWorkType(data) {
-  const query = getAdminParams();
-
-  if (!query) {
-    throw new Error(
-      "Role and email are required to create a work type."
-    );
-  }
-
-  return post(
-    `/admin/job-settings/work-type?${query}`,
-    data
-  );
-}
-
-// Update a work type
-export async function updateJobWorkType(id, data) {
-  if (id === undefined || id === null || id === "") {
-    throw new Error("A valid work type ID is required.");
-  }
-
-  const query = getAdminParams();
-
-  if (!query) {
-    throw new Error(
-      "Role and email are required to update a work type."
-    );
-  }
-
-  const response = await fetch(
-    `${API_URL}/admin/job-settings/work-type/${encodeURIComponent(id)}?${query}`,
-    {
-      method: "PUT",
-      headers: getRequestHeaders({
-        "Content-Type": "application/json",
-      }),
-      body: JSON.stringify(data),
-    }
-  );
-
-  return handleResponse(response);
-}
-
-// Delete a work type
-export async function deleteJobWorkType(id) {
-  if (id === undefined || id === null || id === "") {
-    throw new Error("A valid work type ID is required.");
-  }
-
-  const query = getAdminParams();
-
-  if (!query) {
-    throw new Error(
-      "Role and email are required to delete a work type."
-    );
-  }
-
-  const response = await fetch(
-    `${API_URL}/admin/job-settings/work-type/${encodeURIComponent(id)}?${query}`,
-    {
-      method: "DELETE",
-      headers: getRequestHeaders(),
-    }
-  );
-
-  return handleResponse(response);
-}
-
-/* =====================================================
-   JOB FINDER - JOB LOCATION API
-===================================================== */
-
-// Get all job locations
 export async function getAllJobLocations() {
-  const query = getAdminParams();
-
-  if (!query) {
-    throw new Error(
-      "Role and email are required to fetch job locations."
-    );
-  }
-
-  return get(
-    "/admin/job-settings/location",
-    Object.fromEntries(new URLSearchParams(query))
-  );
+  return get("/admin/job-settings/location");
 }
 
+export async function getAllJobEducations() {
+  return get("/admin/job-settings/education");
+}
+
+export async function getAllJobSectors() {
+  return get("/admin/job-settings/sector");
+}
+
+export async function getAllJobTypes() {
+  return get("/admin/job-settings/job-type");
+}
+
+export async function getAllJobRoles() {
+  return get("/admin/job-settings/role");
+}
+
+export async function getAllJobWorkTypes() {
+  return get("/admin/job-settings/work-type");
+}
+
+export async function getAllJobCurrencies() {
+  return get("/admin/job-settings/currency");
+}
 /* =====================================================
    EXPORT API BASE URL
 ===================================================== */
