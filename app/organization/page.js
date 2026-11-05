@@ -1,8 +1,13 @@
 import styles from "./page.module.css";
+import { canonicalMetadata } from "../seo-utils";
 
 export const metadata = {
-  title: "Organization | PJSoftTech",
-  description: "PJSoftTech Core Values and Culture.",
+  ...canonicalMetadata("/organization"),
+  title: {
+    absolute: "PJSoftTech Organization Values and Culture",
+  },
+  description:
+    "Read about PJSoftTech's organizational values and culture, including collaboration, integrity, continuous learning and commitment to customers.",
 };
 
 const coreValues = [

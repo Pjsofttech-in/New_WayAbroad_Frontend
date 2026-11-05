@@ -1,6 +1,10 @@
+import { canonicalMetadata } from "../seo-utils";
+
 export const metadata = {
-  title: "Study Abroad Courses | Courses by Stream",
-  description: "Explore study abroad courses by academic stream and find options aligned with your interests and career goals.",
+  ...canonicalMetadata("/courses"),
+  title: "Study Abroad Courses by Stream",
+  description:
+    "Explore study abroad courses by academic stream, compare fields such as business, engineering and medicine, and find a path that fits your goals.",
 };
 
 export default function Layout({ children }) {

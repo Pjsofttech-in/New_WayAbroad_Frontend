@@ -3,6 +3,11 @@ import { notFound } from "next/navigation";
 
 import styles from "./stream.module.css";
 import { courseStreams } from "../../data/courses";
+import {
+  brandedMetadataTitle,
+  canonicalMetadata,
+  cleanMetadataText,
+} from "../../seo-utils";
 
 export function generateStaticParams() {
   return courseStreams.map((stream) => ({
@@ -11,25 +16,33 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }) {
+  const { slug } = await params;
   const stream = courseStreams.find(
-    (item) => item.slug === params.slug
+    (item) => item.slug === slug
   );
 
   if (!stream) {
     return {
-      title: "Course Stream | Wayabroad",
+      ...canonicalMetadata(`/stream/${encodeURIComponent(slug || "")}`),
+      title: brandedMetadataTitle("Study Abroad Course Stream"),
+      description:
+        "Explore academic streams and study abroad course options with Wayabroad, and compare fields to guide university admissions research and planning.",
     };
   }
 
   return {
-    title: `${stream.name} | Wayabroad`,
-    description: `Explore ${stream.name} courses and study opportunities with Wayabroad.`,
+    ...canonicalMetadata(`/stream/${encodeURIComponent(slug)}`),
+    title: brandedMetadataTitle(`${stream.name} Courses Abroad`),
+    description: cleanMetadataText(
+      `Explore ${stream.courses.join(", ")} and other ${stream.name} study abroad courses, and find options aligned with your academic interests and goals.`
+    ),
   };
 }
 
-export default function StreamPage({ params }) {
+export default async function StreamPage({ params }) {
+  const { slug } = await params;
   const stream = courseStreams.find(
-    (item) => item.slug === params.slug
+    (item) => item.slug === slug
   );
 
   if (!stream) {

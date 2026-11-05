@@ -24,7 +24,7 @@ function unwrapResponse(response) {
 export default function JobDetailsPage() {
   const params = useParams();
   const router = useRouter();
-  const jobId = Array.isArray(params.id) ? params.id[0] : params.id;
+  const jobId = Array.isArray(params.slug) ? params.slug[0] : params.slug;
 
   const [job, setJob] = useState(null);
   const [relatedJobs, setRelatedJobs] = useState([]);

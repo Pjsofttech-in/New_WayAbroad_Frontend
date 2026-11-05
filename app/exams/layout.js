@@ -1,6 +1,10 @@
+import { canonicalMetadata } from "../seo-utils";
+
 export const metadata = {
-  title: "Study Abroad Exams | IELTS, TOEFL, GRE, GMAT & More",
-  description: "Explore exams commonly used for studying abroad, including IELTS, TOEFL, GRE, GMAT, SAT, ACT and more.",
+  ...canonicalMetadata("/exams"),
+  title: "Study Abroad Exams and Test Preparation",
+  description:
+    "Explore tests used for study abroad admissions, including IELTS, TOEFL, GRE, GMAT, SAT, ACT and more, and find exam preparation guidance.",
 };
 
 export default function Layout({ children }) {

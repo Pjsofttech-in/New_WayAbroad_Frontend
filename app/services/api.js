@@ -289,8 +289,8 @@ export async function searchStreams(query = "") {
    COUNTRIES
 ===================================================== */
 
-export async function getAllCountries() {
-  return get("/getAllCountries");
+export async function getAllCountries(options = {}) {
+  return get("/getAllCountries", {}, options);
 }
 
 /* =====================================================

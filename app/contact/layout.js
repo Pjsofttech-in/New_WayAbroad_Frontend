@@ -1,6 +1,10 @@
+import { canonicalMetadata } from "../seo-utils";
+
 export const metadata = {
-  title: "Contact Wayabroad",
-  description: "Contact Wayabroad for study abroad counselling, course guidance and support with your international education journey.",
+  ...canonicalMetadata("/contact"),
+  title: "Contact Study Abroad Counsellors",
+  description:
+    "Contact Wayabroad for study abroad counselling, university and course guidance, admissions support, and help planning your international education.",
 };
 
 export default function Layout({ children }) {

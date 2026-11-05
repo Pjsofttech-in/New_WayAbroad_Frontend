@@ -1,6 +1,10 @@
+import { canonicalMetadata } from "../seo-utils";
+
 export const metadata = {
-  title: "Become a Wayabroad Partner",
-  description: "Explore partnership opportunities with Wayabroad for education and international student services.",
+  ...canonicalMetadata("/become-partner"),
+  title: "Official Channel Partner Opportunities",
+  description:
+    "Explore becoming an official Wayabroad channel partner, with integrated platform solutions, partner support and a form to discuss partnership opportunities.",
 };
 
 export default function Layout({ children }) {

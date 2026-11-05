@@ -949,7 +949,7 @@
    TABLET / MOBILE
 ========================================================= */
 
-@media (max-width: 980px) {
+@media (max-width: 1100px) {
   .topbar {
     width: 100%;
 
@@ -999,7 +999,7 @@
   .nav.open {
     position: absolute;
 
-    top: 70px;
+    top: 100%;
 
     left: 0;
     right: 0;
@@ -1249,6 +1249,41 @@
     background: #edf8fb;
   }
 
+  .nav.open .jobFinder {
+    width: 100%;
+
+    height: 48px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: flex-start;
+
+    padding: 0 14px;
+
+    margin-top: 4px;
+
+    color: #1d3342;
+
+    background: #ffffff;
+
+    border: 1px solid #e4edf1;
+
+    border-radius: 8px;
+
+    font-size: 15px;
+
+    box-sizing: border-box;
+  }
+
+  .nav.open .jobFinder:hover,
+  .nav.open .jobFinder.finderActive {
+    color: #0783a3;
+    background: #edf8fb;
+    border-color: #9bcfdd;
+  }
+
 
   /* =====================================================
      MOBILE COUNSELLING
@@ -1315,8 +1350,6 @@
   }
 
   .nav.open {
-    top: 64px;
-
     max-height:
       calc(100vh - 64px);
 
@@ -1377,6 +1410,7 @@
 .nav.open .navLink:focus-visible,
 .nav.open .dropdownButton:focus-visible,
 .nav.open .courseFinder:focus-visible,
+.nav.open .jobFinder:focus-visible,
 .nav.open .counselling:focus-visible {
   outline-color: #0783a3;
 }

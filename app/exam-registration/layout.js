@@ -1,6 +1,10 @@
+import { canonicalMetadata } from "../seo-utils";
+
 export const metadata = {
-  title: "Exam Preparation Registration",
-  description: "Register with Wayabroad for guidance and support with study abroad exam preparation.",
+  ...canonicalMetadata("/exam-registration"),
+  title: "Register for Exam Preparation",
+  description:
+    "Register for exam preparation support with Wayabroad by sharing your chosen test and contact details, so the team can follow up on your next steps.",
 };
 
 export default function Layout({ children }) {

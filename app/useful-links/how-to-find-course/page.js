@@ -13,6 +13,11 @@ import {
   CreditCard,
 } from "lucide-react";
 
+import {
+  brandedMetadataTitle,
+  canonicalMetadata,
+} from "../../seo-utils";
+
 import styles from "../[slug]/page.module.css";
 
 const iconMap = {
@@ -77,9 +82,10 @@ const page = {
 };
 
 export const metadata = {
-  title: "How to Find a Course | Wayabroad",
+  ...canonicalMetadata("/useful-links/how-to-find-course"),
+  title: brandedMetadataTitle("How to Find a Course Abroad"),
   description:
-    "Finding the right course is the first step towards your dream of studying abroad. Follow this comprehensive guide to make an informed decision.",
+    "Learn how to choose a study abroad course by weighing your interests, university options, costs, scholarships and future career opportunities.",
 };
 
 export default function HowToFindCoursePage() {

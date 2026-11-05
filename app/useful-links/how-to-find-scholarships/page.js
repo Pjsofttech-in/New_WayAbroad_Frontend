@@ -13,6 +13,11 @@ import {
   CalendarDays,
 } from "lucide-react";
 
+import {
+  brandedMetadataTitle,
+  canonicalMetadata,
+} from "../../seo-utils";
+
 import styles from "../[slug]/page.module.css";
 
 const iconMap = {
@@ -78,9 +83,10 @@ const page = {
 };
 
 export const metadata = {
-  title: "How to Find Scholarships | Wayabroad",
+  ...canonicalMetadata("/useful-links/how-to-find-scholarships"),
+  title: brandedMetadataTitle("How to Find Study Abroad Scholarships"),
   description:
-    "Discover how to find and apply for scholarships to fund your international education. Explore various funding opportunities and maximize your chances.",
+    "Learn how to search for study abroad scholarships, check eligibility and deadlines, and prepare applications for international education funding.",
 };
 
 export default function HowToFindScholarshipsPage() {

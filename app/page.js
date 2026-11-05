@@ -1,14 +1,10 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import Link from "next/link";
-import {
-  submitFormSubmission,
-  getAllContinents,
-  getAllCourseNames,
-} from "./services/api";
-
 import styles from "./home.module.css";
+import {
+  ContinentTabs,
+  HomepageConsultationForm,
+} from "./components/HomepageInteractions";
+import { getAllCountries } from "./services/api";
 
 import {
   Check,
@@ -28,13 +24,6 @@ import {
 /* =========================
    DATA
 ========================= */
-
-const countries = [
-  "Australia",
-  "Canada",
-  "UK",
-  "USA",
-];
 
 const why = [
   [
@@ -182,142 +171,67 @@ const consultationBenefits = [
   "Offer Letter In Less Than 48 Hours*",
 ];
 
+function getCountryRecords(response) {
+  if (Array.isArray(response)) return response;
+  if (Array.isArray(response?.data)) return response.data;
+  if (Array.isArray(response?.countries)) return response.countries;
+  if (Array.isArray(response?.content)) return response.content;
+  return [];
+}
+
+async function loadHomepageCountries() {
+  try {
+    const response = await getAllCountries({
+      cache: "force-cache",
+      next: { revalidate: 3600 },
+    });
+    const countries = [];
+    const seenIds = new Set();
+    const seenNames = new Set();
+
+    for (const record of getCountryRecords(response)) {
+      if (
+        !record ||
+        (typeof record.id !== "string" &&
+          typeof record.id !== "number") ||
+        typeof (record.country || record.countryName) !== "string"
+      ) {
+        continue;
+      }
+
+      const id = String(record.id).trim();
+      const name = (record.country || record.countryName)
+        .trim()
+        .replace(/\s+/g, " ");
+      const normalizedName = name.toLowerCase();
+
+      if (
+        !id ||
+        !name ||
+        seenIds.has(id) ||
+        seenNames.has(normalizedName)
+      ) {
+        continue;
+      }
+
+      seenIds.add(id);
+      seenNames.add(normalizedName);
+      countries.push({ id, name });
+    }
+
+    return countries;
+  } catch (error) {
+    console.error("Failed to load homepage destinations:", error);
+    return [];
+  }
+}
+
 /* =========================
    HOME COMPONENT
 ========================= */
 
-export default function Home() {
-  const [tab, setTab] = useState("Australia");
-
-  // DYNAMIC DROPDOWN DATA
-  const [continents, setContinents] = useState([]);
-  const [courses, setCourses] = useState([]);
-
-  // FORM STATES
-  const [sent, setSent] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    continentId: "",
-    courseId: "",
-    agree: false,
-  });
-
-  /* =========================
-     FETCH CONTINENTS & COURSES
-  ========================= */
-
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        const [continentsData, coursesData] = await Promise.all([
-          getAllContinents(),
-          getAllCourseNames(),
-        ]);
-
-        setContinents(continentsData || []);
-        setCourses(coursesData || []);
-      } catch (error) {
-        console.error(
-          "Failed to load dropdown data:",
-          error
-        );
-      }
-    };
-
-    loadData();
-  }, []);
-
-  /* =========================
-     HANDLE INPUT CHANGES
-  ========================= */
-
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-
-    setForm((previousForm) => ({
-      ...previousForm,
-      [name]:
-        type === "checkbox"
-          ? checked
-          : value,
-    }));
-  };
-
-  /* =========================
-     HANDLE FORM SUBMISSION
-  ========================= */
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!form.agree) {
-      setError(
-        "Please agree to the terms & privacy policy."
-      );
-      return;
-    }
-
-    if (!form.continentId) {
-      setError("Please select a continent.");
-      return;
-    }
-
-    if (!form.courseId) {
-      setError("Please select a course.");
-      return;
-    }
-
-    setLoading(true);
-    setSent(false);
-    setError("");
-
-    try {
-      await submitFormSubmission({
-        formType: "COUNSELLING",
-
-        name: form.name,
-        email: form.email,
-        phoneNumber: form.phone,
-
-        continentId: Number(form.continentId),
-        courseId: Number(form.courseId),
-
-        password: null,
-        createdByEmail: null,
-        role: null,
-        branchCode: null,
-        status: "NEW",
-      });
-
-      setSent(true);
-
-      setForm({
-        name: "",
-        email: "",
-        phone: "",
-        continentId: "",
-        courseId: "",
-        agree: false,
-      });
-    } catch (err) {
-      console.error(
-        "Consultation Error:",
-        err
-      );
-
-      setError(
-        err.message ||
-          "Something went wrong. Please try again."
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+export default async function Home() {
+  const countries = await loadHomepageCountries();
 
   return (
     <main>
@@ -472,32 +386,7 @@ export default function Home() {
 
       {/* ================= CONTINENTS ================= */}
 
-      <section
-        className={styles.continents}
-        id="exams"
-      >
-        <h2>Explore By Continent</h2>
-
-        <div className={styles.tabs}>
-          {countries.map(
-            (country) => (
-              <button
-                key={country}
-                className={
-                  tab === country
-                    ? styles.selected
-                    : ""
-                }
-                onClick={() =>
-                  setTab(country)
-                }
-              >
-                {country}
-              </button>
-            )
-          )}
-        </div>
-      </section>
+      <ContinentTabs countries={countries} />
 
       {/* ================= ESSENTIALS ================= */}
 
@@ -556,123 +445,7 @@ export default function Home() {
 
         {/* ================= FORM ================= */}
 
-        <form onSubmit={handleSubmit}>
-          <h3>
-            Start Your Study Abroad Journey
-          </h3>
-
-          <input
-            name="name"
-            placeholder="Enter Full Name*"
-            value={form.name}
-            onChange={handleChange}
-            required
-          />
-
-          <input
-            name="email"
-            placeholder="Enter Email*"
-            type="email"
-            value={form.email}
-            onChange={handleChange}
-            required
-          />
-
-          <input
-            name="phone"
-            placeholder="Phone Number*"
-            value={form.phone}
-            onChange={handleChange}
-            required
-          />
-
-          {/* DYNAMIC CONTINENT DROPDOWN */}
-
-          <select
-            name="continentId"
-            value={form.continentId}
-            onChange={handleChange}
-            required
-          >
-            <option
-              value=""
-              disabled
-            >
-              Select Continents*
-            </option>
-
-            {continents.map(
-              (continent) => (
-                <option
-                  key={continent.id}
-                  value={continent.id}
-                >
-                  {continent.continentname}
-                </option>
-              )
-            )}
-          </select>
-
-          {/* DYNAMIC COURSE DROPDOWN */}
-
-          <select
-            name="courseId"
-            value={form.courseId}
-            onChange={handleChange}
-            required
-          >
-            <option
-              value=""
-              disabled
-            >
-              Select Course*
-            </option>
-
-            {courses.map(
-              (course) => (
-                <option
-                  key={course.id}
-                  value={course.id}
-                >
-                  {course.courseName}
-                </option>
-              )
-            )}
-          </select>
-
-          <label>
-            <input
-              type="checkbox"
-              name="agree"
-              checked={form.agree}
-              onChange={handleChange}
-              required
-            />
-
-            I have read and agreed to terms & privacy policy
-          </label>
-
-          <button
-            type="submit"
-            disabled={loading}
-          >
-            {loading
-              ? "Submitting..."
-              : "Book your Free Consultation"}
-          </button>
-
-          {sent && (
-            <p className={styles.success}>
-              Request submitted successfully!
-            </p>
-          )}
-
-          {error && (
-            <p className={styles.success}>
-              {error}
-            </p>
-          )}
-        </form>
+        <HomepageConsultationForm />
       </section>
     </main>
   );

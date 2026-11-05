@@ -11,6 +11,11 @@ import {
   MapPin,
 } from "lucide-react";
 
+import {
+  brandedMetadataTitle,
+  canonicalMetadata,
+} from "../../seo-utils";
+
 import styles from "../[slug]/page.module.css";
 
 const iconMap = {
@@ -62,9 +67,10 @@ const page = {
 };
 
 export const metadata = {
-  title: "Ask Wayabroad | Wayabroad",
+  ...canonicalMetadata("/useful-links/ask-wayabroad"),
+  title: brandedMetadataTitle("Study Abroad Questions and Answers"),
   description:
-    "Have questions about studying abroad? Our team of experts is here to guide you through every step of your international education journey.",
+    "Have questions about study abroad, courses, scholarships or university admissions? Contact Wayabroad for guidance on your international education journey.",
 };
 
 export default function AskWayabroadPage() {

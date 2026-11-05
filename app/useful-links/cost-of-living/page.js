@@ -12,6 +12,11 @@ import {
   Landmark,
 } from "lucide-react";
 
+import {
+  brandedMetadataTitle,
+  canonicalMetadata,
+} from "../../seo-utils";
+
 import styles from "../[slug]/page.module.css";
 
 const iconMap = {
@@ -65,9 +70,10 @@ const page = {
 };
 
 export const metadata = {
-  title: "Cost of Living | Wayabroad",
+  ...canonicalMetadata("/useful-links/cost-of-living"),
+  title: brandedMetadataTitle("Cost of Living While Studying Abroad"),
   description:
-    "Understand the typical costs of studying and living abroad and learn practical ways to plan and manage your student budget.",
+    "Plan your study abroad budget with guidance on typical student expenses, accommodation, transport, food and practical ways to manage living costs.",
 };
 
 export default function CostOfLivingPage() {

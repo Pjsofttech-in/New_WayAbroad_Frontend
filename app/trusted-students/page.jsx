@@ -1,8 +1,12 @@
 import InfoPage from "../components/InfoPage/InfoPage";
 import styles from "../components/InfoPage/InfoPage.module.css";
+import { canonicalMetadata } from "../seo-utils";
 
 export const metadata = {
-  title: "Study Abroad Programs | Wayabroad",
+  ...canonicalMetadata("/trusted-students"),
+  title: "Study Abroad Programs",
+  description:
+    "Explore study abroad destinations in Australia, Canada, Ireland, the UK, the USA and New Zealand, and learn about international education options.",
 };
 
 const destinations = [

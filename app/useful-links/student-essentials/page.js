@@ -12,6 +12,11 @@ import {
   Bus,
 } from "lucide-react";
 
+import {
+  brandedMetadataTitle,
+  canonicalMetadata,
+} from "../../seo-utils";
+
 import styles from "../[slug]/page.module.css";
 
 const iconMap = {
@@ -43,31 +48,62 @@ const page = {
       title: "Before You Go",
       icon: "clipboard",
       items: [
-        { icon: "clipboard", text: "Visa requirements and application" },
-        { icon: "health", text: "Health insurance and vaccinations" },
-        { icon: "home", text: "Accommodation arrangements" },
-        { icon: "card", text: "Banking and finances" },
-        { icon: "luggage", text: "Packing essentials" },
+        {
+          icon: "clipboard",
+          text: "Check the visa instructions for your destination and organize the documents required for your application.",
+        },
+        {
+          icon: "health",
+          text: "Review destination-specific health cover, medical and vaccination requirements before you travel.",
+        },
+        {
+          icon: "home",
+          text: "Compare accommodation options, location, costs and contract terms before making arrangements.",
+        },
+        {
+          icon: "card",
+          text: "Plan for tuition and living costs, and confirm how you will access and transfer funds.",
+        },
+        {
+          icon: "luggage",
+          text: "Pack for the destination climate and check airline baggage rules and important document requirements.",
+        },
       ],
     },
     {
       title: "After Arrival",
       icon: "landmark",
       items: [
-        { icon: "landmark", text: "University registration" },
-        { icon: "wallet", text: "Opening a bank account" },
-        { icon: "mobile", text: "Getting a local SIM card" },
-        { icon: "bus", text: "Understanding public transport" },
-        { icon: "card", text: "Registering with local authorities (if required)" },
+        {
+          icon: "landmark",
+          text: "Complete your institution's enrolment steps and find out where to get help on campus.",
+        },
+        {
+          icon: "wallet",
+          text: "Check local bank account requirements and compare access, transfer and account fees.",
+        },
+        {
+          icon: "mobile",
+          text: "Compare local mobile plans and the identification needed to activate a service.",
+        },
+        {
+          icon: "bus",
+          text: "Learn the routes between your accommodation and campus, and check local fare and ticket options.",
+        },
+        {
+          icon: "card",
+          text: "Confirm whether your destination requires address registration or other arrival formalities.",
+        },
       ],
     },
   ],
 };
 
 export const metadata = {
-  title: "Student Essentials | Wayabroad",
+  ...canonicalMetadata("/useful-links/student-essentials"),
+  title: brandedMetadataTitle("Study Abroad Student Essentials"),
   description:
-    "Everything you need to know about preparing for your study abroad journey, from pre-departure checklists to settling in after arrival.",
+    "Prepare for study abroad with practical pre-departure and arrival guidance, from important documents and packing to settling into your new destination.",
 };
 
 export default function StudentEssentialsPage() {

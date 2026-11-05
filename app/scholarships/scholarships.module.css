@@ -17,7 +17,7 @@
 .noDataText {
   text-align: center;
   font-size: 18px;
-  color: gray;
+  color: rgb(19, 74, 156);
 }
 
 /* ==========================================
@@ -190,10 +190,19 @@
 \========================================== */
 
 .titleBanner {
-  width: auto;
-  /* margin-left: calc(-50vw + 50%); */
-  min-height: 30px;
-  background-image: url("/scholarshipImg.jpg");
+  width: 100%;
+  min-height: 230px;
+  padding: 26px clamp(20px, 4vw, 56px);
+  overflow: hidden;
+  background-color: #0b315f;
+  background-image:
+    linear-gradient(
+      108deg,
+      rgba(5, 35, 75, 0.96) 0%,
+      rgba(8, 77, 132, 0.82) 52%,
+      rgba(10, 124, 167, 0.56) 100%
+    ),
+    url("/scholarshipImg.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -201,20 +210,22 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  /* margin-top: 60px;
-
-  margin-bottom: 60px; */
-  /* padding-bottom: 70px;
-
-  padding-top: 20px; */
   position: relative;
+  isolation: isolate;
 }
 
 .titleBanner::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.45);
+  z-index: -1;
+  background:
+    radial-gradient(
+      circle at 82% 18%,
+      rgba(77, 207, 255, 0.28),
+      transparent 30%
+    ),
+    linear-gradient(90deg, rgba(6, 32, 70, 0.2), transparent 75%);
 }
 
 .titleBanner h1,
@@ -227,13 +238,14 @@
 }
 
 .scholarshipsTitle {
-  font-size: 50px;
-  font-weight: bold;
-  padding-top: 10px;
-  margin-bottom: 0;
+  max-width: 900px;
+  margin: 0;
+  padding: 0;
   color: white;
-  letter-spacing: 2px;
-  padding-left: 60px;
+  font-size: clamp(38px, 5vw, 64px);
+  font-weight: 800;
+  letter-spacing: -1.5px;
+  line-height: 1.08;
 }
 
 .titleBanner h2 {
@@ -242,11 +254,30 @@
 }
 
 .titleBanner p {
-  padding-left: 50px;
+  padding-left: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.bannerEyebrow {
+  width: fit-content;
+  margin: 0 0 14px;
+  padding: 7px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #e2f6ff;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.4px;
 }
 
 .bannerPara {
-  width: 450px;
+  width: min(100%, 520px);
+  margin: 16px 0 0;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: clamp(15px, 1.5vw, 18px);
+  line-height: 1.65;
 }
 
 /* ==========================================
@@ -258,11 +289,11 @@
 .mainHero {
   display: flex;
   flex-direction: column;
-  gap: 35px;
+  gap: 14px;
   width: auto;
   margin-left: 50px;
   margin-right: 50px;
-  margin-top: 20px;
+  margin-top: 16px;
 }
 
 /* ==========================================
@@ -274,7 +305,7 @@
 .filtersWrapper {
   width: 100%;
   min-width: 0;
-  margin: 0 0 10px;
+  margin: 0;
 }
 
 /* Horizontal filter bar */
@@ -379,13 +410,13 @@
 .filtersBar select {
   flex: 10;
   min-width: 0;
-  height: 44px;
-  padding: 0 36px 0 12px;
+  height: 38px;
+  padding: 0 32px 0 10px;
   border: 1px solid #d1d5db;
   border-radius: 8px;
   background-color: #ffffff;
   color: #374151;
-  font-size: 14px;
+  font-size: 13px;
   outline: none;
   cursor: pointer;
 }
@@ -965,8 +996,8 @@
 
   .mainHero {
     flex-direction: column;
-    gap: 20px;
-    margin-top: 40px;
+    gap: 14px;
+    margin-top: 20px;
   }
 
   .detailsHeading {
@@ -1008,11 +1039,12 @@
   .titleBanner {
     width: 100vw;
     margin-left: calc(-50vw + 50%);
-    padding: 40px 20px;
+    padding: 24px 16px;
     margin-top: -10px;
     text-align: center;
     align-items: center;
-    min-height: 150px;
+    min-height: 200px;
+    border-radius: 0 0 18px 18px;
   }
 
   .titleBanner h2 {
@@ -1025,21 +1057,29 @@
   }
 
   .scholarshipsTitle {
-    font-size: 35px;
+    max-width: 620px;
+    font-size: clamp(32px, 8vw, 42px);
     padding-left: 0;
+    letter-spacing: -0.8px;
+  }
+
+  .bannerEyebrow {
+    margin-bottom: 12px;
+    font-size: 10px;
   }
 
   .bannerPara {
     width: 100%;
-    max-width: 300px;
-    font-size: 14px;
+    max-width: 360px;
+    font-size: 15px;
   }
 
   /* MAIN */
 
   .mainHero {
     flex-direction: column;
-    margin-top: -20px;
+    gap: 12px;
+    margin-top: -10px;
     margin-left: 0;
     margin-right: 0;
   }
@@ -1057,10 +1097,10 @@
     flex-direction: column;
     flex-wrap: nowrap;
     align-items: stretch;
-    gap: 12px;
-    margin-top: 10px;
+    gap: 9px;
+    margin-top: 8px;
     background: #f8f8f8;
-    padding: 15px;
+    padding: 12px;
     border-radius: 6px;
     height: fit-content;
     max-width: 100%;
@@ -1085,12 +1125,14 @@
   .filtersBar select {
     flex: none;
     width: 100%;
+    height: 38px;
     box-sizing: border-box;
-    font-size: 14px;
+    font-size: 12px;
   }
 
   .searchBtn {
-    font-size: 14px;
+    height: 38px;
+    font-size: 12px;
   }
 
   .resetBtn {

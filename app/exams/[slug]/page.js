@@ -3,9 +3,38 @@ import { notFound } from "next/navigation";
 
 import exams from "../../data/exams";
 import styles from "./exam-detail.module.css";
+import {
+  brandedMetadataTitle,
+  canonicalMetadata,
+  cleanMetadataText,
+} from "../../seo-utils";
 
-export default function ExamDetailPage({ params }) {
-  const slug = params?.slug;
+export async function generateMetadata({ params }) {
+  const { slug } = await params;
+  const exam = exams?.[slug];
+
+  if (!exam) {
+    return {
+      ...canonicalMetadata(`/exams/${encodeURIComponent(slug || "")}`),
+      title: brandedMetadataTitle("Study Abroad Exam Preparation"),
+      description:
+        "Explore exam information and preparation guidance for students planning university admissions and study abroad, with key details to inform their next steps.",
+    };
+  }
+
+  return {
+    ...canonicalMetadata(`/exams/${encodeURIComponent(slug)}`),
+    title: brandedMetadataTitle(`${exam.name} Exam Preparation`),
+    description: cleanMetadataText(
+      exam.whatIsIt ||
+        exam.description ||
+        `Explore ${exam.name} exam information and preparation guidance for university admissions.`
+    ),
+  };
+}
+
+export default async function ExamDetailPage({ params }) {
+  const { slug } = await params;
 
   const exam = exams?.[slug];
 

@@ -10,6 +10,11 @@ import {
   ListChecks,
 } from "lucide-react";
 
+import {
+  brandedMetadataTitle,
+  canonicalMetadata,
+} from "../../seo-utils";
+
 import styles from "../[slug]/page.module.css";
 
 const iconMap = {
@@ -71,9 +76,10 @@ const page = {
 };
 
 export const metadata = {
-  title: "Letter of Recommendation | Wayabroad",
+  ...canonicalMetadata("/useful-links/letter-of-recommendation"),
+  title: brandedMetadataTitle("University Letter of Recommendation Guide"),
   description:
-    "Strong letters of recommendation can significantly enhance your university application. Follow this guide to secure compelling recommendations.",
+    "Prepare letters of recommendation for university applications with guidance on choosing referees, sharing relevant details and meeting requirements.",
 };
 
 export default function LetterOfRecommendationPage() {

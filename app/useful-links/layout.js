@@ -1,6 +1,10 @@
+import { canonicalMetadata } from "../seo-utils";
+
 export const metadata = {
+  ...canonicalMetadata("/useful-links"),
   title: "Study Abroad Resources",
-  description: "Useful study abroad resources covering courses, scholarships, statements of purpose, student essentials and related guidance.",
+  description:
+    "Browse Wayabroad study abroad resources on courses, scholarships, statements of purpose, student essentials, living costs and international applications.",
 };
 
 export default function Layout({ children }) {

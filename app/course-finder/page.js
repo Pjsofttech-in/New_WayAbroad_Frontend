@@ -194,6 +194,12 @@ export default function CourseFinder() {
   const [filters, setFilters] =
     useState(emptyFilters);
 
+  const activeFilterCount = Object.values(filters).reduce(
+    (count, value) =>
+      count + (Array.isArray(value) ? value.length : Number(Boolean(value))),
+    0
+  );
+
 
   /* =======================================================
      HIERARCHY
@@ -1942,11 +1948,9 @@ const makeSet = (items) =>
   return (
     <Container
       maxWidth="xl"
-      sx={{
-        mt: 4,
-        mb: 4,
-      }}
+      className={styles.courseFinderContainer}
     >
+
 
       {/* ===================================================
           HEADER
@@ -1991,21 +1995,28 @@ const makeSet = (items) =>
         }
       >
 
+        <section className={styles.hero}>
+          <div>
+            <span className={styles.eyebrow}>COURSE FINDER</span>
+            <h1>Find a course that takes you further</h1>
+            <p>
+              Explore courses and universities abroad, then narrow your
+              shortlist to what matters to you.
+            </p>
+          </div>
+        </section>
+
         {/* =================================================
             HORIZONTAL FILTER BAR
         ================================================= */}
 
-        <div
-          className={
-            styles.horizontalFilters
-          }
-        >
-
-          
+        <div className={styles.horizontalFilters}>
+          {/* Search */}
           <div className={styles.filterSearch}>
             <TextField
               fullWidth
-              placeholder="Search..."
+              placeholder="Search"
+              aria-label="Search"
               value={globalSearch}
               onChange={(e) => setGlobalSearch(e.target.value)}
               size="small"
@@ -2032,471 +2043,252 @@ const makeSet = (items) =>
             />
           </div>
 
-
+          {/* Country */}
           {renderMultiSelect({
             name: "countryId",
             label: "Country",
             searchType: "country",
             items: countries,
-            getValue: (item) =>
-              item.id,
-            getLabel: (item) =>
-              getName(
-                item,
-                "country"
-              ),
+            getValue: (item) => item.id,
+            getLabel: (item) => getName(item, "country"),
             emptyLabel: "Country",
           })}
 
-
+          {/* State */}
           {renderMultiSelect({
             name: "stateId",
             label: "State",
             searchType: "state",
             items: states,
-            getValue: (item) =>
-              item.id,
-            getLabel: (item) =>
-              getName(
-                item,
-                "state"
-              ),
-            disabled:
-              !filters.countryId
-                .length,
+            getValue: (item) => item.id,
+            getLabel: (item) => getName(item, "state"),
+            disabled: !filters.countryId.length,
             emptyLabel: "State",
           })}
 
-
+          {/* City */}
           {renderMultiSelect({
             name: "cityId",
             label: "City",
             searchType: "city",
             items: cities,
-            getValue: (item) =>
-              item.id,
-            getLabel: (item) =>
-              getName(
-                item,
-                "city"
-              ),
-            disabled:
-              !filters.stateId
-                .length,
+            getValue: (item) => item.id,
+            getLabel: (item) => getName(item, "city"),
+            disabled: !filters.stateId.length,
             emptyLabel: "City",
           })}
 
-
+          {/* University */}
           {renderMultiSelect({
             name: "universityId",
             label: "University",
             searchType: "university",
             items: universities,
-            getValue: (item) =>
-              item.id,
-            getLabel: (item) =>
-              getName(
-                item,
-                "university"
-              ),
-            disabled:
-              !filters.cityId
-                .length,
+            getValue: (item) => item.id,
+            getLabel: (item) => getName(item, "university"),
+            disabled: !filters.cityId.length,
             emptyLabel: "University",
           })}
 
-
+          {/* College */}
           {renderMultiSelect({
             name: "collegeId",
             label: "College",
             searchType: "college",
             items: colleges,
-            getValue: (item) =>
-              item.id,
-            getLabel: (item) =>
-              getName(
-                item,
-                "college"
-              ),
-            disabled:
-              !filters.universityId
-                .length,
+            getValue: (item) => item.id,
+            getLabel: (item) => getName(item, "college"),
+            disabled: !filters.universityId.length,
             emptyLabel: "College",
           })}
 
-
-          {renderMultiSelect({
-            name: "streamName",
-            label: "Stream",
-            searchType: "stream",
-            items: streams,
-            getValue: (item) =>
-              item.name,
-            getLabel: (item) =>
-              item.name,
-            emptyLabel: "Stream",
-          })}
-
-
-          {/* =================================================
-              COURSE DROPDOWN
-              
-              NOW USES getAllCourseNames()
-          ================================================= */}
-
-          {renderMultiSelect({
-            name: "courseId",
-            label: "Course",
-            searchType: "course",
-
-            /*
-              courses now contains:
-
-              [
-                {
-                  id: "Computer Science",
-                  name: "Computer Science",
-                  courseName: "Computer Science"
-                },
-                {
-                  id: "Business Administration",
-                  name: "Business Administration",
-                  courseName: "Business Administration"
-                }
-              ]
-            */
-            items: courses,
-
-            getValue: (item) =>
-              item.id,
-
-            getLabel: (item) =>
-              getName(
-                item,
-                "course"
-              ),
-
-            emptyLabel: "Course",
-          })}
-
-
-          {/* =================================================
-              SCHOLARSHIP
-          ================================================= */}
-
-          <FormControl
-            className={
-              styles.horizontalFilter
-            }
+          {/* More Filters — last in the row */}
+          <button
+            type="button"
+            className={styles.filterToggle}
+            aria-expanded={showMoreFilters}
+            aria-controls="advanced-course-filters"
+            onClick={() => setShowMoreFilters((open) => !open)}
           >
-            <InputLabel>
-              Scholarship
-            </InputLabel>
+            <span>{showMoreFilters ? "Fewer filters" : "More filters"}</span>
 
-            <Select
-              value={
-                filters.scholarship
-              }
-              onChange={(e) =>
-                handleFilterChange(
-                  "scholarship",
-                  e.target.value
-                )
-              }
-              label="Scholarship"
-              disabled={loading}
+            {activeFilterCount > 0 && (
+              <span className={styles.filterCount}>{activeFilterCount}</span>
+            )}
+
+            {showMoreFilters ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+          </button>
+
+          {/* =====================================================
+              ADVANCED FILTERS
+              These appear only when More Filters is opened
+          ===================================================== */}
+
+          {showMoreFilters && (
+            <div
+              className={styles.advancedFilters}
+              id="advanced-course-filters"
             >
-              <MenuItem value="">
-                Scholarship
-              </MenuItem>
+              {/* Stream */}
+              {renderMultiSelect({
+                name: "streamName",
+                label: "Stream",
+                searchType: "stream",
+                items: streams,
+                getValue: (item) => item.name,
+                getLabel: (item) => item.name,
+                emptyLabel: "Stream",
+              })}
 
-              <MenuItem value="Yes">
-                Yes
-              </MenuItem>
+              {/* Course */}
+              {renderMultiSelect({
+                name: "courseId",
+                label: "Course",
+                searchType: "course",
+                items: courses,
+                getValue: (item) => item.id,
+                getLabel: (item) => getName(item, "course"),
+                emptyLabel: "Course",
+              })}
 
-              <MenuItem value="No">
-                No
-              </MenuItem>
-            </Select>
-          </FormControl>
-
-
-          {/* =================================================
-              FEES RANGE
-          ================================================= */}
-
-          <FormControl
-            className={
-              styles.horizontalFilter
-            }
-          >
-            <InputLabel>
-              Fees Range
-            </InputLabel>
-
-            <Select
-              value={
-                filters.feesRange
-              }
-              onChange={(e) =>
-                handleFilterChange(
-                  "feesRange",
-                  e.target.value
-                )
-              }
-              label="Fees Range"
-              disabled={loading}
-            >
-              <MenuItem value="">
-                Fees Range
-              </MenuItem>
-
-              <MenuItem value="0-100000">
-                0-100000
-              </MenuItem>
-
-              <MenuItem value="100000-1000000">
-                100000-1000000
-              </MenuItem>
-
-              <MenuItem value="1000000-2000000">
-                1000000-2000000
-              </MenuItem>
-
-              <MenuItem value="2000000+">
-                2000000+
-              </MenuItem>
-            </Select>
-          </FormControl>
-
-
-          {/* =================================================
-              EXAM TYPE
-          ================================================= */}
-
-          <FormControl
-            className={
-              styles.horizontalFilter
-            }
-          >
-            <InputLabel>
-              Exam Type
-            </InputLabel>
-
-            <Select
-              multiple
-              value={
-                filters.examType
-              }
-              onChange={(e) =>
-                handleFilterChange(
-                  "examType",
-                  e.target.value
-                )
-              }
-              label="Exam Type"
-              disabled={loading}
-              renderValue={(selected) =>
-                selected.length
-                  ? selected.join(
-                      ", "
-                    )
-                  : "Exam Type"
-              }
-            >
-              {[
-                "IELTS",
-                "TOEFL",
-                "PTE",
-                "GRE",
-                "GMAT",
-              ].map((exam) => (
-                <MenuItem
-                  key={exam}
-                  value={exam}
+              {/* Scholarship */}
+              <FormControl className={styles.horizontalFilter}>
+                <InputLabel>Scholarship</InputLabel>
+                <Select
+                  value={filters.scholarship}
+                  onChange={(e) =>
+                    handleFilterChange("scholarship", e.target.value)
+                  }
+                  label="Scholarship"
+                  disabled={loading}
                 >
-                  <Checkbox
-                    checked={filters.examType.includes(
-                      exam
-                    )}
-                  />
+                  <MenuItem value="">Scholarship</MenuItem>
+                  <MenuItem value="Yes">Yes</MenuItem>
+                  <MenuItem value="No">No</MenuItem>
+                </Select>
+              </FormControl>
 
-                  <ListItemText
-                    primary={exam}
-                  />
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+              {/* Fees Range */}
+              <FormControl className={styles.horizontalFilter}>
+                <InputLabel>Fees Range</InputLabel>
+                <Select
+                  value={filters.feesRange}
+                  onChange={(e) =>
+                    handleFilterChange("feesRange", e.target.value)
+                  }
+                  label="Fees Range"
+                  disabled={loading}
+                >
+                  <MenuItem value="">Fees Range</MenuItem>
+                  <MenuItem value="0-100000">0-100000</MenuItem>
+                  <MenuItem value="100000-1000000">100000-1000000</MenuItem>
+                  <MenuItem value="1000000-2000000">1000000-2000000</MenuItem>
+                  <MenuItem value="2000000+">2000000+</MenuItem>
+                </Select>
+              </FormControl>
 
-
-          {/* =================================================
-              ENGLISH REQUIRED
-          ================================================= */}
-
-          <FormControl
-            className={
-              styles.horizontalFilter
-            }
-          >
-            <InputLabel>
-              English Required
-            </InputLabel>
-
-            <Select
-              value={
-                filters.englishExamRequirements
-              }
-              onChange={(e) =>
-                handleFilterChange(
-                  "englishExamRequirements",
-                  e.target.value
-                )
-              }
-              label="English Required"
-              disabled={loading}
-            >
-              <MenuItem value="">
-                English Required
-              </MenuItem>
-
-              <MenuItem value="Yes">
-                Yes
-              </MenuItem>
-
-              <MenuItem value="No">
-                No
-              </MenuItem>
-            </Select>
-          </FormControl>
-
-
-          {/* =================================================
-              ACADEMIC REQUIREMENTS
-          ================================================= */}
-
-          <FormControl
-            className={
-              styles.horizontalFilter
-            }
-          >
-            <InputLabel>
-              Academic Requirements
-            </InputLabel>
-
-            <Select
-              multiple
-              value={
-                filters.academicRequirements
-              }
-              onChange={(e) =>
-                handleFilterChange(
-                  "academicRequirements",
-                  e.target.value
-                )
-              }
-              label="Academic Requirements"
-              disabled={loading}
-              renderValue={(selected) =>
-                selected.length
-                  ? selected.join(
-                      ", "
-                    )
-                  : "Academic"
-              }
-            >
-              {Array.from(
-                { length: 10 },
-                (_, index) => {
-                  const min =
-                    index * 10;
-
-                  const max =
-                    (index + 1) *
-                    10;
-
-                  const value =
-                    `${min}-${max}%`;
-
-                  return (
-                    <MenuItem
-                      key={value}
-                      value={value}
-                    >
-                      <Checkbox
-                        checked={filters.academicRequirements.includes(
-                          value
-                        )}
-                      />
-
-                      <ListItemText
-                        primary={value}
-                      />
+              {/* Exam Type */}
+              <FormControl className={styles.horizontalFilter}>
+                <InputLabel>Exam Type</InputLabel>
+                <Select
+                  multiple
+                  value={filters.examType}
+                  onChange={(e) =>
+                    handleFilterChange("examType", e.target.value)
+                  }
+                  label="Exam Type"
+                  disabled={loading}
+                  renderValue={(selected) =>
+                    selected.length ? selected.join(", ") : "Exam Type"
+                  }
+                >
+                  {["IELTS", "TOEFL", "PTE", "GRE", "GMAT"].map((exam) => (
+                    <MenuItem key={exam} value={exam}>
+                      <Checkbox checked={filters.examType.includes(exam)} />
+                      <ListItemText primary={exam} />
                     </MenuItem>
-                  );
-                }
-              )}
-            </Select>
-          </FormControl>
+                  ))}
+                </Select>
+              </FormControl>
 
-
-          {/* =================================================
-              INTAKE
-          ================================================= */}
-
-          <FormControl
-            className={
-              styles.horizontalFilter
-            }
-          >
-            <InputLabel>
-              Intake
-            </InputLabel>
-
-            <Select
-              multiple
-              value={
-                filters.intake
-              }
-              onChange={(e) =>
-                handleFilterChange(
-                  "intake",
-                  e.target.value
-                )
-              }
-              label="Intake"
-              disabled={loading}
-              renderValue={(selected) =>
-                selected.length
-                  ? selected.join(
-                      ", "
+              {/* English Required */}
+              <FormControl className={styles.horizontalFilter}>
+                <InputLabel>English Required</InputLabel>
+                <Select
+                  value={filters.englishExamRequirements}
+                  onChange={(e) =>
+                    handleFilterChange(
+                      "englishExamRequirements",
+                      e.target.value
                     )
-                  : "Intake"
-              }
-            >
-              {[
-                "Summer",
-                "Winter",
-                "Spring",
-              ].map((item) => (
-                <MenuItem
-                  key={item}
-                  value={item}
+                  }
+                  label="English Required"
+                  disabled={loading}
                 >
-                  <Checkbox
-                    checked={filters.intake.includes(
-                      item
-                    )}
-                  />
+                  <MenuItem value="">English Required</MenuItem>
+                  <MenuItem value="Yes">Yes</MenuItem>
+                  <MenuItem value="No">No</MenuItem>
+                </Select>
+              </FormControl>
 
-                  <ListItemText
-                    primary={item}
-                  />
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+              {/* Academic Requirements */}
+              <FormControl className={styles.horizontalFilter}>
+                <InputLabel>Academic Requirements</InputLabel>
+                <Select
+                  multiple
+                  value={filters.academicRequirements}
+                  onChange={(e) =>
+                    handleFilterChange(
+                      "academicRequirements",
+                      e.target.value
+                    )
+                  }
+                  label="Academic Requirements"
+                  disabled={loading}
+                  renderValue={(selected) =>
+                    selected.length ? selected.join(", ") : "Academic"
+                  }
+                >
+                  {Array.from({ length: 10 }, (_, index) => {
+                    const min = index * 10;
+                    const max = (index + 1) * 10;
+                    const value = `${min}-${max}%`;
 
+                    return (
+                      <MenuItem key={value} value={value}>
+                        <Checkbox
+                          checked={filters.academicRequirements.includes(value)}
+                        />
+                        <ListItemText primary={value} />
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
+              </FormControl>
+
+              {/* Intake */}
+              <FormControl className={styles.horizontalFilter}>
+                <InputLabel>Intake</InputLabel>
+                <Select
+                  multiple
+                  value={filters.intake}
+                  onChange={(e) => handleFilterChange("intake", e.target.value)}
+                  label="Intake"
+                  disabled={loading}
+                  renderValue={(selected) =>
+                    selected.length ? selected.join(", ") : "Intake"
+                  }
+                >
+                  {["Summer", "Winter", "Spring"].map((item) => (
+                    <MenuItem key={item} value={item}>
+                      <Checkbox checked={filters.intake.includes(item)} />
+                      <ListItemText primary={item} />
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </div>
+          )}
         </div>
 
 
@@ -2797,10 +2589,17 @@ const makeSet = (items) =>
         >
 
           <div className={styles.resultsToolbar}>
-            <div className={styles.resultsSummary}>
-              <strong>{totalCourses} courses</strong>
-              <span> across </span>
-              <strong>{allUniversities.length} universities</strong>
+            <div className={styles.resultsSummary} aria-live="polite">
+              <div>
+                <h2>Courses &amp; universities</h2>
+                <p>
+                  <strong>{totalCourses}</strong>{" "}
+                  {totalCourses === 1 ? "course" : "courses"}
+                  <span> across </span>
+                  <strong>{allUniversities.length}</strong>{" "}
+                  {allUniversities.length === 1 ? "university" : "universities"}
+                </p>
+              </div>
 
               <small>
                 Showing universities{" "}
@@ -2819,7 +2618,6 @@ const makeSet = (items) =>
 
             <div className={styles.resultsControls}>
               <label>
-                <span>Sort universities</span>
                 <select
                   value={sortOrder}
                   onChange={(e) => {
@@ -2834,7 +2632,6 @@ const makeSet = (items) =>
               </label>
 
               <label>
-                <span>Per page</span>
                 <select
                   value={universitiesPerPage}
                   onChange={(e) => {
@@ -2850,20 +2647,6 @@ const makeSet = (items) =>
 
             </div>
           </div>
-
-          {showMoreFilters && (
-            <div className={styles.moreFiltersPanel}>
-              <p>
-                Use the filters above to narrow universities and courses.
-              </p>
-              <button
-                type="button"
-                onClick={clearAllFilters}
-              >
-                Clear All Filters
-              </button>
-            </div>
-          )}
 
           {loading ? (
             <div
@@ -2892,79 +2675,30 @@ const makeSet = (items) =>
                 >
 
                   {/* UNIVERSITY HEADER */}
-
-                  <div
-                    className={
-                      styles.universityHeader
-                    }
-                  >
-                    <div>
-
-                      <h3
-                        className={
-                          styles.universityName
-                        }
-                      >
-                        {
-                          university.universityName ||
+                   <div className={styles.universityHeader}>
+                    <div className={styles.universityTitleRow}>
+                      <h3 className={styles.universityName}>
+                        {university.universityName ||
                           university.name ||
-                          "University"
-                        }
+                          "University"}
                       </h3>
 
-
-                      <p
-                        className={
-                          styles.universityLocation
-                        }
-                      >
-                        {
-                          city.city ||
-                          city.cityName
-                        }
-                        ,{" "}
-                        {
-                          state.state ||
-                          state.stateName
-                        }
-                        ,{" "}
-                        {
-                          country.country ||
-                          country.countryName
-                        }
+                      <p className={styles.universityLocation}>
+                        · {city.city || city.cityName},{" "}
+                        {state.state || state.stateName},{" "}
+                        {country.country || country.countryName}
                       </p>
 
-
-                      <p
-                        className={
-                          styles.universityId
-                        }
-                      >
-                        ID:{" "}
-                        {
-                          university.id
-                        }{" "}
-                        | Courses:{" "}
-                        {(
-                          university.abroadColleges ||
-                          []
-                        ).reduce(
-                          (
-                            total,
-                            college
-                          ) =>
-                            total +
-                            (
-                              college.abroadCourses ||
-                              []
-                            ).length,
+                      <p className={styles.universityId}>
+                        ID: {university.id} | Courses:{" "}
+                        {(university.abroadColleges || []).reduce(
+                          (total, college) =>
+                            total + (college.abroadCourses || []).length,
                           0
                         )}
                       </p>
-
                     </div>
                   </div>
-
 
                   {/* COLLEGES */}
 
@@ -3087,24 +2821,26 @@ const makeSet = (items) =>
               }
             >
 
-              {filters.examType.length ? (
-                <Typography>
-                  No course found with
-                  this exam.
-                </Typography>
-              ) : filters.feesRange ? (
-                <Typography>
-                  No course is available
-                  in this fees range.
-                </Typography>
-              ) : (
-                <Typography>
-                  No data available.
-                  Please check if
-                  countries, states,
-                  cities, universities
-                  and colleges are added.
-                </Typography>
+              <span className={styles.emptyStateIcon} aria-hidden="true">
+                <SearchIcon />
+              </span>
+              <h2>
+                {activeFilterCount > 0 || globalSearch.trim()
+                  ? "No courses match your search"
+                  : "No courses to show yet"}
+              </h2>
+              <p>
+                {activeFilterCount > 0 || globalSearch.trim()
+                  ? "Try changing or clearing a few filters to see more options."
+                  : "Course listings will appear here as they become available."}
+              </p>
+              {(activeFilterCount > 0 || globalSearch.trim()) && (
+                <Button
+                  variant="outlined"
+                  onClick={clearAllFilters}
+                >
+                  Clear all filters
+                </Button>
               )}
 
             </div>

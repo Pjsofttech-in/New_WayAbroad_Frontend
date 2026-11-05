@@ -102,8 +102,10 @@
   color: #c4ccd6;
 }
 
+/* Main blog image — 16:9 ratio (1600 × 900) */
 .blogImageContainer {
   width: 100%;
+  aspect-ratio: 16 / 9;
   margin: 0 0 35px;
   overflow: hidden;
   border-radius: 16px;
@@ -113,7 +115,7 @@
 .blogImage {
   display: block;
   width: 100%;
-  max-height: 450px;
+  height: 100%;
   object-fit: cover;
   border-radius: 16px;
 }

@@ -1,3 +1,6 @@
+import { getAllCountries } from "./services/api";
+import { normalizeCountryRecords } from "./services/study-abroad";
+
 const publicRoutes = [
   "/",
   "/mbbs",
@@ -47,34 +50,54 @@ const examRoutes = [
 // Use your actual production domain
 const siteUrl = "https://www.wayabroad.in";
 
-export default function sitemap() {
+export default async function sitemap() {
   const routes = [
     ...publicRoutes,
     ...examRoutes.map((slug) => `/exams/${slug}`),
   ];
+  let countries = [];
+
+  try {
+    const response = await getAllCountries({
+      cache: "force-cache",
+      next: { revalidate: 3600 },
+    });
+    countries = normalizeCountryRecords(response);
+  } catch (error) {
+    console.error("Failed to load country routes for sitemap:", error);
+  }
 
   const now = new Date();
 
-  return routes.map((route) => ({
+  const entries = [
+    ...routes.map((route) => ({ route, priority: undefined })),
+    ...countries.map(({ id }) => ({
+      route: `/study-abroad/${encodeURIComponent(id)}`,
+      priority: 0.8,
+    })),
+  ];
+  const uniqueEntries = [
+    ...new Map(entries.map((entry) => [entry.route, entry])).values(),
+  ];
+
+  return uniqueEntries.map(({ route, priority }) => ({
     url: `${siteUrl}${route}`,
-
     lastModified: now,
-
     changeFrequency:
       route === "/" ||
       route === "/blog" ||
       route === "/scholarships"
         ? "daily"
         : "weekly",
-
     priority:
-      route === "/"
+      priority ??
+      (route === "/"
         ? 1
         : route === "/courses" ||
-          route === "/exams" ||
-          route === "/scholarships" ||
-          route === "/mbbs"
-        ? 0.9
-        : 0.7,
+            route === "/exams" ||
+            route === "/scholarships" ||
+            route === "/mbbs"
+          ? 0.9
+          : 0.7),
   }));
 }

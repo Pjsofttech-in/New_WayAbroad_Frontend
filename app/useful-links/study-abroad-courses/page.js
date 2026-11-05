@@ -11,6 +11,11 @@ import {
   FlaskConical,
 } from "lucide-react";
 
+import {
+  brandedMetadataTitle,
+  canonicalMetadata,
+} from "../../seo-utils";
+
 import styles from "../[slug]/page.module.css";
 
 const iconMap = {
@@ -129,10 +134,11 @@ const page = {
 };
 
 export const metadata = {
-  title: "Study Abroad Courses | Wayabroad",
+  ...canonicalMetadata("/useful-links/study-abroad-courses"),
+  title: brandedMetadataTitle("Study Abroad Courses"),
 
   description:
-    "Discover a world of academic opportunities with our comprehensive guide to study abroad courses across top universities worldwide.",
+    "Explore study abroad courses across academic fields, compare options for your interests and career goals, and plan your university admissions research.",
 };
 
 export default function StudyAbroadCoursesPage() {

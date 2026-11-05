@@ -1,8 +1,11 @@
 import LegalPage from "../components/LegalPage/LegalPage";
+import { canonicalMetadata } from "../seo-utils";
 
 export const metadata = {
-  title: "Terms and Conditions | Wayabroad",
-  description: "Terms and Conditions for Wayabroad.",
+  ...canonicalMetadata("/terms-and-conditions"),
+  title: "Terms and Conditions",
+  description:
+    "Read the terms governing use of the website and services, including service information, user responsibilities and prohibited activities.",
 };
 
 const sections = [

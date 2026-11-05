@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -6,15 +7,34 @@ import { useParams, useRouter } from "next/navigation";
 import {
   getBlogById,
   getAllBlogs,
-} from "../../../services/api";
+} from "../../services/api";
 
-import styles from "../../BlogById.module.css";
+import styles from "../BlogById.module.css";
+
+/* ============================================================
+   GENERATE SEO-FRIENDLY SLUG
+============================================================ */
+
+const generateSlug = (title) => {
+  if (!title) return "";
+
+  return String(title)
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+};
+
+/* ============================================================
+   BLOG DETAIL COMPONENT
+============================================================ */
 
 export default function Blog() {
   const params = useParams();
   const router = useRouter();
 
-  const id = params?.id;
+  // New URL: /blog/study-abroad-guide
+  const slug = params?.slug;
 
   const [blog, setBlog] = useState(null);
   const [allBlogs, setAllBlogs] = useState([]);
@@ -24,12 +44,12 @@ export default function Blog() {
 
   const [error, setError] = useState("");
 
-  // ============================================================
-  // FETCH CURRENT BLOG + ALL BLOGS
-  // ============================================================
+  /* ============================================================
+     FETCH CURRENT BLOG USING SLUG
+  ============================================================ */
 
   useEffect(() => {
-    if (!id) return;
+    if (!slug) return;
 
     const fetchBlogs = async () => {
       try {
@@ -37,32 +57,82 @@ export default function Blog() {
         setSidebarLoading(true);
         setError("");
 
-        const data = await getBlogById(id);
+        /* ----------------------------------------
+           FETCH ALL BLOGS
+        ---------------------------------------- */
+
+        const blogsResponse = await getAllBlogs();
+
+        let blogs = [];
+
+        if (Array.isArray(blogsResponse)) {
+          blogs = blogsResponse;
+        } else if (Array.isArray(blogsResponse?.data)) {
+          blogs = blogsResponse.data;
+        } else if (Array.isArray(blogsResponse?.content)) {
+          blogs = blogsResponse.content;
+        } else if (Array.isArray(blogsResponse?.blogs)) {
+          blogs = blogsResponse.blogs;
+        }
+
+        setAllBlogs(blogs);
+
+        /* ----------------------------------------
+           FIND BLOG USING URL SLUG
+        ---------------------------------------- */
+
+        const currentSlug = Array.isArray(slug)
+          ? slug[0]
+          : slug;
+
+        const matchedBlog = blogs.find((item) => {
+          const itemSlug =
+            item.slug ||
+            item.blogSlug ||
+            generateSlug(
+              item.title ||
+              item.name ||
+              item.blogTitle
+            );
+
+          return itemSlug === currentSlug;
+        });
+
+        /* ----------------------------------------
+           BLOG NOT FOUND
+        ---------------------------------------- */
+
+        if (!matchedBlog) {
+          setBlog(null);
+          setError("");
+          return;
+        }
+
+        /* ----------------------------------------
+           GET BLOG ID
+        ---------------------------------------- */
+
+        const blogId =
+          matchedBlog.id ||
+          matchedBlog.blogId ||
+          matchedBlog._id;
+
+        if (!blogId) {
+          throw new Error(
+            "Blog ID not found in API response."
+          );
+        }
+
+        /* ----------------------------------------
+           FETCH COMPLETE BLOG DETAILS
+        ---------------------------------------- */
+
+        const data = await getBlogById(blogId);
+
         const blogData = data?.data || data;
 
         setBlog(blogData);
 
-        // Fetch all blogs for sidebar
-        try {
-          const blogsResponse = await getAllBlogs();
-
-          let blogs = [];
-
-          if (Array.isArray(blogsResponse)) {
-            blogs = blogsResponse;
-          } else if (Array.isArray(blogsResponse?.data)) {
-            blogs = blogsResponse.data;
-          } else if (Array.isArray(blogsResponse?.content)) {
-            blogs = blogsResponse.content;
-          } else if (Array.isArray(blogsResponse?.blogs)) {
-            blogs = blogsResponse.blogs;
-          }
-
-          setAllBlogs(blogs);
-        } catch (sidebarError) {
-          console.error("Error fetching all blogs:", sidebarError);
-          setAllBlogs([]);
-        }
       } catch (err) {
         console.error("Error fetching blog:", err);
 
@@ -77,11 +147,11 @@ export default function Blog() {
     };
 
     fetchBlogs();
-  }, [id]);
+  }, [slug]);
 
-  // ============================================================
-  // GET BLOG CONTENT
-  // ============================================================
+  /* ============================================================
+     GET BLOG CONTENT
+  ============================================================ */
 
   const getBlogContent = () => {
     if (!blog) return "";
@@ -97,9 +167,9 @@ export default function Blog() {
     );
   };
 
-  // ============================================================
-  // PREPARE HTML CONTENT
-  // ============================================================
+  /* ============================================================
+     PREPARE HTML CONTENT
+  ============================================================ */
 
   const prepareHtmlContent = (content) => {
     if (!content) return "";
@@ -120,6 +190,7 @@ export default function Blog() {
       html.includes("&amp;")
     ) {
       const textarea = document.createElement("textarea");
+
       textarea.innerHTML = html;
 
       return textarea.value;
@@ -128,14 +199,15 @@ export default function Blog() {
     return html;
   };
 
-  // ============================================================
-  // REMOVE FIRST H1 FROM BLOG CONTENT
-  // ============================================================
+  /* ============================================================
+     REMOVE FIRST H1 FROM BLOG CONTENT
+  ============================================================ */
 
   const removeFirstH1 = (html) => {
     if (!html) return "";
 
     const container = document.createElement("div");
+
     container.innerHTML = html;
 
     const firstH1 = container.querySelector("h1");
@@ -147,9 +219,9 @@ export default function Blog() {
     return container.innerHTML;
   };
 
-  // ============================================================
-  // GET BLOG IMAGE
-  // ============================================================
+  /* ============================================================
+     GET BLOG IMAGE
+  ============================================================ */
 
   const getBlogImage = (item) => {
     if (!item) return "";
@@ -164,9 +236,9 @@ export default function Blog() {
     );
   };
 
-  // ============================================================
-  // GET BLOG ID
-  // ============================================================
+  /* ============================================================
+     GET BLOG ID
+  ============================================================ */
 
   const getBlogId = (item) => {
     if (!item) return "";
@@ -179,9 +251,27 @@ export default function Blog() {
     );
   };
 
-  // ============================================================
-  // GET BLOG TITLE
-  // ============================================================
+  /* ============================================================
+     GET BLOG SLUG
+  ============================================================ */
+
+  const getBlogSlug = (item) => {
+    if (!item) return "";
+
+    return (
+      item.slug ||
+      item.blogSlug ||
+      generateSlug(
+        item.title ||
+        item.name ||
+        item.blogTitle
+      )
+    );
+  };
+
+  /* ============================================================
+     GET BLOG TITLE
+  ============================================================ */
 
   const getBlogTitle = (item) => {
     if (!item) return "Untitled Blog";
@@ -194,9 +284,9 @@ export default function Blog() {
     );
   };
 
-  // ============================================================
-  // GET BLOG DATE
-  // ============================================================
+  /* ============================================================
+     GET BLOG DATE
+  ============================================================ */
 
   const getBlogDate = (item) => {
     if (!item) return "";
@@ -211,9 +301,9 @@ export default function Blog() {
     );
   };
 
-  // ============================================================
-  // FORMAT DATE
-  // ============================================================
+  /* ============================================================
+     FORMAT DATE
+  ============================================================ */
 
   const formatDate = (date) => {
     if (!date) return "";
@@ -235,9 +325,9 @@ export default function Blog() {
     }
   };
 
-  // ============================================================
-  // GET CATEGORY
-  // ============================================================
+  /* ============================================================
+     GET CATEGORY
+  ============================================================ */
 
   const getBlogCategory = (item) => {
     if (!item) return "";
@@ -251,20 +341,20 @@ export default function Blog() {
     );
   };
 
-  // ============================================================
-  // FILTER CURRENT BLOG
-  // ============================================================
+  /* ============================================================
+     FILTER CURRENT BLOG
+  ============================================================ */
 
   const otherBlogs = allBlogs.filter((item) => {
-    const currentId = String(id);
+    const currentId = String(getBlogId(blog));
     const itemId = String(getBlogId(item));
 
     return itemId && itemId !== currentId;
   });
 
-  // ============================================================
-  // RELATED BLOGS
-  // ============================================================
+  /* ============================================================
+     RELATED BLOGS
+  ============================================================ */
 
   const currentCategory = getBlogCategory(blog);
 
@@ -284,35 +374,38 @@ export default function Blog() {
     ),
   ].slice(0, 4);
 
-  // ============================================================
-  // SUGGESTED BLOGS
-  // ============================================================
+  /* ============================================================
+     SUGGESTED BLOGS
+  ============================================================ */
 
   const suggestionBlogs = otherBlogs
     .filter((item) => !relatedBlogs.includes(item))
     .slice(0, 6);
 
-  // ============================================================
-  // LOADING
-  // ============================================================
+  /* ============================================================
+     LOADING
+  ============================================================ */
 
   if (loading) {
     return (
       <div className={styles.loading}>
         <div className={styles.loadingSpinner}></div>
+
         <p>Loading blog...</p>
       </div>
     );
   }
 
-  // ============================================================
-  // ERROR
-  // ============================================================
+  /* ============================================================
+     ERROR
+  ============================================================ */
 
   if (error) {
     return (
       <div className={styles.errorContainer}>
-        <p className={styles.errorMessage}>{error}</p>
+        <p className={styles.errorMessage}>
+          {error}
+        </p>
 
         <button
           className={styles.retryButton}
@@ -324,9 +417,9 @@ export default function Blog() {
     );
   }
 
-  // ============================================================
-  // BLOG NOT FOUND
-  // ============================================================
+  /* ============================================================
+     BLOG NOT FOUND
+  ============================================================ */
 
   if (!blog) {
     return (
@@ -334,40 +427,52 @@ export default function Blog() {
         <p className={styles.errorMessage}>
           Blog not found.
         </p>
+
+        <button
+          className={styles.retryButton}
+          onClick={() => router.push("/blog")}
+        >
+          Back to Blogs
+        </button>
       </div>
     );
   }
 
-  // ============================================================
-  // BLOG DATA
-  // ============================================================
+  /* ============================================================
+     BLOG DATA
+  ============================================================ */
 
   const blogContent = getBlogContent();
 
   const preparedHtml = prepareHtmlContent(blogContent);
 
-  // Remove the first H1 from the API blog content
+  // Remove the first H1 from API blog content
   const htmlContent = removeFirstH1(preparedHtml);
 
   const mainImage = getBlogImage(blog);
+
   const title = getBlogTitle(blog);
+
   const category = getBlogCategory(blog);
 
   const date = formatDate(getBlogDate(blog));
 
-  // ============================================================
-  // RENDER
-  // ============================================================
+  /* ============================================================
+     RENDER
+  ============================================================ */
 
   return (
     <section className={styles.blogPage}>
       <div className={styles.blogLayout}>
 
-        {/* LEFT SIDE - MAIN BLOG */}
+        {/* ========================================
+            LEFT SIDE - MAIN BLOG
+        ======================================== */}
 
         <main className={styles.blogMain}>
 
-          {/* Breadcrumb - title removed */}
+          {/* BREADCRUMB */}
+
           <div className={styles.breadcrumb}>
             <span
               onClick={() => router.push("/")}
@@ -388,19 +493,30 @@ export default function Blog() {
             </span>
           </div>
 
-          {/* Category */}
+          {/* CATEGORY */}
+
           {category && (
             <div className={styles.categoryBadge}>
               {category}
             </div>
           )}
 
-          {/* Main Blog Title - kept */}
+          {/* BLOG TITLE */}
+
           <h1 className={styles.blogTitle}>
             {title}
           </h1>
 
-          {/* Main Image */}
+          {/* BLOG DATE */}
+
+          {date && (
+            <div className={styles.blogDate}>
+              {date}
+            </div>
+          )}
+
+          {/* MAIN IMAGE */}
+
           {mainImage && (
             <div className={styles.blogImageContainer}>
               <img
@@ -414,7 +530,8 @@ export default function Blog() {
             </div>
           )}
 
-          {/* Blog Content - first H1 removed */}
+          {/* BLOG CONTENT */}
+
           {htmlContent ? (
             <article
               className={styles.blogContent}
@@ -430,18 +547,21 @@ export default function Blog() {
 
         </main>
 
-        {/* RIGHT SIDE - SIDEBAR */}
+        {/* ========================================
+            RIGHT SIDE - SIDEBAR
+        ======================================== */}
 
         <aside className={styles.blogSidebar}>
 
-          {/* SUGGESTED BLOGS */}
+          {/* ========================================
+              SUGGESTED BLOGS
+          ======================================== */}
 
           <section
             className={`${styles.sidebarBox} ${styles.suggestionsBox}`}
           >
             <div className={styles.sidebarHeader}>
               <div className={styles.sidebarTitleWrapper}>
-
                 <h2>Suggested blogs</h2>
               </div>
 
@@ -468,9 +588,13 @@ export default function Blog() {
                     }
                     className={styles.sidebarBlogCard}
                     onClick={() =>
-                      router.push(`/blog/${getBlogId(item)}`)
+                      router.push(
+                        `/blog/${getBlogSlug(item)}`
+                      )
                     }
                   >
+                    {/* IMAGE */}
+
                     <div className={styles.sidebarImageWrapper}>
                       {getBlogImage(item) ? (
                         <img
@@ -489,6 +613,8 @@ export default function Blog() {
                         </div>
                       )}
                     </div>
+
+                    {/* CONTENT */}
 
                     <div className={styles.sidebarBlogInfo}>
                       <h3>{getBlogTitle(item)}</h3>
@@ -509,14 +635,15 @@ export default function Blog() {
             )}
           </section>
 
-          {/* RELATED BLOGS */}
+          {/* ========================================
+              RELATED BLOGS
+          ======================================== */}
 
           <section
             className={`${styles.sidebarBox} ${styles.relatedBox}`}
           >
             <div className={styles.sidebarHeader}>
               <div className={styles.sidebarTitleWrapper}>
-
                 <h2>Related Blogs</h2>
               </div>
 
@@ -543,9 +670,13 @@ export default function Blog() {
                     }
                     className={styles.sidebarBlogCard}
                     onClick={() =>
-                      router.push(`/blog/${getBlogId(item)}`)
+                      router.push(
+                        `/blog/${getBlogSlug(item)}`
+                      )
                     }
                   >
+                    {/* IMAGE */}
+
                     <div className={styles.sidebarImageWrapper}>
                       {getBlogImage(item) ? (
                         <img
@@ -564,6 +695,8 @@ export default function Blog() {
                         </div>
                       )}
                     </div>
+
+                    {/* CONTENT */}
 
                     <div className={styles.sidebarBlogInfo}>
                       <h3>{getBlogTitle(item)}</h3>
@@ -589,6 +722,3 @@ export default function Blog() {
     </section>
   );
 }
-
-
-// add image 1600:900

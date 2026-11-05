@@ -12,6 +12,11 @@ import {
   Landmark,
 } from "lucide-react";
 
+import {
+  brandedMetadataTitle,
+  canonicalMetadata,
+} from "../../seo-utils";
+
 import styles from "../[slug]/page.module.css";
 
 const iconMap = {
@@ -65,9 +70,10 @@ const page = {
 };
 
 export const metadata = {
-  title: "Statement of Purpose | Wayabroad",
+  ...canonicalMetadata("/useful-links/statement-of-purpose"),
+  title: brandedMetadataTitle("Statement of Purpose for University Admissions"),
   description:
-    "Your Statement of Purpose is a crucial part of your university application. Craft a compelling narrative that showcases your unique story and aspirations.",
+    "Prepare a clear Statement of Purpose for university admissions that explains your academic background, study goals and reasons for choosing a program.",
 };
 
 export default function StatementOfPurposePage() {

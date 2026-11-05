@@ -1,8 +1,11 @@
 import LegalPage from "../components/LegalPage/LegalPage";
+import { canonicalMetadata } from "../seo-utils";
 
 export const metadata = {
-  title: "Data Protection Addendum | PJSoftTech",
-  description: "Data Protection Addendum for PJSoftTech Pvt. Ltd.",
+  ...canonicalMetadata("/data-protection-addendum"),
+  title: "Data Protection Addendum",
+  description:
+    "Review the data protection addendum for information about data handling, account security, retention periods and data maintenance responsibilities.",
 };
 
 const sections = [

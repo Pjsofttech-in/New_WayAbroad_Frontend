@@ -1,8 +1,11 @@
 import LegalPage from "../components/LegalPage/LegalPage";
+import { canonicalMetadata } from "../seo-utils";
 
 export const metadata = {
-  title: "Privacy Policy | Wayabroad",
-  description: "Privacy Policy for Wayabroad.",
+  ...canonicalMetadata("/privacy-policy"),
+  title: "Privacy Policy",
+  description:
+    "Learn what personal, technical and usage information may be collected, how it is used, and when information may be shared under this privacy policy.",
 };
 
 const sections = [

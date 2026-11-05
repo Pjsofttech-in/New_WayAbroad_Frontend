@@ -1,8 +1,11 @@
 import LegalPage from "../components/LegalPage/LegalPage";
+import { canonicalMetadata } from "../seo-utils";
 
 export const metadata = {
-  title: "Copyright Policy | PJSoftTech",
-  description: "Copyright Policy for PJSoftTech Pvt. Ltd.",
+  ...canonicalMetadata("/copyright-policy"),
+  title: "Copyright Policy",
+  description:
+    "Read the copyright policy covering ownership and permitted use of website text, images, software, downloads, digital content and related materials.",
 };
 
 const sections = [

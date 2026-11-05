@@ -1,8 +1,11 @@
 import LegalPage from "../components/LegalPage/LegalPage";
+import { canonicalMetadata } from "../seo-utils";
 
 export const metadata = {
-  title: "Refund Policy | Wayabroad",
-  description: "Refund Policy for Wayabroad.",
+  ...canonicalMetadata("/refund-policy"),
+  title: "Refund Policy",
+  description:
+    "Review the refund policy, including eligibility requirements, non-refundable services and the steps for submitting a request for eligible purchases.",
 };
 
 const sections = [

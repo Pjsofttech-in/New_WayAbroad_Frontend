@@ -1,6 +1,10 @@
+import { canonicalMetadata } from "../seo-utils";
+
 export const metadata = {
-  title: "Instant University Offer Support",
-  description: "Explore Wayabroad support for university applications and selected instant offer opportunities.",
+  ...canonicalMetadata("/instant-offer"),
+  title: "FastLane Course Eligibility",
+  description:
+    "Explore FastLane course options, answer eligibility questions and learn how Wayabroad counsellors can help with your university application.",
 };
 
 export default function Layout({ children }) {

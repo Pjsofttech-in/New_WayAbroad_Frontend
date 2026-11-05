@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -7,6 +8,20 @@ import { getAllBlogs } from "../services/api";
 
 import styles from "./Blog.module.css";
 
+/* ========================================
+   GENERATE SEO-FRIENDLY BLOG SLUG
+======================================== */
+
+const generateSlug = (title) => {
+  if (!title) return "";
+
+  return title
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+};
+
 export default function Blog() {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -15,18 +30,6 @@ export default function Blog() {
   const [currentPage, setCurrentPage] = useState(1);
 
   const blogsPerPage = 12;
-
-  /* ========================================
-     CREATE BLOG SLUG
-  ======================================== */
-
-  const slugify = (text) => {
-    return text
-      ?.toLowerCase()
-      .replace(/[^a-z0-9\s-]/g, "")
-      .replace(/\s+/g, "-")
-      .replace(/^-+|-+$/g, "");
-  };
 
   /* ========================================
      GET ALL BLOGS
@@ -46,14 +49,10 @@ export default function Blog() {
           setBlogs([]);
         }
       } catch (err) {
-        console.error(
-          "Error fetching blogs:",
-          err
-        );
+        console.error("Error fetching blogs:", err);
 
         setError(
-          err.message ||
-            "Failed to load blogs."
+          err.message || "Failed to load blogs."
         );
       } finally {
         setLoading(false);
@@ -143,6 +142,7 @@ export default function Blog() {
 
       <div className={styles.blogTitle}>
         <h1>Blogs</h1>
+
         <p>
           Explore our latest articles,
           guides and updates.
@@ -155,52 +155,54 @@ export default function Blog() {
 
       <div className={styles.blogGrid}>
 
-        {currentBlogs.map((blog) => (
-          <Link
-            key={blog.id}
-            href={`/blog/${blog.id}/${slugify(
-              blog.title
-            )}`}
-            className={styles.blogCard}
-          >
+        {currentBlogs.map((blog) => {
+          /* Generate slug from API slug or title */
 
-            {/* BLOG IMAGE */}
+          const blogSlug =
+            blog.slug || generateSlug(blog.title);
 
-            {blog.image && (
-              <div className={styles.blogImageWrapper}>
-                <img
-                  src={blog.image}
-                  alt={
-                    blog.title ||
-                    "Blog"
-                  }
-                  className={styles.blogImage}
-                />
-              </div>
-            )}
+          return (
+            <Link
+              key={blog.id}
+              href={`/blog/${blogSlug}`}
+              className={styles.blogCard}
+            >
 
-            {/* BLOG CONTENT */}
+              {/* BLOG IMAGE */}
 
-            <div className={styles.blogCaption}>
-              <h2>
-                {blog.title ||
-                  "Untitled Blog"}
-              </h2>
-
-              {blog.description && (
-                <p>
-                  {blog.description
-                    .replace(/<[^>]*>/g, "")
-                    .slice(0, 120)}
-                  {blog.description.length > 120
-                    ? "..."
-                    : ""}
-                </p>
+              {blog.image && (
+                <div className={styles.blogImageWrapper}>
+                  <img
+                    src={blog.image}
+                    alt={blog.title || "Blog"}
+                    className={styles.blogImage}
+                  />
+                </div>
               )}
-            </div>
 
-          </Link>
-        ))}
+              {/* BLOG CONTENT */}
+
+              <div className={styles.blogCaption}>
+                <h2>
+                  {blog.title || "Untitled Blog"}
+                </h2>
+
+                {blog.description && (
+                  <p>
+                    {blog.description
+                      .replace(/<[^>]*>/g, "")
+                      .slice(0, 120)}
+
+                    {blog.description.length > 120
+                      ? "..."
+                      : ""}
+                  </p>
+                )}
+              </div>
+
+            </Link>
+          );
+        })}
 
       </div>
 
@@ -216,9 +218,7 @@ export default function Blog() {
           <button
             type="button"
             onClick={() =>
-              handlePageChange(
-                currentPage - 1
-              )
+              handlePageChange(currentPage - 1)
             }
             disabled={currentPage === 1}
           >
@@ -234,9 +234,7 @@ export default function Blog() {
             <button
               key={page}
               type="button"
-              onClick={() =>
-                handlePageChange(page)
-              }
+              onClick={() => handlePageChange(page)}
               className={
                 currentPage === page
                   ? styles.activePage
@@ -252,13 +250,9 @@ export default function Blog() {
           <button
             type="button"
             onClick={() =>
-              handlePageChange(
-                currentPage + 1
-              )
+              handlePageChange(currentPage + 1)
             }
-            disabled={
-              currentPage === totalPages
-            }
+            disabled={currentPage === totalPages}
           >
             Next
           </button>

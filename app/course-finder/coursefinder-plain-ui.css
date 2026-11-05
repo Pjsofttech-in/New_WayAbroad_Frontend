@@ -4,7 +4,7 @@
 
 .cf-container {
   width: min(calc(100% - 32px), 1440px);
-  margin: 32px auto;
+  margin: 4px auto 32px;
   box-sizing: border-box;
 }
 

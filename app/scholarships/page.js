@@ -25,18 +25,6 @@ export default function Scholarships() {
   const [filterLocation, setFilterLocation] = useState("");
 
   /* ==========================================
-     CREATE SLUG
-  ========================================== */
-
-  const createSlug = (name) => {
-    return (name || "")
-      .toLowerCase()
-      .replace(/[^a-z0-9\s-]/g, "")
-      .trim()
-      .replace(/\s+/g, "-");
-  };
-
-  /* ==========================================
      FETCH SCHOLARSHIPS
   ========================================== */
 
@@ -181,6 +169,8 @@ export default function Scholarships() {
       ===================================== */}
 
       <div className={styles.titleBanner}>
+
+        <p className={styles.bannerEyebrow}>FUND YOUR FUTURE</p>
 
         <h1 className={styles.scholarshipsTitle}>
           Way Abroad Scholarships
@@ -499,9 +489,7 @@ export default function Scholarships() {
                       >
 
                         <Link
-                          href={`/scholarship/${item.id}/${createSlug(
-                            item.sname
-                          )}`}
+                          href={`/scholarship/${item.id}`}
                           className={
                             styles.applyBtn
                           }

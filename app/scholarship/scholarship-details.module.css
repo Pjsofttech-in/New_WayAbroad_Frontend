@@ -1,0 +1,910 @@
+
+/* =========================================
+   SCHOLARSHIP PROFILE PAGE
+========================================= */
+
+.detailsPage {
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 20px;
+  color: #34465a;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.detailsPage *,
+.detailsPage *::before,
+.detailsPage *::after {
+  box-sizing: border-box;
+}
+
+/* =========================================
+   MAIN PROFILE CONTAINER
+========================================= */
+
+.scholarshipProfile {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  width: 100%;
+  height: calc(100vh - 100px);
+  min-height: 600px;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+/* =========================================
+   LEFT SIDEBAR
+========================================= */
+
+.profileSidebar {
+  display: flex;
+  flex-direction: column;
+  width: 240px;
+  height: 100%;
+  overflow-y: auto;
+  padding: 16px 12px;
+  background: linear-gradient(
+    180deg,
+    #626fe0 0%,
+    #7550b8 100%
+  );
+  color: #ffffff;
+}
+
+/* =========================================
+   SIDEBAR HEADER
+========================================= */
+
+.sidebarHeader {
+  padding: 0 4px;
+}
+
+.sidebarBack {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 7px 8px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.sidebarBack span {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.sidebarBack:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* =========================================
+   SCHOLARSHIP IDENTITY
+========================================= */
+
+.sidebarIdentity {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 3px;
+  text-align: center;
+}
+
+.scholarshipInitial {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 45px;
+  height: 45px;
+  margin-bottom: 8px;
+  border: 3px solid rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+  background: #eeeaff;
+  color: #7251b8;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.sidebarIdentity h2 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 750;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.sidebarIdentity p {
+  margin: 5px 0 8px;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 12px;
+}
+
+/* =========================================
+   STATUS BADGE
+========================================= */
+
+.sidebarBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 26px;
+  margin-bottom: 16px;
+  padding: 5px 12px;
+  border-radius: 30px;
+  background: #e5fff2;
+  color: #176c4e;
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: 0.3px;
+}
+
+/* =========================================
+   SIDEBAR NAVIGATION
+========================================= */
+
+.sidebarNavigation {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sidebarItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 36px;
+  padding: 6px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.94);
+  color: #34465a;
+  font-family: inherit;
+  font-size: 12px;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.sidebarItem:hover {
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(33, 28, 84, 0.12);
+}
+
+.activeSidebarItem {
+  border-color: #ffffff;
+  background: #ffffff;
+  color: #7055b7;
+  box-shadow: 0 3px 10px rgba(33, 28, 84, 0.12);
+}
+
+/* =========================================
+   SIDEBAR NUMBER
+========================================= */
+
+.sidebarNumber {
+  display: flex;
+  flex: 0 0 22px;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #ebe5fb;
+  color: #7055b7;
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.activeSidebarItem .sidebarNumber {
+  background: #7650b8;
+  color: #ffffff;
+}
+
+.sidebarLabel {
+  min-width: 0;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* =========================================
+   SIDEBAR APPLY BUTTON
+========================================= */
+
+.sidebarApplyBtn {
+  width: 100%;
+  min-height: 38px;
+  margin-top: 10px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  background: #ff8a00;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 750;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.sidebarApplyBtn:hover {
+  background: #e87900;
+}
+
+/* =========================================
+   RIGHT CONTENT
+========================================= */
+
+.profileContent {
+  height: 100%;
+  min-width: 0;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  background: #ffffff;
+}
+
+/* =========================================
+   PROFILE TOPBAR
+========================================= */
+
+.profileTopbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  min-height: 92px;
+  padding: 20px 30px;
+  border-bottom: 1px solid #e3e7ed;
+}
+
+.profileLabel {
+  display: block;
+  margin-bottom: 9px;
+  color: #4267c8;
+  font-size: 12px;
+  font-weight: 750;
+  letter-spacing: 0.5px;
+}
+
+.profileTopbar h1 {
+  margin: 0;
+  color: #596779;
+  font-size: 17px;
+  font-weight: 550;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.closeButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: #7b8795;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.closeButton:hover {
+  background: #f0f2f6;
+}
+
+/* =========================================
+   PROFILE SECTIONS
+========================================= */
+
+.profileSection {
+  padding: 30px;
+  border-bottom: 1px solid #edf0f5;
+  scroll-margin-top: 20px;
+}
+
+.sectionHeading {
+  margin: 0 0 24px;
+  color: #347bbd;
+  font-size: 24px;
+  font-weight: 750;
+  line-height: 1.4;
+}
+
+/* =========================================
+   INFORMATION GRID
+========================================= */
+
+.informationGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.informationCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  min-height: 100px;
+  padding: 18px;
+  border: 1px solid #e0e5eb;
+  border-radius: 12px;
+  background: #f7f8fa;
+}
+
+.informationCard span {
+  margin-bottom: 10px;
+  color: #788493;
+  font-size: 12px;
+  font-weight: 750;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.informationCard strong {
+  color: #34465a;
+  font-size: 15px;
+  font-weight: 650;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+/* =========================================
+   DESCRIPTION
+========================================= */
+
+.descriptionCard {
+  padding: 22px;
+  border: 1px solid #e0e5eb;
+  border-radius: 12px;
+  background: #f7f8fa;
+}
+
+.descriptionCard p {
+  margin: 0;
+  color: #647386;
+  font-size: 14px;
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+  white-space: pre-line;
+}
+
+/* =========================================
+   OFFICIAL WEBSITE LINK
+========================================= */
+
+.officialLink {
+  display: inline-flex;
+  margin-top: 20px;
+  color: #1769bb;
+  font-size: 14px;
+  font-weight: 750;
+  text-decoration: none;
+}
+
+.officialLink:hover {
+  text-decoration: underline;
+}
+
+/* =========================================
+   DOCUMENT CARD
+========================================= */
+
+.documentCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 22px;
+  border: 1px solid #e0e5eb;
+  border-radius: 12px;
+  background: #f7f8fa;
+}
+
+.documentCard h3 {
+  margin: 0 0 8px;
+  color: #34465a;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.documentCard p {
+  margin: 0;
+  color: #788493;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.documentButton {
+  flex-shrink: 0;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  background: #1769bb;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.documentButton:hover {
+  background: #105594;
+}
+
+/* =========================================
+   FAQ
+========================================= */
+
+.faqItem {
+  margin-bottom: 12px;
+  overflow: hidden;
+  border: 1px solid #e0e5eb;
+  border-radius: 10px;
+  background: #ffffff;
+}
+
+.faqQuestion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  width: 100%;
+  min-height: 58px;
+  padding: 15px 18px;
+  border: none;
+  background: #ffffff;
+  color: #34465a;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 650;
+  text-align: left;
+  cursor: pointer;
+}
+
+.faqQuestion:hover {
+  background: #f7f9fc;
+}
+
+.faqIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #eef2ff;
+  color: #7055b7;
+  font-size: 20px;
+  transition: transform 0.2s ease;
+}
+
+.faqIconOpen {
+  transform: rotate(45deg);
+}
+
+.faqAnswer {
+  padding: 0 18px 18px;
+  color: #647386;
+  font-size: 14px;
+  line-height: 1.8;
+  white-space: pre-line;
+}
+
+/* =========================================
+   POPULAR SCHOLARSHIPS
+========================================= */
+
+.popularGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.popularCard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid #e0e5eb;
+  border-radius: 10px;
+  background: #f7f8fa;
+  color: #34465a;
+  text-decoration: none;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.popularCard:hover {
+  border-color: #b9d5f5;
+  background: #eef6ff;
+  transform: translateY(-2px);
+}
+
+.popularNumber {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #7650b8;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.popularCard strong {
+  color: #34465a;
+  font-size: 14px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.popularLink {
+  color: #1769bb;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+/* =========================================
+   APPLICATION MODAL
+========================================= */
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  overflow-y: auto;
+  background: rgba(10, 25, 45, 0.65);
+  backdrop-filter: blur(4px);
+}
+
+.modalBox {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  padding: 30px;
+  overflow-y: auto;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+.modalClose {
+  position: absolute;
+  top: 12px;
+  right: 15px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  background: #f1f4f8;
+  color: #526174;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.modalTitle {
+  margin: 0 0 25px;
+  color: #347bbd;
+  font-size: 23px;
+  font-weight: 750;
+}
+
+.modalForm {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.formGroup label {
+  color: #526174;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.formGroup input,
+.formGroup select {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid #dce3ec;
+  border-radius: 8px;
+  outline: none;
+  background: #ffffff;
+  color: #34465a;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.formGroup input:focus,
+.formGroup select:focus {
+  border-color: #5878dc;
+  box-shadow: 0 0 0 3px rgba(88, 120, 220, 0.12);
+}
+
+.formGroup input[readonly] {
+  background: #f5f7fa;
+}
+
+/* =========================================
+   MODAL BUTTONS
+========================================= */
+
+.modalButtons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.cancelBtn,
+.submitBtn {
+  min-width: 100px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.cancelBtn {
+  background: #eef1f5;
+  color: #526174;
+}
+
+.submitBtn {
+  background: #1769bb;
+  color: #ffffff;
+}
+
+.submitBtn:hover {
+  background: #105594;
+}
+
+.submitBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* =========================================
+   LOADING AND EMPTY STATES
+========================================= */
+
+.loadingState,
+.emptyState {
+  padding: 60px 20px;
+  color: #647386;
+  font-size: 16px;
+  text-align: center;
+}
+
+.emptyState button {
+  margin-top: 15px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  background: #1769bb;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.emptyText {
+  color: #788493;
+  font-size: 14px;
+}
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 1100px) {
+  .detailsPage {
+    padding: 15px;
+  }
+
+  .scholarshipProfile {
+    grid-template-columns: 240px minmax(0, 1fr);
+  }
+
+  .profileSidebar {
+    width: 240px;
+    padding: 16px 12px;
+  }
+
+  .profileSection {
+    padding: 24px;
+  }
+
+  .informationGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 700px) {
+  .detailsPage {
+    padding: 10px;
+  }
+
+  .scholarshipProfile {
+    grid-template-columns: 145px minmax(0, 1fr);
+    min-height: auto;
+    border-radius: 12px;
+  }
+
+  .profileSidebar {
+    min-height: auto;
+    width: 145px;
+    padding: 12px 8px;
+  }
+
+  .sidebarHeader {
+    padding: 0 4px;
+  }
+
+  .sidebarBack {
+    margin-bottom: 10px;
+    padding: 6px;
+    font-size: 11px;
+  }
+
+  .sidebarIdentity {
+    padding: 0 3px;
+  }
+
+  .scholarshipInitial {
+    width: 45px;
+    height: 45px;
+    margin-bottom: 8px;
+    font-size: 20px;
+  }
+
+  .sidebarIdentity h2 {
+    font-size: 12px;
+    line-height: 1.35;
+  }
+
+  .sidebarIdentity p {
+    margin: 4px 0 6px;
+    font-size: 10px;
+  }
+
+  .sidebarBadge {
+    min-height: 22px;
+    margin-bottom: 12px;
+    padding: 4px 9px;
+    font-size: 9px;
+  }
+
+  .sidebarNavigation {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .sidebarItem {
+    gap: 6px;
+    min-height: 31px;
+    padding: 5px 6px;
+    border-radius: 5px;
+    font-size: 10px;
+  }
+
+  .sidebarNumber {
+    flex-basis: 18px;
+    width: 18px;
+    height: 18px;
+    font-size: 9px;
+  }
+
+  .sidebarLabel {
+    font-size: 10px;
+  }
+
+  .sidebarApplyBtn {
+    min-height: 34px;
+    margin-top: 8px;
+    padding: 6px 8px;
+    font-size: 11px;
+  }
+
+  .profileTopbar {
+    min-height: 75px;
+    padding: 18px;
+  }
+
+  .profileTopbar h1 {
+    font-size: 15px;
+  }
+
+  .profileSection {
+    padding: 20px;
+  }
+
+  .sectionHeading {
+    font-size: 20px;
+  }
+
+  .informationGrid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .informationCard {
+    min-height: 85px;
+  }
+
+  .popularGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .documentCard {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .documentButton {
+    width: 100%;
+  }
+
+  .modalBox {
+    padding: 25px 20px;
+  }
+}
+
+/* =========================================
+   SMALL MOBILE
+========================================= */
+
+@media (max-width: 380px) {
+  .sidebarNavigation {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .profileTopbar {
+    align-items: flex-start;
+  }
+
+  .profileSection {
+    padding: 16px;
+  }
+
+  .modalButtons {
+    flex-direction: column;
+  }
+
+  .modalButtons button {
+    width: 100%;
+  }
+}

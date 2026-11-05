@@ -37,6 +37,11 @@ import {
   ListChecks,
 } from "lucide-react";
 
+import {
+  brandedMetadataTitle,
+  canonicalMetadata,
+  cleanMetadataText,
+} from "../../seo-utils";
 import styles from "./page.module.css";
 
 const iconMap = {
@@ -667,8 +672,29 @@ function Icon({ name, size = 22 }) {
   return <IconComponent size={size} strokeWidth={2} />;
 }
 
+export async function generateMetadata({ params }) {
+  const { slug } = await params;
+  const page = pages[slug];
+
+  if (!page) {
+    return {
+      ...canonicalMetadata(`/useful-links/${encodeURIComponent(slug || "")}`),
+      title: brandedMetadataTitle("Study Abroad Resource"),
+      description:
+        "Browse Wayabroad resources for study abroad courses, scholarships, university admissions and international student planning.",
+    };
+  }
+
+  return {
+    ...canonicalMetadata(`/useful-links/${encodeURIComponent(slug)}`),
+    title: brandedMetadataTitle(page.title),
+    description: cleanMetadataText(page.description),
+  };
+}
+
 export default async function UsefulLinksPage({ params }) {
-  const page = pages[params.slug];
+  const { slug } = await params;
+  const page = pages[slug];
 
   if (!page) {
     return (
