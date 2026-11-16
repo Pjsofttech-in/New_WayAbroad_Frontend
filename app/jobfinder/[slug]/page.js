@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import styles from "../jobfinder.module.css";
 import { getJobById, getAllJobs, applyForJob } from "../../services/api";
+import { getCountryName } from "../job-utils";
 
 const EMPTY_APPLICATION = {
   applicantName: "",
@@ -278,7 +279,9 @@ export default function JobDetailsPage() {
                   </h3>
 
                   <p>
-                    {relatedJob.sectorName || "Career opportunity"}
+                    {relatedJob.sectorName ||
+                      getCountryName(relatedJob) ||
+                      "Career opportunity"}
                   </p>
 
                   <span>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "../jobfinder/jobfinder.module.css";
 
@@ -14,6 +14,7 @@ import {
   getAllJobRoles,
   getAllJobWorkTypes,
 } from "../services/api";
+import { getCountryName } from "../jobfinder/job-utils";
 
 const JOBS_PER_PAGE = 9;
 
@@ -100,33 +101,12 @@ function getLocationName(job) {
   );
 }
 
-function getCountryName(job) {
-  const country = job?.country;
-
-  if (typeof country === "string") {
-    return job?.countryName || country;
-  }
-
-  return (
-    job?.countryName ||
-    country?.countryName ||
-    country?.name ||
-    job?.location?.countryName ||
-    job?.location?.country?.countryName ||
-    job?.location?.country?.name ||
-    (typeof job?.location?.country === "string"
-      ? job.location.country
-      : "") ||
-    ""
-  );
-}
-
 function getCompanyName(job) {
   return (
     job?.companyName ||
     job?.company?.name ||
     job?.employerName ||
-    "Career opportunity"
+    ""
   );
 }
 
@@ -318,6 +298,166 @@ function matchesText(value, selected) {
       : String(value);
 
   return actual.trim().toLowerCase() === selected.trim().toLowerCase();
+}
+
+function SearchableFilter({ label, value, options = [], onChange }) {
+  const id = useId();
+  const wrapperRef = useRef(null);
+  const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const filterOptions = [
+    { label, value: "" },
+    ...options.map((option) => {
+      if (typeof option === "string" || typeof option === "number") {
+        const value = String(option);
+        return { label: value, value };
+      }
+
+      return {
+        label: String(option.label),
+        value: String(option.value),
+      };
+    }),
+  ];
+  const visibleOptions = filterOptions.filter((option) =>
+    option.label.toLowerCase().includes(query.trim().toLowerCase())
+  );
+  const selectedOption = filterOptions.find(
+    (option) => option.value === value
+  );
+  const selectedIndex = Math.max(
+    filterOptions.findIndex((option) => option.value === value),
+    0
+  );
+
+  useEffect(() => {
+    if (!open) return;
+
+    const handleOutsideClick = (event) => {
+      if (!wrapperRef.current?.contains(event.target)) {
+        setOpen(false);
+        setQuery("");
+        setActiveIndex(0);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+    document.addEventListener("touchstart", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+      document.removeEventListener("touchstart", handleOutsideClick);
+    };
+  }, [open]);
+
+  const selectOption = (option) => {
+    onChange(option.value);
+    setOpen(false);
+    setQuery("");
+    setActiveIndex(0);
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      if (!open) {
+        setOpen(true);
+        setQuery("");
+        setActiveIndex(0);
+      } else if (visibleOptions.length > 0) {
+        setActiveIndex((index) =>
+          Math.min(index + 1, visibleOptions.length - 1)
+        );
+      }
+    } else if (event.key === "ArrowUp" && open) {
+      event.preventDefault();
+      setActiveIndex((index) => Math.max(index - 1, 0));
+    } else if (
+      event.key === "Enter" &&
+      open &&
+      visibleOptions[activeIndex]
+    ) {
+      event.preventDefault();
+      selectOption(visibleOptions[activeIndex]);
+    } else if (event.key === "Escape" && open) {
+      event.preventDefault();
+      setOpen(false);
+      setQuery("");
+      setActiveIndex(0);
+    } else if (event.key === "Tab") {
+      setOpen(false);
+      setQuery("");
+      setActiveIndex(0);
+    }
+  };
+
+  return (
+    <div
+      ref={wrapperRef}
+      className={styles.selectWrapper}
+      onFocus={() => {
+        setOpen(true);
+        setQuery("");
+        setActiveIndex(selectedIndex);
+      }}
+    >
+      <input
+        type="text"
+        className={styles.searchableFilterInput}
+        role="combobox"
+        aria-label={label}
+        aria-autocomplete="list"
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        aria-controls={`${id}-options`}
+        aria-activedescendant={
+          open && visibleOptions[activeIndex]
+            ? `${id}-option-${activeIndex}`
+            : undefined
+        }
+        autoComplete="off"
+        value={open ? query : selectedOption?.label || ""}
+        placeholder={open ? `Search ${label.toLowerCase()}` : label}
+        onChange={(event) => {
+          setQuery(event.target.value);
+          setActiveIndex(0);
+          setOpen(true);
+        }}
+        onKeyDown={handleKeyDown}
+      />
+      <span className={styles.filterChevron} aria-hidden="true" />
+
+      {open && (
+        <ul
+          id={`${id}-options`}
+          className={styles.filterDropdown}
+          role="listbox"
+          aria-label={`${label} options`}
+        >
+          {visibleOptions.length > 0 ? (
+            visibleOptions.map((option, index) => (
+              <li
+                id={`${id}-option-${index}`}
+                key={`${option.value}-${option.label}`}
+                className={`${styles.filterOption} ${
+                  index === activeIndex ? styles.filterOptionActive : ""
+                }`}
+                role="option"
+                aria-selected={option.value === value}
+                onClick={() => selectOption(option)}
+              >
+                {option.label}
+              </li>
+            ))
+          ) : (
+            <li className={styles.filterEmpty}>No matching options</li>
+          )}
+        </ul>
+      )}
+    </div>
+  );
 }
 
 /* =========================================
@@ -687,17 +827,6 @@ export default function JobSearchHeader() {
   };
 
   /* =========================================
-     RENDER STRING OPTIONS
-  ========================================= */
-
-  const renderOptions = (values) =>
-    values.map((value) => (
-      <option key={value} value={value}>
-        {value}
-      </option>
-    ));
-
-  /* =========================================
      RENDER COMPONENT
   ========================================= */
 
@@ -766,134 +895,76 @@ export default function JobSearchHeader() {
 
           {/* Location filter — country dependent */}
 
-          <label className={styles.selectWrapper}>
-            <span className={styles.visuallyHidden}>Location</span>
-
-            <select
-              value={location}
-              onChange={(event) => {
-                setLocation(event.target.value);
-                setCurrentPage(1);
-              }}
-              aria-label="Filter jobs by location"
-            >
-              <option value="">Locations</option>
-
-              {filteredLocations.map((item, index) => {
-                const locationName = getLocationOptionName(item);
-
-                if (!locationName) return null;
-
-                return (
-                  <option
-                    key={item?.id ?? `${locationName}-${index}`}
-                    value={locationName}
-                  >
-                    {locationName}
-                  </option>
-                );
-              })}
-            </select>
-          </label>
+          <SearchableFilter
+            label="Locations"
+            value={location}
+            options={filteredLocations
+              .map(getLocationOptionName)
+              .filter(Boolean)}
+            onChange={(value) => {
+              setLocation(value);
+              setCurrentPage(1);
+            }}
+          />
 
           {/* Education */}
 
-          <label className={styles.selectWrapper}>
-            <span className={styles.visuallyHidden}>Education</span>
-
-            <select
-              value={filters.education}
-              onChange={(event) =>
-                updateFilter("education", event.target.value)
-              }
-            >
-              <option value="">Education</option>
-              {renderOptions(educations)}
-            </select>
-          </label>
+          <SearchableFilter
+            label="Education"
+            value={filters.education}
+            options={educations}
+            onChange={(value) => updateFilter("education", value)}
+          />
 
           {/* Sector */}
 
-          <label className={styles.selectWrapper}>
-            <span className={styles.visuallyHidden}>Sector</span>
-
-            <select
-              value={filters.sector}
-              onChange={(event) =>
-                updateFilter("sector", event.target.value)
-              }
-            >
-              <option value="">Sectors</option>
-              {renderOptions(sectors)}
-            </select>
-          </label>
+          <SearchableFilter
+            label="Sectors"
+            value={filters.sector}
+            options={sectors}
+            onChange={(value) => updateFilter("sector", value)}
+          />
 
           {/* Job Type */}
 
-          <label className={styles.selectWrapper}>
-            <span className={styles.visuallyHidden}>Job type</span>
-
-            <select
-              value={filters.jobType}
-              onChange={(event) =>
-                updateFilter("jobType", event.target.value)
-              }
-            >
-              <option value="">Job Types</option>
-              {renderOptions(jobTypes)}
-            </select>
-          </label>
+          <SearchableFilter
+            label="Job Types"
+            value={filters.jobType}
+            options={jobTypes}
+            onChange={(value) => updateFilter("jobType", value)}
+          />
 
           {/* Job Role */}
 
-          <label className={styles.selectWrapper}>
-            <span className={styles.visuallyHidden}>Job role</span>
-
-            <select
-              value={filters.role}
-              onChange={(event) =>
-                updateFilter("role", event.target.value)
-              }
-            >
-              <option value="">Job Roles</option>
-              {renderOptions(roles)}
-            </select>
-          </label>
+          <SearchableFilter
+            label="Job Roles"
+            value={filters.role}
+            options={roles}
+            onChange={(value) => updateFilter("role", value)}
+          />
 
           {/* Work Type */}
 
-          <label className={styles.selectWrapper}>
-            <span className={styles.visuallyHidden}>Work type</span>
-
-            <select
-              value={filters.workType}
-              onChange={(event) =>
-                updateFilter("workType", event.target.value)
-              }
-            >
-              <option value="">Work Types</option>
-              {renderOptions(workTypes)}
-            </select>
-          </label>
+          <SearchableFilter
+            label="Work Types"
+            value={filters.workType}
+            options={workTypes}
+            onChange={(value) => updateFilter("workType", value)}
+          />
 
           {/* Salary */}
 
-          <label className={styles.salarySelect}>
-            <span className={styles.visuallyHidden}>Salary range</span>
-
-            <select
-              value={filters.salary}
-              onChange={(event) =>
-                updateFilter("salary", event.target.value)
-              }
-            >
-              <option value="">Salary</option>
-              <option value="under50000">Below 50,000</option>
-              <option value="50000">50,000+</option>
-              <option value="100000">1,00,000+</option>
-              <option value="150000">1,50,000+</option>
-            </select>
-          </label>
+          <SearchableFilter
+            label="Salary"
+            value={filters.salary}
+            options={[
+              { value: "under50000", label: "Below 50,000" },
+              { value: "50000", label: "50,000+" },
+              { value: "100000", label: "1,00,000+" },
+              { value: "150000", label: "1,50,000+" },
+            ]}
+            onChange={(value) => updateFilter("salary", value)}
+          />
 
           {/* Clear filters */}
 
@@ -982,6 +1053,9 @@ export default function JobSearchHeader() {
               {visibleJobs.map((job) => {
                 const saved = savedJobIds.includes(job.id);
                 const skills = getSkills(job);
+                const companyName = getCompanyName(job);
+                const cardSubtitle =
+                  companyName || getCountryName(job) || "Career opportunity";
 
                 return (
                   <article className={styles.jobCard} key={job.id}>
@@ -989,14 +1063,14 @@ export default function JobSearchHeader() {
 
                     <div className={styles.jobCardTop}>
                       <div className={styles.companyLogo}>
-                        {getCompanyName(job).charAt(0).toUpperCase()}
+                        {cardSubtitle.charAt(0).toUpperCase()}
                       </div>
 
                       <div className={styles.jobTitleBlock}>
                         <h3>{job.jobTitle || "Untitled Job"}</h3>
 
                         <p className={styles.companyName}>
-                          {getCompanyName(job)}
+                          {cardSubtitle}
                         </p>
                       </div>
 
