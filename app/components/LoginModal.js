@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState, useEffect } from "react";
 import { X } from "lucide-react";
 
@@ -397,9 +398,12 @@ export default function LoginModal({
           {/* ================= LEFT SIDE ================= */}
 
           <div className={styles.leftSide}>
-            <img
+            <Image
               src="/images/signup-image.jpg"
               alt="Study Abroad"
+              width={800}
+              height={534}
+              sizes="(max-width: 600px) 300px, 320px"
               className={
                 styles.accountImage
               }

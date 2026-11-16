@@ -17,6 +17,7 @@ import {
   brandedMetadataTitle,
   canonicalMetadata,
 } from "../../seo-utils";
+import BreadcrumbJsonLd from "../../components/BreadcrumbJsonLd";
 
 import styles from "../[slug]/page.module.css";
 
@@ -94,6 +95,12 @@ export default function HowToFindScholarshipsPage() {
 
   return (
     <main className={styles.page}>
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Home", path: "/" },
+          { name: page.title, path: "/useful-links/how-to-find-scholarships" },
+        ]}
+      />
       <section className={styles.hero}>
         <div className={styles.heroInner}>
           <h1>

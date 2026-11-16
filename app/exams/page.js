@@ -1,5 +1,7 @@
 import Link from "next/link";
 import styles from "./exams.module.css";
+import JsonLd from "../components/JsonLd";
+import { createBreadcrumbSchema } from "../structured-data";
 
 const exams = [
   {
@@ -47,6 +49,12 @@ const exams = [
 export default function ExamsPage() {
   return (
     <main className={styles.examsPage}>
+      <JsonLd
+        data={createBreadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Exams", path: "/exams" },
+        ])}
+      />
       <section className={styles.examsSection}>
         <div className={styles.container}>
 

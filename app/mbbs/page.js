@@ -1,4 +1,7 @@
+import Link from "next/link";
 import styles from "./mbbs.module.css";
+import JsonLd from "../components/JsonLd";
+import { createBreadcrumbSchema } from "../structured-data";
 
 const countries = [
   "Kyrgyzstan",
@@ -18,25 +21,28 @@ const countries = [
 export default function MBBSPage() {
   return (
     <main className={styles.mbbsPage}>
+      <JsonLd
+        data={createBreadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "MBBS Abroad", path: "/mbbs" },
+        ])}
+      />
       <section className={styles.mbbsSection}>
         <div className={styles.container}>
           <h1>Study MBBS Abroad</h1>
 
           <div className={styles.description}>
             <p>
-              Pursuing MBBS in foreign countries has become a popular choice
-              for students due to affordable fees, global exposure, and
-              high-quality education. Countries like Russia, Kazakhstan, and
-              the UK offer world-class medical universities with
-              internationally recognized degrees.
+              Students considering medical studies abroad should compare
+              admission requirements, total costs, degree recognition, and
+              licensing rules using current information from official
+              institutions and regulators.
             </p>
 
             <p>
-              At WayAbroad, we guide you through the entire journey — from
-              selecting the right country and university to visa processing,
-              admission support, and post-arrival assistance. Our expert team
-              ensures a smooth and hassle-free experience so you can focus on
-              achieving your dream of becoming a doctor.
+              Wayabroad provides guidance with university selection,
+              admissions, and visa preparation. Requirements vary by
+              destination and institution, so confirm details before applying.
             </p>
           </div>
 
@@ -46,6 +52,10 @@ export default function MBBSPage() {
                 {country}
               </div>
             ))}
+          </div>
+
+          <div className={styles.consultationCta}>
+            <Link href="/counselling">Discuss MBBS abroad options</Link>
           </div>
         </div>
       </section>

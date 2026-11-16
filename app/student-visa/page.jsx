@@ -1,19 +1,21 @@
 import InfoPage from "../components/InfoPage/InfoPage";
 import styles from "../components/InfoPage/InfoPage.module.css";
+import Link from "next/link";
 
 export default function StudentVisaPage() {
   return (
     <InfoPage
       title="Student Visa Application Assistance"
       subtitle="Need to apply for a visa? Here's all you need to know"
+      breadcrumbPath="/student-visa"
     >
       <section className={styles.section}>
         <h2>Need to apply for a visa?</h2>
 
         <p>
-          A student visa is an endorsement by immigration authorities on your
-          passport. It indicates that you are allowed to enter and stay in a
-          country to study for a specified period.
+          A student visa or permit is the immigration authorization or status
+          required to study in a destination country. Its name, format, and
+          conditions vary by country.
         </p>
       </section>
 
@@ -47,7 +49,7 @@ export default function StudentVisaPage() {
           study.
         </p>
 
-        <p>Most students will require evidence of:</p>
+        <p>Depending on the destination, applicants may be asked for:</p>
 
         <ul className={styles.list}>
           <li>Enrolment in a recognised educational institution.</li>
@@ -75,19 +77,32 @@ export default function StudentVisaPage() {
 
         <p>
           Our expert team can guide students throughout the visa application
-          process and help them understand the latest visa requirements and
-          conditions.
+          process and help them organise application documents. Requirements
+          and conditions change and vary by destination; check the relevant
+          immigration authority for current rules.
         </p>
 
         <p>
-          We can help you prepare the required documents and direct you to
-          official sources and authorised immigration representatives.
+          Wayabroad can help students find official information. Immigration
+          advice or representation should be obtained from an appropriately
+          authorised professional where required.
         </p>
 
         <p>
-          To reduce your hassle, we can also help with document certification,
-          translation and courier support where applicable.
+          Ask a counsellor whether document certification, translation, or
+          courier support is available for your case.
         </p>
+      </section>
+
+      <section className={styles.section}>
+        <h2>Discuss your student visa preparation</h2>
+        <p>
+          Contact Wayabroad to ask about study-abroad counselling and
+          application support.
+        </p>
+        <Link href="/counselling" className={styles.button}>
+          Book a counselling appointment
+        </Link>
       </section>
     </InfoPage>
   );

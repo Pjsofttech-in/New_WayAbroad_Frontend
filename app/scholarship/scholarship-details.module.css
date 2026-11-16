@@ -113,7 +113,7 @@
   font-weight: 800;
 }
 
-.sidebarIdentity h2 {
+.sidebarName {
   margin: 0;
   color: #ffffff;
   font-size: 16px;
@@ -790,7 +790,7 @@
     font-size: 20px;
   }
 
-  .sidebarIdentity h2 {
+  .sidebarName {
     font-size: 12px;
     line-height: 1.35;
   }

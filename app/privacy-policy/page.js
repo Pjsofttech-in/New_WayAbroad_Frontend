@@ -90,6 +90,7 @@ export default function PrivacyPolicyPage() {
   return (
     <LegalPage
       title="Privacy Policy"
+      breadcrumbPath="/privacy-policy"
       sections={sections}
     />
   );

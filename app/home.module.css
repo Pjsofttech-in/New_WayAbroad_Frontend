@@ -91,31 +91,34 @@
   padding: 50px 5%;
 }
 
-.journey h3 {
+.journey h2 {
   font-size: 20px;
   margin-bottom: 30px;
   color: #263654;
 }
 
-.journey h3 span {
+.journey h2 span {
   color: #4b84ae;
   font-weight: 500;
   margin-left: 6px;
 }
 
 .journey > div {
-  display: flex;
-  justify-content: center;
-  gap: 60px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  max-width: 1100px;
+  margin: 0 auto;
+  gap: 24px;
 }
 
 .journey article {
   display: grid;
   gap: 6px;
+  padding: 8px;
 }
 
 .journey b {
-  font-size: 30px;
+  font-size: 18px;
   color: #1f3153;
 }
 
@@ -351,6 +354,23 @@
 
 .servicegrid button {
   margin-top: 8px;
+}
+
+.servicegrid .serviceButton {
+  display: inline-block;
+  margin-top: 8px;
+  border: 1px solid #4b6594;
+  border-radius: 6px;
+  padding: 8px 16px;
+  color: #45608f;
+  font-size: 14px;
+  text-decoration: none;
+  transition: 0.3s ease;
+}
+
+.servicegrid .serviceButton:hover {
+  background: #45608f;
+  color: #ffffff;
 }
 
 /* ================================
@@ -680,12 +700,11 @@
   }
 
   .journey > div {
-    flex-wrap: wrap;
     gap: 25px;
   }
 
   .journey b {
-    font-size: 25px;
+    font-size: 18px;
   }
 
   .universities {

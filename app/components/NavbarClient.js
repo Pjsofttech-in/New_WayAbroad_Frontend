@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
 
 import {
@@ -17,7 +18,10 @@ import {
 } from "lucide-react";
 
 import styles from "./Navbar.module.css";
-import LoginModal from "./LoginModal";
+
+const LoginModal = dynamic(() => import("./LoginModal"), {
+  ssr: false,
+});
 
 const nav = [
   "Home",

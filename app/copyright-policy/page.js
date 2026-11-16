@@ -82,6 +82,7 @@ export default function CopyrightPolicyPage() {
   return (
     <LegalPage
       title="Copyright Policy"
+      breadcrumbPath="/copyright-policy"
       sections={sections}
     />
   );

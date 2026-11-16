@@ -331,7 +331,7 @@ export default function ScholarshipDetails() {
   if (!scholarship) {
     return (
       <div className={styles.emptyState}>
-        <h2>Scholarship not found</h2>
+        <h1>Scholarship not found</h1>
 
         <button
           type="button"
@@ -371,9 +371,9 @@ export default function ScholarshipDetails() {
 
             <div className={styles.sidebarIdentity}>
 
-              <h2>
+              <div className={styles.sidebarName}>
                 {scholarship.sname || "Scholarship"}
-              </h2>
+              </div>
 
               <p>Scholarship Profile</p>
 

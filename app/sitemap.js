@@ -1,14 +1,28 @@
-import { getAllCountries } from "./services/api";
-import { normalizeCountryRecords } from "./services/study-abroad";
+import { getAllBlogs, getAllCountries } from "./services/api";
+import {
+  getStudyAbroadByCountry,
+  normalizeCountryRecords,
+} from "./services/study-abroad";
+import { courseStreams } from "./data/courses";
+import exams from "./data/exams";
+
+const siteUrl = "https://www.wayabroad.in";
+
+export const dynamic = "force-dynamic";
 
 const publicRoutes = [
   "/",
   "/mbbs",
   "/courses",
+  "/course-finder",
   "/exams",
   "/scholarships",
   "/blog",
   "/about",
+  "/about/living-abroad-support",
+  "/about/study-abroad-counselling",
+  "/about/what-we-do",
+  "/about/why-choose-us",
   "/contact",
   "/counselling",
   "/counselling-office",
@@ -17,8 +31,8 @@ const publicRoutes = [
   "/instant-offer",
   "/organization",
   "/student-visa",
-  "/student-testimonial",
   "/trusted-students",
+  "/job-finder",
   "/useful-links/ask-wayabroad",
   "/useful-links/cost-of-living",
   "/useful-links/how-to-find-course",
@@ -34,28 +48,33 @@ const publicRoutes = [
   "/data-protection-addendum",
 ];
 
-const examRoutes = [
-  "act",
-  "sat",
-  "gre",
-  "gmat",
-  "ielts",
-  "toefl",
-  "lsat",
-  "mcat",
-  "pte",
-  "duolingo",
-];
+function unwrapBlogs(response) {
+  if (Array.isArray(response)) return response;
+  if (Array.isArray(response?.data)) return response.data;
+  if (Array.isArray(response?.content)) return response.content;
+  if (Array.isArray(response?.blogs)) return response.blogs;
+  return [];
+}
 
-// Use your actual production domain
-const siteUrl = "https://www.wayabroad.in";
+function getBlogSlug(blog) {
+  const slug = blog?.slug || blog?.blogSlug;
+  if (typeof slug === "string" && slug.trim()) {
+    return slug.trim();
+  }
 
-export default async function sitemap() {
-  const routes = [
-    ...publicRoutes,
-    ...examRoutes.map((slug) => `/exams/${slug}`),
-  ];
-  let countries = [];
+  return String(blog?.title || "")
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+function isValidBlogSlug(slug) {
+  return /^[a-z0-9]+(?:-[a-z0-9]+)*$/i.test(slug);
+}
+
+async function getValidCountryRoutes() {
+  let countries;
 
   try {
     const response = await getAllCountries({
@@ -65,39 +84,80 @@ export default async function sitemap() {
     countries = normalizeCountryRecords(response);
   } catch (error) {
     console.error("Failed to load country routes for sitemap:", error);
+    return [];
   }
 
+  const results = await Promise.all(
+    countries.map(async ({ id }) => {
+      if (/[/?#\\]/.test(id) || id === "." || id === "..") {
+        return null;
+      }
+
+      try {
+        await getStudyAbroadByCountry(id);
+        return `/study-abroad/${encodeURIComponent(id)}`;
+      } catch (error) {
+        console.error(
+          `Skipping unavailable country guide in sitemap (${id}):`,
+          error
+        );
+        return null;
+      }
+    })
+  );
+
+  return results.filter(Boolean);
+}
+
+async function getBlogRoutes() {
+  try {
+    const blogs = unwrapBlogs(await getAllBlogs());
+
+    return blogs
+      .map(getBlogSlug)
+      .filter(isValidBlogSlug)
+      .map((slug) => `/blog/${encodeURIComponent(slug)}`);
+  } catch (error) {
+    console.error("Failed to load blog routes for sitemap:", error);
+    return [];
+  }
+}
+
+export default async function sitemap() {
+  const [countryRoutes, blogRoutes] = await Promise.all([
+    getValidCountryRoutes(),
+    getBlogRoutes(),
+  ]);
+  const routes = [
+    ...publicRoutes,
+    ...Object.keys(exams).map((slug) => `/exams/${slug}`),
+    ...courseStreams.map((stream) => `/stream/${stream.slug}`),
+    ...blogRoutes,
+    ...countryRoutes,
+  ];
+  const uniqueRoutes = [...new Set(routes)];
   const now = new Date();
 
-  const entries = [
-    ...routes.map((route) => ({ route, priority: undefined })),
-    ...countries.map(({ id }) => ({
-      route: `/study-abroad/${encodeURIComponent(id)}`,
-      priority: 0.8,
-    })),
-  ];
-  const uniqueEntries = [
-    ...new Map(entries.map((entry) => [entry.route, entry])).values(),
-  ];
-
-  return uniqueEntries.map(({ route, priority }) => ({
+  return uniqueRoutes.map((route) => ({
     url: `${siteUrl}${route}`,
     lastModified: now,
     changeFrequency:
       route === "/" ||
       route === "/blog" ||
+      route.startsWith("/blog/") ||
       route === "/scholarships"
         ? "daily"
         : "weekly",
     priority:
-      priority ??
-      (route === "/"
+      route === "/"
         ? 1
         : route === "/courses" ||
             route === "/exams" ||
             route === "/scholarships" ||
             route === "/mbbs"
           ? 0.9
-          : 0.7),
+          : route.startsWith("/study-abroad/")
+            ? 0.8
+            : 0.7,
   }));
 }

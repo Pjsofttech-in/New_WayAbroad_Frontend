@@ -20,14 +20,10 @@ export default function BecomePartner() {
   });
 
   const features = [
-    "Personalized solutions",
-    "All-in-one channel integrations",
-    "Boosted partner revenues",
-    "Premium quality software solutions",
-    "Support across various branches",
-    "Robust security features",
-    "Top-tier retail solutions",
-    "Multi-module integrated platform",
+    "Share your organization details",
+    "Provide a contact name and email",
+    "Tell us your city",
+    "Submit a partnership inquiry",
   ];
 
   const handleChange = (e) => {
@@ -110,13 +106,14 @@ export default function BecomePartner() {
         <div className={styles.heroOverlay}></div>
 
         <div className={styles.heroContent}>
-          <h1>Become a Part of</h1>
+          <h1>Discuss a Partnership with</h1>
 
-          <h2>Official Channel Partner</h2>
+          <h2>Wayabroad</h2>
 
           <p>
-            Achieve Boundless Growth, Endless Profits, and Partnership
-            Opportunities with Wayabroad.
+            Share your organization details and partnership interest through
+            the inquiry form. Review any proposed scope and terms before
+            making a commitment.
           </p>
 
           <button
@@ -124,7 +121,7 @@ export default function BecomePartner() {
             className={styles.heroButton}
             onClick={() => setShowForm(true)}
           >
-            BECOME A PARTNER
+            SEND A PARTNER INQUIRY
           </button>
         </div>
       </section>
@@ -135,7 +132,7 @@ export default function BecomePartner() {
         <div className={styles.partnerImageCard}>
           <Image
             src="/images/partner-illustration.png"
-            alt="WayAbroad Authorized Partner Illustration"
+            alt="Illustration for the Wayabroad partner inquiry page"
             width={800}
             height={650}
             className={styles.partnerImage}
@@ -154,8 +151,9 @@ export default function BecomePartner() {
           <h2>Partner Program Opportunities</h2>
 
           <p className={styles.intro}>
-            By joining us as a Channel Partner, you unlock access to advanced
-            software solutions and a dependable partner focused on your growth.
+            The options below describe the partner inquiry types currently
+            listed on this page. Contact Wayabroad to confirm availability,
+            scope, and terms.
           </p>
 
           <div className={styles.opportunityList}>
@@ -164,17 +162,16 @@ export default function BecomePartner() {
               <h3>Implementation Associate</h3>
 
               <p>
-                Responsible for onboarding and implementing Wayabroad
-                solutions.
+                Ask about opportunities related to onboarding and
+                implementation.
               </p>
             </div>
 
             <div className={styles.opportunity}>
-              <h3>Certified Partner</h3>
+              <h3>Sales and Implementation Partner</h3>
 
               <p>
-                Facilitate sales closures and manage implementation
-                lifecycle.
+                Ask about the scope and requirements for this partner type.
               </p>
             </div>
 
@@ -182,20 +179,20 @@ export default function BecomePartner() {
               <h3>Referral Partner</h3>
 
               <p>
-                Refer clients and expand Wayabroad reach.
+                Ask about referral arrangements and applicable terms.
               </p>
             </div>
 
           </div>
 
-          {/* START EARNING NOW */}
+          {/* PARTNER INQUIRY */}
 
           <button
             type="button"
             className={styles.earningButton}
             onClick={() => setShowForm(true)}
           >
-            START EARNING NOW
+            SEND A PARTNER INQUIRY
           </button>
         </div>
       </section>
@@ -204,7 +201,7 @@ export default function BecomePartner() {
 
       <section className={styles.featuresSection}>
         <div className={styles.container}>
-          <h2>Essential Features of Our Partner Program</h2>
+          <h2>Information for a Partner Inquiry</h2>
 
           <div className={styles.featuresGrid}>
             {features.map((feature) => (
@@ -226,53 +223,24 @@ export default function BecomePartner() {
             className={styles.partnerButton}
             onClick={() => setShowForm(true)}
           >
-            BECOME A PARTNER
+            SEND A PARTNER INQUIRY
           </button>
         </div>
       </section>
 
-      {/* ================= SUCCESS HIGHLIGHTS ================= */}
+      {/* ================= PARTNER INQUIRY INFORMATION ================= */}
 
       <section
         className={styles.successSection}
-        id="success"
+        id="partner-inquiry-details"
       >
         <div className={styles.container}>
-          <h2>Partner Success Highlights</h2>
-
-          <div className={styles.successGrid}>
-
-            <div className={styles.successCard}>
-              <h3>
-                Our partners can onboard clients across multiple companies
-                seamlessly.
-              </h3>
-
-              <p>
-                I can always rely on the Wayabroad team for smooth
-                implementation.
-              </p>
-
-              <em>
-                - R Ashish Pawar, Channel Partner Since 2020
-              </em>
-            </div>
-
-            <div className={styles.successCard}>
-              <h3>
-                Clients have successfully integrated their operations.
-              </h3>
-
-              <p>
-                Incredible support and benefits!
-              </p>
-
-              <em>
-                - Pragti Bisen, Partner Since 2021
-              </em>
-            </div>
-
-          </div>
+          <h2>Before submitting a partner inquiry</h2>
+          <p>
+            Use the form to provide your name, organization, email, contact
+            number, and city. Confirm the opportunity, commercial terms, and
+            any claims about expected outcomes directly with Wayabroad.
+          </p>
         </div>
       </section>
 
@@ -282,14 +250,14 @@ export default function BecomePartner() {
         <div className={styles.joinOverlay}></div>
 
         <div className={styles.joinContent}>
-          <h2>Looking Into Our Partner Programs?</h2>
+          <h2>          Have Questions About Partnership Options?</h2>
 
           <button
             type="button"
             className={styles.joinButton}
             onClick={() => setShowForm(true)}
           >
-            JOIN US NOW
+            SEND AN INQUIRY
           </button>
         </div>
       </section>

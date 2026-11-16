@@ -421,62 +421,49 @@ export default function Scholarships() {
                         }
                       >
 
-                        <p>
-                          <b>
-                            For:
-                          </b>{" "}
-                          {item?.scholarshipFor ||
-                            "-"}
-                        </p>
+                        {item?.scholarshipFor && (
+                          <p>
+                            <b>For:</b> {item.scholarshipFor}
+                          </p>
+                        )}
 
-                        <p>
-                          <b>
-                            Type:
-                          </b>{" "}
-                          {item?.scholarshipType ||
-                            "-"}
-                        </p>
+                        {item?.scholarshipType && (
+                          <p>
+                            <b>Type:</b> {item.scholarshipType}
+                          </p>
+                        )}
 
-                        <p>
-                          <b>
-                            Category:
-                          </b>{" "}
-                          {item?.scholarshipcategory ||
-                            "-"}
-                        </p>
+                        {item?.scholarshipcategory && (
+                          <p>
+                            <b>Category:</b> {item.scholarshipcategory}
+                          </p>
+                        )}
 
-                        <p>
-                          <b>
-                            Location:
-                          </b>{" "}
-                          {item?.studyLocation ||
-                            "-"}
-                        </p>
+                        {item?.studyLocation && (
+                          <p>
+                            <b>Location:</b> {item.studyLocation}
+                          </p>
+                        )}
 
-                        <p>
-                          <b>
-                            Qualification:
-                          </b>{" "}
-                          {item?.qualification ||
-                            "-"}
-                        </p>
+                        {item?.qualification && (
+                          <p>
+                            <b>Qualification:</b> {item.qualification}
+                          </p>
+                        )}
 
-                        <p>
-                          <b>
-                            Amount:
-                          </b>{" "}
-                          ₹
-                          {item?.amount ??
-                            "0"}
-                        </p>
+                        {item?.amount !== null &&
+                          item?.amount !== undefined &&
+                          String(item.amount).trim() !== "" && (
+                            <p>
+                              <b>Amount:</b> ₹{item.amount}
+                            </p>
+                          )}
 
-                        <p>
-                          <b>
-                            Deadline:
-                          </b>{" "}
-                          {item?.deadline ||
-                            "-"}
-                        </p>
+                        {item?.deadline && (
+                          <p>
+                            <b>Deadline:</b> {item.deadline}
+                          </p>
+                        )}
 
                       </div>
 

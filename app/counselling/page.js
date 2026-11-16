@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import {
@@ -167,7 +168,7 @@ export default function CounsellingPage() {
               </span>
 
               <span>
-                Visa Support
+                Visa preparation guidance
               </span>
             </div>
 
@@ -179,7 +180,7 @@ export default function CounsellingPage() {
               </span>
 
               <span>
-                Free Consulting
+                Counselling on study options
               </span>
             </div>
 
@@ -191,7 +192,7 @@ export default function CounsellingPage() {
               </span>
 
               <span>
-                End to End Support
+                University application support
               </span>
             </div>
 
@@ -203,7 +204,7 @@ export default function CounsellingPage() {
               </span>
 
               <span>
-                Loan & Finance Assistant
+                Education finance information
               </span>
             </div>
 
@@ -215,7 +216,7 @@ export default function CounsellingPage() {
               </span>
 
               <span>
-                Scholarship Worth ₹10,00,000*
+                Scholarship search guidance
               </span>
             </div>
 
@@ -227,7 +228,7 @@ export default function CounsellingPage() {
               </span>
 
               <span>
-                Courses Starting From ₹8 Lakhs*
+                Course and destination selection
               </span>
             </div>
 
@@ -239,7 +240,7 @@ export default function CounsellingPage() {
               </span>
 
               <span>
-                Offer Letter In Less Than 48 Hours*
+                Pre-departure planning
               </span>
             </div>
           </div>
@@ -345,7 +346,14 @@ export default function CounsellingPage() {
             />
 
             <span>
-              I have read and agreed to terms & privacy policy
+              I have read and agreed to{" "}
+              <Link href="/terms-and-conditions">
+                Terms and Conditions
+              </Link>{" "}
+              and{" "}
+              <Link href="/privacy-policy">
+                Privacy Policy
+              </Link>
             </span>
           </label>
 
@@ -355,7 +363,7 @@ export default function CounsellingPage() {
           >
             {loading
               ? "Submitting..."
-              : "Book your Free Consultation"}
+              : "Request a Counselling Session"}
           </button>
 
           {message && (

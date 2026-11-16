@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import {
   getAllContinents,
@@ -58,6 +58,7 @@ export function ContinentTabs({ countries = [] }) {
 }
 
 export function HomepageConsultationForm() {
+  const formRef = useRef(null);
   const [continents, setContinents] = useState([]);
   const [courses, setCourses] = useState([]);
   const [sent, setSent] = useState(false);
@@ -88,7 +89,27 @@ export function HomepageConsultationForm() {
       }
     };
 
-    loadData();
+    const formElement = formRef.current;
+    if (!formElement) return;
+
+    if (!("IntersectionObserver" in window)) {
+      loadData();
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          observer.disconnect();
+          loadData();
+        }
+      },
+      { rootMargin: "600px 0px" }
+    );
+
+    observer.observe(formElement);
+
+    return () => observer.disconnect();
   }, []);
 
   const handleChange = (event) => {
@@ -155,7 +176,7 @@ export function HomepageConsultationForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form ref={formRef} onSubmit={handleSubmit}>
       <h3>Start Your Study Abroad Journey</h3>
 
       <input
@@ -225,11 +246,18 @@ export function HomepageConsultationForm() {
           onChange={handleChange}
           required
         />
-        I have read and agreed to terms & privacy policy
+        I have read and agreed to{" "}
+        <Link href="/terms-and-conditions">
+          Terms and Conditions
+        </Link>{" "}
+        and{" "}
+        <Link href="/privacy-policy">
+          Privacy Policy
+        </Link>
       </label>
 
       <button type="submit" disabled={loading}>
-        {loading ? "Submitting..." : "Book your Free Consultation"}
+        {loading ? "Submitting..." : "Request a Counselling Session"}
       </button>
 
       {sent && (

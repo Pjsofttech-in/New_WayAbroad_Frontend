@@ -2,6 +2,7 @@ import {
   brandedMetadataTitle,
   canonicalMetadata,
 } from "../../seo-utils";
+import BreadcrumbJsonLd from "../../components/BreadcrumbJsonLd";
 
 export const metadata = {
   ...canonicalMetadata("/about/study-abroad-counselling"),
@@ -11,5 +12,19 @@ export const metadata = {
 };
 
 export default function Layout({ children }) {
-  return children;
+  return (
+    <>
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Home", path: "/" },
+          { name: "About", path: "/about" },
+          {
+            name: "Study Abroad Counselling",
+            path: "/about/study-abroad-counselling",
+          },
+        ]}
+      />
+      {children}
+    </>
+  );
 }

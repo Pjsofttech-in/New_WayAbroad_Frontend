@@ -29,6 +29,7 @@ export default function InstantOfferPage() {
     <InfoPage
       title="Get started with FastLane today!"
       subtitle="Answer a few questions to see if you're eligible for a course before you apply"
+      breadcrumbPath="/instant-offer"
     >
       <section className={styles.section}>
         <h2>We have a range of FastLane courses to choose from</h2>
@@ -45,7 +46,7 @@ export default function InstantOfferPage() {
         </ul>
       </section>
 
-      <section className={styles.section}>
+      <section className={styles.section} id="courses">
         <h2>Explore FastLane Courses</h2>
 
         <div className={styles.grid}>
@@ -58,7 +59,7 @@ export default function InstantOfferPage() {
               <br />
 
               <a href="#courses" className={styles.button}>
-                Explore Courses
+                Explore {category.title} FastLane courses
               </a>
             </article>
           ))}

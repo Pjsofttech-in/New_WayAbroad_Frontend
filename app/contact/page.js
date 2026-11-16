@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import {
@@ -231,9 +232,9 @@ export default function ContactPage() {
 
           <div className={styles.contactDetails}>
 
-            <h3>
+            <h2>
               CONTACT OUR EXPERTS
-            </h3>
+            </h2>
 
 
             {/* EMAIL */}
@@ -381,7 +382,7 @@ export default function ContactPage() {
         <div className={styles.formHeader}>
 
           <span className={styles.formEyebrow}>
-            FREE CONSULTATION
+            STUDY ABROAD COUNSELLING
           </span>
 
           <h2>
@@ -503,8 +504,14 @@ export default function ContactPage() {
             />
 
             <span>
-              I have read and agreed to
-              terms & privacy policy
+              I have read and agreed to{" "}
+              <Link href="/terms-and-conditions">
+                Terms and Conditions
+              </Link>{" "}
+              and{" "}
+              <Link href="/privacy-policy">
+                Privacy Policy
+              </Link>
             </span>
           </label>
 
@@ -517,7 +524,7 @@ export default function ContactPage() {
           >
             {loading
               ? "Submitting..."
-              : "Book your Free Consultation"}
+              : "Request a Counselling Session"}
           </button>
 
 

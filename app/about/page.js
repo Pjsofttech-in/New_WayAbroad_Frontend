@@ -1,6 +1,5 @@
-"use client";
-
 import Link from "next/link";
+import BreadcrumbJsonLd from "../components/BreadcrumbJsonLd";
 import styles from "./about.module.css";
 
 export default function AboutPage() {
@@ -30,28 +29,39 @@ export default function AboutPage() {
   const studentServices = [
     {
       title: "Get the right student health cover",
+      linkText: "Explore student health cover",
       text: "Student health cover helps you pay for medical and hospital care and protects your health while studying abroad.",
     },
     {
       title: "Find accommodation",
-      text: "We can help find a great place to live according to your age, preference, and budget.",
+      linkText: "Explore accommodation options",
+      text: "Compare accommodation options with providers, considering your preferences and budget.",
     },
     {
       title: "Student Banking",
-      text: "Getting your finances organised is important, with Wayabroad we can simplify the process whilst in another country.",
+      linkText: "Explore student banking",
+      text: "Review student banking requirements and compare services before travelling.",
     },
     {
       title: "Money transfer securely",
-      text: "Securely pay tuition fees, living expenses and other essentials, in your local currency, with competitive FX rates and no fees.",
+      linkText: "Explore secure money transfers",
+      text: "Compare payment methods, exchange rates and fees directly with providers before transferring funds.",
     },
     {
       title: "Student education loans made simple",
-      text: "Applying for an Education Loan is made simple and easy with Wayabroad's trusted financial partners.",
+      linkText: "Explore education loan assistance",
+      text: "Explore education loan options and compare terms with your chosen lender.",
     },
   ];
 
   return (
     <main className={styles.aboutPage}>
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Home", path: "/" },
+          { name: "About", path: "/about" },
+        ]}
+      />
 
       {/* =====================================================
           HERO
@@ -86,38 +96,18 @@ export default function AboutPage() {
           </div>
 
           <p>
-            Wayabroad is a leader in global education services, helping people
-            achieve their international education goals for 55 years. An
-            Australian-listed company, we operate in more than 50 countries
-            around the world.
+            Wayabroad provides guidance for students planning international
+            study, including course and university selection, application
+            support, visa preparation, and pre-departure planning.
           </p>
 
-          <h3>About Wayabroad India</h3>
+          <h3 id="about-wayabroad-india">About Wayabroad India</h3>
 
           <p>
-            Wayabroad in India has more than 2 offices spanning over 2 cities
-            in India. We guide students and their families through the entire
-            study overseas process – university/course selection, submission
-            of application, assistance with the visa process and pre-departure
-            planning.
+            Wayabroad in India guides students and their families through
+            course and university selection, applications, visa preparation,
+            and pre-departure planning.
           </p>
-
-          <p>
-            Wayabroad India has also been recognised as a Great Place to Work
-            in India for, the third time in a row (2023-2024) and was also
-            recognised as India's Best Workplaces™ for Women 2022 by Great
-            Place to Work®. It is a landmark achievement and a testimony to
-            Wayabroad Education being an employee-centric organisation that
-            focuses on maintaining a healthy work environment and encourages
-            building high-quality relationships in the workplace.
-          </p>
-
-          <a
-            href="https://wayabroad.in/about#"
-            className={styles.learnMore}
-          >
-            Learn more
-          </a>
         </div>
       </section>
 
@@ -127,7 +117,7 @@ export default function AboutPage() {
 
       <section className={styles.section}>
         <div className={styles.container}>
-          <h2>Our Values</h2>
+          <h2 id="our-values">Our Values</h2>
 
           <p>
             We are driven by values of Community, Caring, Expertise, Integrity,
@@ -139,18 +129,12 @@ export default function AboutPage() {
           <div className={styles.cards}>
             {values.map((item) => (
               <div className={styles.infoCard} key={item.title}>
-                <h4>{item.title}</h4>
+                <h3>{item.title}</h3>
                 <p>{item.text}</p>
               </div>
             ))}
           </div>
 
-          <a
-            href="https://wayabroad.in/about#"
-            className={styles.learnMore}
-          >
-            Learn more
-          </a>
         </div>
       </section>
 
@@ -163,9 +147,8 @@ export default function AboutPage() {
           <h2>What we do</h2>
 
           <p>
-            We specialise in combining human expertise with our leading
-            technology to help people get accepted into their ideal course,
-            take an English language test, or learn English in our schools.
+            Wayabroad helps students research international study options and
+            plan key steps in the university application process.
           </p>
 
           {/* STUDENT PLACEMENT */}
@@ -173,27 +156,21 @@ export default function AboutPage() {
           <h3>Student Placement</h3>
 
           <p>
-            Wayabroad combines experience and technology to help students get
-            into their dream international courses. Our global digital
-            platform connects leading institutions, services, and alumni with
-            prospective students. We have more than 2 offices based in India.
-            To add, Wayabroad partners with quality universities and
-            institutions across Australia, Canada, Ireland, New Zealand, the
-            United Kingdom, and the United States.
+            Students can explore courses and universities in destinations
+            including Australia, Canada, Ireland, New Zealand, the United
+            Kingdom, and the United States. Confirm current course availability
+            and admission requirements with each institution.
           </p>
 
           <p>
-            But these advantages would mean little without our expert people.
-            Our highly trained counsellors are by our students' side from the
-            first course search until day one in the classroom, and beyond.
+            Wayabroad counsellors can help students consider course options
+            and prepare university applications.
           </p>
 
           <p>
-            We have a team of expert education counsellors around the world.
-            All of them are experts and highly trained in ensuring students
-            can submit quality, verified applications, resulting in a
-            world-class education for our customers, and genuine students for
-            our institution clients.
+            Application requirements vary by course and institution. Students
+            should check the current requirements and submit accurate
+            supporting documents.
           </p>
 
           {/* IELTS */}
@@ -201,36 +178,16 @@ export default function AboutPage() {
           <h3>IELTS</h3>
 
           <p>
-            IELTS (the International English Language Testing System) is the
-            world's most popular English language test for work, study, and
-            migration. More than 50 organisations including universities,
-            professional bodies, immigration authorities and other government
-            agencies trust IELTS as a reliable indicator of true-to-life
-            ability to communicate in English.
+            IELTS is an English proficiency test used by some universities and
+            other organisations. Acceptance and score requirements vary, so
+            check the relevant institution's current requirements.
           </p>
 
           <p>
             IELTS assesses a test taker's English language proficiency across
             four skills: listening, reading, writing, and speaking. Delivered
-            on either a computer or paper, IELTS is the only high-stakes
-            language test recognised for migration across Australia, Canada,
-            New Zealand, and the United Kingdom.
-          </p>
-
-          <p>
-            With a focus on human conversations, IELTS was a pioneer of
-            four-skills English language testing more than 4 years ago. IELTS
-            continues to set the standard for English language testing today.
-          </p>
-
-          <p>
-            Wayabroad has more than 2 test locations in India. This includes
-            more than 2 computer-delivered IELTS centres.
-          </p>
-
-          <p>
-            In August 2021, Wayabroad acquired the British Council's IELTS
-            business in India.
+            on computer or paper depending on available test formats and
+            location. Confirm current test arrangements with the provider.
           </p>
         </div>
       </section>
@@ -241,7 +198,7 @@ export default function AboutPage() {
 
       <section className={styles.section}>
         <div className={styles.container}>
-          <h3>Student Essentials Services (SES)</h3>
+          <h2 id="student-essentials-services">Student Essentials Services (SES)</h2>
 
           <p>
             We, at Wayabroad understand how challenging it can be to pursue
@@ -254,15 +211,15 @@ export default function AboutPage() {
           <div className={styles.cards}>
             {studentServices.map((service) => (
               <div className={styles.infoCard} key={service.title}>
-                <h4>{service.title}</h4>
+                <h3>{service.title}</h3>
 
                 <p>
                   {service.text}{" "}
                   <a
-                    href="https://wayabroad.in/about#"
+                    href="/about/living-abroad-support"
                     className={styles.learnMore}
                   >
-                    Learn more
+                    {service.linkText}
                   </a>
                 </p>
               </div>
@@ -272,99 +229,18 @@ export default function AboutPage() {
       </section>
 
       {/* =====================================================
-          WAYABROAD CONNECT
-      ===================================================== */}
-
-      <section className={styles.section}>
-        <div className={styles.container}>
-          <h3>Wayabroad Connect</h3>
-
-          <p>
-            In January 2017 Wayabroad acquired The Hotcourses Group, which was
-            later integrated into Wayabroad's client services as a new B2B
-            division, Wayabroad Connect.
-          </p>
-
-          <p>
-            The strategic partner of choice for institutions seeking access to
-            engaged student communities, Wayabroad Connect uses its global
-            expertise, data-driven insights, and trusted human connections to
-            match universities, schools and colleges with the right students
-            from around the world.
-          </p>
-
-          <a
-            href="https://wayabroad.in/about#"
-            className={styles.learnMore}
-          >
-            Learn more
-          </a>
-        </div>
-      </section>
-
-      {/* =====================================================
-          GROWTH STORY
-      ===================================================== */}
-
-      <section className={styles.section}>
-        <div className={styles.container}>
-          <h3>Wayabroad's Growth Story</h3>
-
-          <p>
-            Wayabroad has been a global leader in international education
-            services for over 50 years. By focusing on our customers' needs and
-            using technology to enable their success, Wayabroad will continue
-            to experiment, innovate, and transform the sector.
-          </p>
-
-          <a
-            href="https://wayabroad.in/about#"
-            className={styles.learnMore}
-          >
-            Learn more
-          </a>
-        </div>
-      </section>
-
-      {/* =====================================================
           VISION AND STRATEGY
       ===================================================== */}
 
       <section className={styles.section}>
         <div className={styles.container}>
-          <h3>Our Vision and Strategy</h3>
+          <h2>Plan your study abroad journey</h2>
 
           <p>
-            Over the past five years, we’ve been transforming our business by
-            building a digital platform and unmatched global dataset to
-            complement our human expertise and connections. Now that we have
-            delivered our global platform, it is time to realise our vision of
-            building a connected community to guide people with global
-            ambitions on their journey to achieve lifelong learning and career
-            aspirations.
-          </p>
-
-          <p>
-            Wayabroad’s vision is to build a global platform and connected
-            community to guide international students along their journey to
-            achieve their lifelong learning and career aspirations.
-          </p>
-
-          <p>
-            To achieve this, Wayabroad is transforming the way international
-            student recruitment services are delivered.
-          </p>
-
-          <p>
-            Together with our customers, we are co-designing a digital
-            platform that connects our students with people, courses, services,
-            and employers so they can pursue their journey with clarity and
-            confidence.
-          </p>
-
-          <p>
-            To put it simply, we will become the bridge that connects students
-            from where they are today, to where they aspire to be.
+            Start by comparing courses, institutions, destinations, and
+            application requirements. Wayabroad counselling can help you
+            discuss these options and identify questions to confirm with
+            universities and relevant authorities.
           </p>
         </div>
       </section>
@@ -375,136 +251,17 @@ export default function AboutPage() {
 
       <section className={styles.section}>
         <div className={styles.container}>
-          <h2>Get to know us better</h2>
-
-          {/* OUR PEOPLE */}
-
-          <h3>Our People</h3>
+          <h2>Get support with your next steps</h2>
 
           <p>
-            Our global team is comprised of over 25 expert education
-            counsellors and globally we have more than 50 people of various
-            nationalities, ages, and cultural backgrounds. It is this diversity
-            and experience that enables our success and motivates our
-            continuous investment in our team's personal and professional
-            development.
+            Ask about course and university selection, applications,
+            scholarships, visa preparation, and practical pre-departure
+            planning.
           </p>
 
-          <a
-            href="https://wayabroad.in/about#"
-            className={styles.learnMore}
-          >
-            Learn more
-          </a>
-
-          {/* OUR LEADERS */}
-
-          <h3>Our Leaders</h3>
-
-          <p>
-            Wayabroad's Global Leadership Team brings more than 5 years of
-            combined experience.
-          </p>
-
-          <a
-            href="https://wayabroad.in/about#"
-            className={styles.learnMore}
-          >
-            Learn more
-          </a>
-
-          {/* BOARD OF DIRECTORS */}
-
-          <h3>Our Board of Directors</h3>
-
-          <p>
-            Wayabroad's Board of Directors possess decades of combined
-            experience and expertise.
-          </p>
-
-          <a
-            href="https://wayabroad.in/about#"
-            className={styles.learnMore}
-          >
-            Learn more
-          </a>
-        </div>
-      </section>
-
-      {/* =====================================================
-          SUSTAINABLE FUTURE
-      ===================================================== */}
-
-      <section className={styles.section}>
-        <div className={styles.container}>
-          <h3>Committed to a sustainable future</h3>
-
-          <p>
-            Wayabroad is committed to building sustainable futures and
-            improving the lives of our customers and our people. We have in
-            place a range of partnerships which aim to support the environment
-            and empower the communities where we operate.
-          </p>
-
-          <p>
-            Our Sustainable Futures initiative creates positive change through
-            education. Aligning with the UN Sustainable Development Goals, we
-            champion education and its real impact on people, communities, and
-            the environment.
-          </p>
-
-          <a
-            href="https://wayabroad.in/about#"
-            className={styles.learnMore}
-          >
-            Learn more
-          </a>
-        </div>
-      </section>
-
-      {/* =====================================================
-          INVESTOR RELATIONS
-      ===================================================== */}
-
-      <section className={styles.section}>
-        <div className={styles.container}>
-          <h3>Investor relations</h3>
-
-          <p>
-            Our outstanding team of people from around the world come to work
-            each day to support our customers to achieve their dreams and
-            aspirations through the power of international education.
-          </p>
-
-          <a
-            href="https://wayabroad.in/about#"
-            className={styles.learnMore}
-          >
-            Learn more
-          </a>
-        </div>
-      </section>
-
-      {/* =====================================================
-          NEWS CENTRE
-      ===================================================== */}
-
-      <section className={styles.section}>
-        <div className={styles.container}>
-          <h3>News centre</h3>
-
-          <p>
-            Stay up to date with Wayabroad's latest news from our teams around
-            the world. Read press releases, and annual reports and get updates
-            from Wayabroad.
-          </p>
-
-          <a
-            href="https://wayabroad.in/about#"
-            className={styles.learnMore}
-          >
-            Learn more
-          </a>
+          <Link href="/counselling" className={styles.learnMore}>
+            Discuss your study plans with a counsellor
+          </Link>
         </div>
       </section>
 

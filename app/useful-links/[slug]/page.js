@@ -43,6 +43,8 @@ import {
   cleanMetadataText,
 } from "../../seo-utils";
 import styles from "./page.module.css";
+import JsonLd from "../../components/JsonLd";
+import { createBreadcrumbSchema } from "../../structured-data";
 
 const iconMap = {
   search: Search,
@@ -707,6 +709,15 @@ export default async function UsefulLinksPage({ params }) {
 
   return (
     <main className={styles.page}>
+      <JsonLd
+        data={createBreadcrumbSchema([
+          { name: "Home", path: "/" },
+          {
+            name: page.title,
+            path: `/useful-links/${encodeURIComponent(slug)}`,
+          },
+        ])}
+      />
       {/* PAGE HERO */}
       <section className={styles.hero}>
         <div className={styles.heroInner}>

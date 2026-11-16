@@ -88,6 +88,7 @@ export default function RefundPolicyPage() {
   return (
     <LegalPage
       title="Refund Policy"
+      breadcrumbPath="/refund-policy"
       sections={sections}
     />
   );

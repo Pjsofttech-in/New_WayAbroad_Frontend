@@ -67,6 +67,7 @@ export default function DataProtectionAddendumPage() {
   return (
     <LegalPage
       title="Data Protection Addendum"
+      breadcrumbPath="/data-protection-addendum"
       sections={sections}
     />
   );

@@ -8,6 +8,8 @@ import {
   canonicalMetadata,
   cleanMetadataText,
 } from "../../seo-utils";
+import JsonLd from "../../components/JsonLd";
+import { createBreadcrumbSchema } from "../../structured-data";
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
@@ -44,6 +46,13 @@ export default async function ExamDetailPage({ params }) {
 
   return (
     <main className={`${styles.examPage} ${styles[slug] || ""}`}>
+      <JsonLd
+        data={createBreadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Exams", path: "/exams" },
+          { name: exam.fullName, path: `/exams/${encodeURIComponent(slug)}` },
+        ])}
+      />
 
       {/* =====================================================
           HERO

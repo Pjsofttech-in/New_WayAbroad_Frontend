@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import styles from "./home.module.css";
 import {
   ContinentTabs,
@@ -20,6 +21,8 @@ import {
   Smartphone,
   Plane,
 } from "lucide-react";
+import JsonLd from "./components/JsonLd";
+import { organizationId, SITE_URL } from "./structured-data";
 
 /* =========================
    DATA
@@ -28,39 +31,39 @@ import {
 const why = [
   [
     "🎓",
-    "Trusted By 113K Students",
-    "Last year alone, Wayabroad fulfilled dreams of over 113K students. Your success is our mission!",
-    "/trusted-students",
+    "Course and University Planning",
+    "Explore academic options and get guidance with course and institution selection.",
+    "/courses",
   ],
   [
     "⚡",
-    "Counselling Right By Your Side",
-    "With 200+ expert counsellors across 77 offices in 83 cities, expert help is always nearby.",
-    "/counselling-office",
+    "Study Abroad Counselling",
+    "Discuss study destinations, courses, applications, and next steps with Wayabroad.",
+    "/counselling",
   ],
   [
     "☑",
-    "Highest Student Visa Success Rate",
-    "With over 55 years of experience, Wayabroad boasts the highest student success rate.",
+    "Visa Preparation Guidance",
+    "Learn about document preparation and student visa steps. Requirements vary by destination.",
     "/student-visa",
   ],
   [
     "📱",
-    "Courses With Instant Offer",
-    "Get your offer letter from select universities with streamlined support.",
-    "/instant-offer",
+    "Scholarship Search",
+    "Browse available scholarship listings and review their eligibility and deadlines.",
+    "/scholarships",
+  ],
+  [
+    "📋",
+    "Course Eligibility Questions",
+    "Ask about course eligibility and application options for your study plans.",
+    "/counselling",
   ],
   [
     "👥",
-    "Your Global Partner In Success",
-    "As a global leader with offices worldwide, we prioritize you and your goals.",
-    "/about",
-  ],
-  [
-    "♥",
-    "Loved By Students",
-    "Rated highly by students who recommend our expert international education services.",
-    "/student-testimonials",
+    "Before-Departure Planning",
+    "Review practical topics such as accommodation, banking, health cover, and travel.",
+    "/about/living-abroad-support",
   ],
 ];
 
@@ -83,7 +86,7 @@ const service = [
   [
     GraduationCap,
     "Education Loan Assistance",
-    "We help you explore financial support, competitive rates and hassle-free education loans.",
+    "Explore education finance options and questions to discuss with lenders.",
   ],
   [
     Building2,
@@ -101,32 +104,32 @@ const essentials = [
   [
     WalletCards,
     "Education loan",
-    "Easy access to finance so you don't delay your dreams.",
+    "Explore education finance options and compare terms with lenders.",
   ],
   [
     House,
     "Accommodation",
-    "Student apartment or homestay, the choice is yours.",
+    "Review accommodation options that may suit your preferences and budget.",
   ],
   [
     Landmark,
     "Banking",
-    "Open a bank account before you arrive.",
+    "Learn about student banking as part of your arrival planning.",
   ],
   [
     ShieldCheck,
     "Health cover",
-    "Your choice, your health cover, your peace of mind abroad.",
+    "Check the health cover requirements for your chosen destination.",
   ],
   [
     Plane,
     "Money transfer",
-    "Safe, secure and fast payments to your institution and beyond.",
+    "Compare payment options and provider terms before transferring funds.",
   ],
   [
     Smartphone,
     "SIM card",
-    "No SIM? No problem — we've got it covered.",
+    "Plan how to arrange a local SIM before or after you arrive.",
   ],
 ];
 
@@ -134,41 +137,50 @@ const universities = [
   {
     name: "University of Melbourne",
     image: "/universities/university-of-melbourne-logo.png",
+    width: 282,
+    height: 210,
   },
   {
     name: "UNSW Australia",
     image: "/universities/unsw-australia-logo.png",
+    width: 920,
+    height: 500,
   },
   {
     name: "UNSW College",
     image: "/universities/unsw-college-logo.jpg",
+    width: 811,
+    height: 811,
   },
   {
     name: "Monash University",
     image: "/universities/monash-university-logo.png",
+    width: 900,
+    height: 500,
   },
   {
     name: "University of Sydney",
     image: "/universities/university-of-sydney-logo.png",
+    width: 580,
+    height: 580,
   },
 ];
 
 const journeyStats = [
-  ["4+", "Years Of Experience"],
-  ["25+", "Available In Countries"],
-  ["250+", "Universities"],
-  ["400+", "Courses"],
-  ["3000+", "Enrolled Students"],
+  ["Course selection", "Explore academic options"],
+  ["Applications", "Plan university applications"],
+  ["Scholarships", "Review available opportunities"],
+  ["Visa preparation", "Understand document requirements"],
+  ["Pre-departure", "Plan practical next steps"],
 ];
 
 const consultationBenefits = [
-  "Visa Support",
-  "Free Consulting",
-  "End to End Support",
-  "Loan & Finance Assistant",
-  "Scholarship Worth ₹10,00,000+",
-  "Courses Starting From ₹8 Lakhs*",
-  "Offer Letter In Less Than 48 Hours*",
+  "Course and destination selection",
+  "University application guidance",
+  "Scholarship information",
+  "Visa document preparation guidance",
+  "Education finance information",
+  "Pre-departure planning",
 ];
 
 function getCountryRecords(response) {
@@ -235,6 +247,17 @@ export default async function Home() {
 
   return (
     <main>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "@id": `${SITE_URL}/#website`,
+          name: "Wayabroad",
+          url: `${SITE_URL}/`,
+          publisher: { "@id": organizationId },
+          inLanguage: "en",
+        }}
+      />
       {/* ================= HERO ================= */}
 
       <section className={styles.hero}>
@@ -247,7 +270,7 @@ export default async function Home() {
 
           <p>
             Get expert guidance and support to study in your dream country.
-            Connect with Wayabroad-certified counsellors today!
+            Connect with a Wayabroad counsellor to discuss your plans.
           </p>
 
           <a href="#free-counselling">
@@ -257,9 +280,13 @@ export default async function Home() {
 
         <div className={styles.art}>
           <div className={styles.student}>
-            <img
+            <Image
               src="/students/student.png"
               alt="Study Abroad Student"
+              width={601}
+              height={486}
+              sizes="(max-width: 700px) 90vw, 45vw"
+              preload
             />
           </div>
         </div>
@@ -268,10 +295,10 @@ export default async function Home() {
       {/* ================= JOURNEY ================= */}
 
       <section className={styles.journey}>
-        <h3>
-          Every Step Of Your Study Abroad Dream
-          <span> We've Got It Covered</span>
-        </h3>
+        <h2>
+          Study Abroad Guidance
+          <span> for Key Steps in Your Journey</span>
+        </h2>
 
         <div>
           {journeyStats.map(
@@ -292,16 +319,15 @@ export default async function Home() {
         id="study-abroad"
       >
         <h2>
-          University Excellence Showcase
+          University Examples
         </h2>
 
         <p>
-          Discover leading educational institutions and their
-          <br />
-          prestigious partnerships.
+          The institutions shown are examples. Check each university's
+          official website for current courses and admissions information.
         </p>
 
-        <h3>Partner Universities</h3>
+        <h3>Explore institutions</h3>
 
         <div className={styles.logoSlider}>
           <div className={styles.logoTrack}>
@@ -313,9 +339,12 @@ export default async function Home() {
                 <article
                   key={`${university.name}-${index}`}
                 >
-                  <img
+                  <Image
                     src={university.image}
                     alt={university.name}
+                    width={university.width}
+                    height={university.height}
+                    sizes="170px"
                   />
                 </article>
               )
@@ -349,7 +378,7 @@ export default async function Home() {
                 <p>{text}</p>
 
                 <Link href={href}>
-                  Learn More →
+                  Learn more about {title} →
                 </Link>
               </article>
             )
@@ -375,9 +404,12 @@ export default async function Home() {
 
                 <p>{text}</p>
 
-                <button>
-                  Learn More →
-                </button>
+                <Link
+                  href="/counselling"
+                  className={styles.serviceButton}
+                >
+                  Ask about {title.toLowerCase()} →
+                </Link>
               </article>
             )
           )}
@@ -410,7 +442,7 @@ export default async function Home() {
                 <p>{text}</p>
 
                 <a href="#free-counselling">
-                  Learn More →
+                  Get help with {title.toLowerCase()} →
                 </a>
               </article>
             )

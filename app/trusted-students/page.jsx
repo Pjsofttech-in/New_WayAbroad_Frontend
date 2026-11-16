@@ -39,8 +39,9 @@ const destinations = [
 export default function TrustedStudentsPage() {
   return (
     <InfoPage
-      title="Study Abroad Programs – Apply now for 2025 Intake | Free Counselling"
+      title="Study Abroad Programs and Destinations"
       subtitle="Learn more about exciting places where you can study"
+      breadcrumbPath="/trusted-students"
     >
       <section className={styles.section}>
         <h2>Six Dream Destinations to Study Abroad</h2>

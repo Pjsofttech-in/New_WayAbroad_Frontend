@@ -1,8 +1,17 @@
 
 import "./globals.css";
+import { Poppins } from "next/font/google";
 import Navbar from "./components/Navbar";
 import Footer from "./components/footer";
 import WhatsAppButton from "./components/WhatsAppButton";
+import JsonLd from "./components/JsonLd";
+import { organizationSchema } from "./structured-data";
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
 
 export const metadata = {
   metadataBase: new URL("https://www.wayabroad.in"),
@@ -57,7 +66,8 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>
+      <body className={poppins.className}>
+        <JsonLd data={organizationSchema} />
         <Navbar />
 
         {children}

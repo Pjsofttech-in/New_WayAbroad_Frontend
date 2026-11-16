@@ -15,6 +15,7 @@ export default function CounsellingOfficePage() {
     <InfoPage
       title="Wayabroad Office Locator"
       subtitle="Find expert counselling and support near you"
+      breadcrumbPath="/counselling-office"
     >
       <section className={styles.section}>
         <h2>Find a Wayabroad Office</h2>

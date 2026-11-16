@@ -1,8 +1,18 @@
 import styles from "./LegalPage.module.css";
+import JsonLd from "../JsonLd";
+import { createBreadcrumbSchema } from "../../structured-data";
 
-export default function LegalPage({ title, sections }) {
+export default function LegalPage({ title, sections, breadcrumbPath }) {
   return (
     <main className={styles.page}>
+      {breadcrumbPath && (
+        <JsonLd
+          data={createBreadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: title, path: breadcrumbPath },
+          ])}
+        />
+      )}
       <div className={styles.container}>
 
         <h1>{title}</h1>

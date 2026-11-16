@@ -914,7 +914,7 @@ export default function JobSearchHeader() {
       <section className={styles.jobsSection}>
         <div className={styles.jobsHeading}>
           <div className={styles.headingTitle}>
-            <h2>Available Jobs</h2>
+            <h1>Available Jobs</h1>
 
             <span className={styles.jobsCount}>
               {sortedJobs.length}{" "}

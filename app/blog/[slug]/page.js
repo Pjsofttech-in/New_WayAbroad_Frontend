@@ -8,6 +8,7 @@ import {
   getBlogById,
   getAllBlogs,
 } from "../../services/api";
+import { useBlogData } from "./BlogDataProvider";
 
 import styles from "../BlogById.module.css";
 
@@ -32,6 +33,7 @@ const generateSlug = (title) => {
 export default function Blog() {
   const params = useParams();
   const router = useRouter();
+  const initialBlogData = useBlogData();
 
   // New URL: /blog/study-abroad-guide
   const slug = params?.slug;
@@ -50,6 +52,19 @@ export default function Blog() {
 
   useEffect(() => {
     if (!slug) return;
+
+    const currentSlug = Array.isArray(slug)
+      ? slug[0]
+      : slug;
+
+    if (initialBlogData?.slug === currentSlug) {
+      setAllBlogs(initialBlogData.blogs || []);
+      setBlog(initialBlogData.blog || null);
+      setError("");
+      setLoading(false);
+      setSidebarLoading(false);
+      return;
+    }
 
     const fetchBlogs = async () => {
       try {
@@ -80,10 +95,6 @@ export default function Blog() {
         /* ----------------------------------------
            FIND BLOG USING URL SLUG
         ---------------------------------------- */
-
-        const currentSlug = Array.isArray(slug)
-          ? slug[0]
-          : slug;
 
         const matchedBlog = blogs.find((item) => {
           const itemSlug =
@@ -147,7 +158,7 @@ export default function Blog() {
     };
 
     fetchBlogs();
-  }, [slug]);
+  }, [slug, initialBlogData]);
 
   /* ============================================================
      GET BLOG CONTENT
@@ -301,6 +312,18 @@ export default function Blog() {
     );
   };
 
+  const getBlogAuthor = (item) => {
+    const author = item?.author || item?.authorName;
+
+    if (typeof author === "string") {
+      return author.trim();
+    }
+
+    return typeof author?.name === "string"
+      ? author.name.trim()
+      : "";
+  };
+
   /* ============================================================
      FORMAT DATE
   ============================================================ */
@@ -323,6 +346,14 @@ export default function Blog() {
     } catch {
       return String(date);
     }
+  };
+
+  const getDateTime = (date) => {
+    if (!date) return undefined;
+    const parsedDate = new Date(date);
+    return Number.isNaN(parsedDate.getTime())
+      ? undefined
+      : parsedDate.toISOString();
   };
 
   /* ============================================================
@@ -455,7 +486,10 @@ export default function Blog() {
 
   const category = getBlogCategory(blog);
 
-  const date = formatDate(getBlogDate(blog));
+  const blogDate = getBlogDate(blog);
+  const date = formatDate(blogDate);
+  const dateTime = getDateTime(blogDate);
+  const author = getBlogAuthor(blog);
 
   /* ============================================================
      RENDER
@@ -509,9 +543,19 @@ export default function Blog() {
 
           {/* BLOG DATE */}
 
-          {date && (
+          {(date || author) && (
             <div className={styles.blogDate}>
-              {date}
+              {date && (
+                <time dateTime={dateTime}>
+                  Published {date}
+                </time>
+              )}
+              {author && (
+                <span>
+                  {date ? " · " : ""}
+                  By {author}
+                </span>
+              )}
             </div>
           )}
 
@@ -523,6 +567,9 @@ export default function Blog() {
                 src={mainImage}
                 alt={title}
                 className={styles.blogImage}
+                loading="eager"
+                fetchPriority="high"
+                decoding="async"
                 onError={(e) => {
                   e.currentTarget.style.display = "none";
                 }}
@@ -601,6 +648,8 @@ export default function Blog() {
                           src={getBlogImage(item)}
                           alt={getBlogTitle(item)}
                           className={styles.sidebarImage}
+                          loading="lazy"
+                          decoding="async"
                           onError={(e) => {
                             e.currentTarget.style.display = "none";
                           }}
@@ -683,6 +732,8 @@ export default function Blog() {
                           src={getBlogImage(item)}
                           alt={getBlogTitle(item)}
                           className={styles.sidebarImage}
+                          loading="lazy"
+                          decoding="async"
                           onError={(e) => {
                             e.currentTarget.style.display = "none";
                           }}

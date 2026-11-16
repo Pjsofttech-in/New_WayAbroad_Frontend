@@ -79,6 +79,7 @@ export default function TermsAndConditionsPage() {
   return (
     <LegalPage
       title="Terms and Conditions"
+      breadcrumbPath="/terms-and-conditions"
       sections={sections}
     />
   );

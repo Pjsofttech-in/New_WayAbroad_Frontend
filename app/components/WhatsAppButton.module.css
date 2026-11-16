@@ -1,4 +1,4 @@
-.whatsappButton {
+.contactButton {
   position: fixed;
 
   right: 28px;
@@ -7,7 +7,7 @@
   width: 58px;
   height: 58px;
 
-  background: #25d366;
+  background: #41639b;
 
   color: white;
 
@@ -22,21 +22,21 @@
   text-decoration: none;
 
   box-shadow:
-    0 6px 20px rgba(37, 211, 102, 0.35);
+    0 6px 20px rgba(65, 99, 155, 0.35);
 
   transition:
     transform 0.25s ease,
     box-shadow 0.25s ease;
 }
 
-.whatsappButton:hover {
+.contactButton:hover {
   transform: scale(1.08);
 
   box-shadow:
-    0 8px 25px rgba(37, 211, 102, 0.5);
+    0 8px 25px rgba(65, 99, 155, 0.5);
 }
 
-.whatsappButton svg {
+.contactButton svg {
   width: 28px;
   height: 28px;
 }
@@ -45,7 +45,7 @@
 /* MOBILE */
 
 @media (max-width: 768px) {
-  .whatsappButton {
+  .contactButton {
     width: 52px;
     height: 52px;
 
@@ -53,7 +53,7 @@
     bottom: 18px;
   }
 
-  .whatsappButton svg {
+  .contactButton svg {
     width: 25px;
     height: 25px;
   }

@@ -116,6 +116,7 @@
   font-weight: 600;
 
   cursor: pointer;
+  text-decoration: none;
 
   transition: 0.25s ease;
 }
@@ -251,33 +252,10 @@
 }
 
 
-/* LINKEDIN */
+/* CONTACT */
 
-.linkedin {
-  background: #16769a;
-}
-
-
-/* WHATSAPP */
-
-.whatsapp {
-  background: #25d366;
-
-  overflow: hidden;
-}
-
-.whatsapp img {
-  width: 27px;
-  height: 27px;
-
-  object-fit: contain;
-}
-
-
-/* TELEGRAM */
-
-.telegram {
-  background: #4a9ed4;
+.contact {
+  background: #41639b;
 }
 
 

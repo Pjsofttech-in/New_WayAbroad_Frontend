@@ -102,6 +102,25 @@
   background: #f8fcfd;
 }
 
+.consultationCta {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.consultationCta a {
+  display: inline-block;
+  padding: 12px 22px;
+  border-radius: 7px;
+  background: #41639b;
+  color: #ffffff;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.consultationCta a:hover {
+  background: #355786;
+}
+
 /* =========================
    TABLET
 ========================= */

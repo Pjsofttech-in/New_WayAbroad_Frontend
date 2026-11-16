@@ -5,9 +5,8 @@ import Link from "next/link";
 import {
   Instagram,
   Facebook,
-  Linkedin,
-  Send,
   MapPin,
+  MessageCircle,
 } from "lucide-react";
 
 import styles from "./Footer.module.css";
@@ -72,7 +71,7 @@ const footerData = [
       },
       {
         name: "Sitemap",
-        href: "/sitemap",
+        href: "/sitemap.xml",
       },
     ],
   },
@@ -124,27 +123,23 @@ const footerData = [
   },
 
   {
-    title: "Connect with Wayabroad",
+    title: "Contact Wayabroad",
     links: [
       {
-        name: "Wayabroad Events",
-        href: "/company/events",
+        name: "Contact",
+        href: "/contact",
       },
       {
-        name: "Wayabroad Offices",
-        href: "/company/offices",
+        name: "Counselling",
+        href: "/counselling",
       },
       {
-        name: "Customer Grievances",
-        href: "/company/customer-grievances",
+        name: "Partner inquiries",
+        href: "/become-partner",
       },
       {
-        name: "Corporate Responsibility",
-        href: "/company/corporate-responsibility",
-      },
-      {
-        name: "About Wayabroad Corporate",
-        href: "/company/about-corporate",
+        name: "Student visa information",
+        href: "/student-visa",
       },
     ],
   },
@@ -218,13 +213,13 @@ export default function Footer() {
 
       {/* FOOTER ACTIONS */}
       <div className={styles.footerActions}>
-        <button
+        <Link
+          href="/contact"
           className={styles.officeButton}
-          type="button"
         >
           <MapPin size={18} />
-          Find the nearest Wayabroad office
-        </button>
+          Contact Wayabroad for office details
+        </Link>
 
         <button
           className={styles.signupButton}
@@ -240,7 +235,7 @@ export default function Footer() {
         <div className={styles.footerLine}></div>
 
         <p className={styles.copyright}>
-          © 2024 Wayabroad. All rights reserved.
+          © {new Date().getFullYear()} Wayabroad. All rights reserved.
         </p>
 
         <div className={styles.socialIcons}>
@@ -264,34 +259,13 @@ export default function Footer() {
               <Facebook size={22} />
             </a>
 
-          <a
-            href="#"
-            className={styles.linkedin}
-            aria-label="LinkedIn"
+          <Link
+            href="/contact"
+            className={styles.contact}
+            aria-label="Contact Wayabroad"
           >
-            <Linkedin size={22} />
-          </a>
-
-          <a
-            href="https://wa.me/919999999999"
-            className={styles.whatsapp}
-            target="_blank"
-            rel="noreferrer"
-            aria-label="WhatsApp"
-          >
-            <img
-              src="/images/whatsapp-icon.png"
-              alt="WhatsApp"
-            />
-          </a>
-
-          <a
-            href="#"
-            className={styles.telegram}
-            aria-label="Telegram"
-          >
-            <Send size={22} />
-          </a>
+            <MessageCircle size={22} />
+          </Link>
         </div>
       </div>
     </footer>

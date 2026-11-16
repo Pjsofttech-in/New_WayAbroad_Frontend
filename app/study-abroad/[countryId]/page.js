@@ -7,6 +7,8 @@ import {
   isInternalIdentifier,
   safeMetadataTitle,
 } from "../../seo-utils";
+import JsonLd from "../../components/JsonLd";
+import { createBreadcrumbSchema } from "../../structured-data";
 
 export default async function StudyAbroadPage({ params }) {
   const { countryId } = await params;
@@ -31,9 +33,20 @@ export default async function StudyAbroadPage({ params }) {
     );
 
     return (
-      <StudyAbroadClient
-        studyAbroad={{ ...studyAbroad, title, country: countryName }}
-      />
+      <>
+        <JsonLd
+          data={createBreadcrumbSchema([
+            { name: "Home", path: "/" },
+            {
+              name: title,
+              path: `/study-abroad/${encodeURIComponent(countryId)}`,
+            },
+          ])}
+        />
+        <StudyAbroadClient
+          studyAbroad={{ ...studyAbroad, title, country: countryName }}
+        />
+      </>
     );
   } catch (error) {
     console.error("Failed to load study abroad country page:", error);

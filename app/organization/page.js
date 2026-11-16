@@ -1,5 +1,7 @@
 import styles from "./page.module.css";
 import { canonicalMetadata } from "../seo-utils";
+import JsonLd from "../components/JsonLd";
+import { createBreadcrumbSchema } from "../structured-data";
 
 export const metadata = {
   ...canonicalMetadata("/organization"),
@@ -46,6 +48,15 @@ const coreValues = [
 export default function OrganizationPage() {
   return (
     <main className={styles.page}>
+      <JsonLd
+        data={createBreadcrumbSchema([
+          { name: "Home", path: "/" },
+          {
+            name: "Organization Values and Culture",
+            path: "/organization",
+          },
+        ])}
+      />
       <div className={styles.container}>
 
         {/* =========================

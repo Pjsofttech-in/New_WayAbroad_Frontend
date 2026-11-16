@@ -16,6 +16,7 @@ import {
   brandedMetadataTitle,
   canonicalMetadata,
 } from "../../seo-utils";
+import BreadcrumbJsonLd from "../../components/BreadcrumbJsonLd";
 
 import styles from "../[slug]/page.module.css";
 
@@ -81,6 +82,12 @@ export default function StatementOfPurposePage() {
 
   return (
     <main className={styles.page}>
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Home", path: "/" },
+          { name: page.title, path: "/useful-links/statement-of-purpose" },
+        ]}
+      />
       <section className={styles.hero}>
         <div className={styles.heroInner}>
           <h1>

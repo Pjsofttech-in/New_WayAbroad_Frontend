@@ -2,10 +2,18 @@ import Link from "next/link";
 
 import styles from "./courses.module.css";
 import { courseStreams } from "../data/courses";
+import JsonLd from "../components/JsonLd";
+import { createBreadcrumbSchema } from "../structured-data";
 
 export default function CoursesPage() {
   return (
     <main className={styles.coursesPage}>
+      <JsonLd
+        data={createBreadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Courses", path: "/courses" },
+        ])}
+      />
       <section className={styles.coursesSection}>
         <div className={styles.container}>
 
@@ -22,11 +30,9 @@ export default function CoursesPage() {
               Engineering, Medical, Business, IT, Arts, and more, based
               on your interests, career goals, and future opportunities.
               Our expert counsellors guide you in selecting the best
-              stream aligned with global demand, top universities, and
+              stream aligned with               available programs, university requirements, and
               scholarship options across countries like the USA, UK,
-              Canada, Australia, and Europe. Whether you aim for
-              high-paying careers or passion-driven paths, we ensure you
-              make a confident and informed choice for your future.
+              Canada, Australia, and Europe.               We help you compare options against your interests and plans.
             </p>
           </header>
 
@@ -68,6 +74,9 @@ export default function CoursesPage() {
               pathway across countries like the USA, UK, Canada,
               Australia, and Europe.
             </p>
+            <Link href="/counselling">
+              Discuss course and university options
+            </Link>
           </div>
 
         </div>

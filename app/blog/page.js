@@ -176,6 +176,8 @@ export default function Blog() {
                     src={blog.image}
                     alt={blog.title || "Blog"}
                     className={styles.blogImage}
+                    loading="lazy"
+                    decoding="async"
                   />
                 </div>
               )}

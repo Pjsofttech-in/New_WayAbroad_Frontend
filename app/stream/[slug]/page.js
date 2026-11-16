@@ -8,6 +8,8 @@ import {
   canonicalMetadata,
   cleanMetadataText,
 } from "../../seo-utils";
+import JsonLd from "../../components/JsonLd";
+import { createBreadcrumbSchema } from "../../structured-data";
 
 export function generateStaticParams() {
   return courseStreams.map((stream) => ({
@@ -51,6 +53,16 @@ export default async function StreamPage({ params }) {
 
   return (
     <main className={styles.streamPage}>
+      <JsonLd
+        data={createBreadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Courses", path: "/courses" },
+          {
+            name: stream.name,
+            path: `/stream/${encodeURIComponent(slug)}`,
+          },
+        ])}
+      />
 
       {/* =========================================
           HERO
