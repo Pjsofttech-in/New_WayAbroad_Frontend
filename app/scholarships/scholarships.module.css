@@ -191,8 +191,8 @@
 
 .titleBanner {
   width: 100%;
-  min-height: 230px;
-  padding: 26px clamp(20px, 4vw, 56px);
+  min-height: 220px;
+  padding: 10px clamp(20px, 4vw, 50px);
   overflow: hidden;
   background-color: #0b315f;
   background-image:

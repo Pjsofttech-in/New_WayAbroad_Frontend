@@ -369,19 +369,6 @@ export default function ScholarshipDetails() {
               Back
             </button>
 
-            <div className={styles.sidebarIdentity}>
-
-              <div className={styles.sidebarName}>
-                {scholarship.sname || "Scholarship"}
-              </div>
-
-              <p>Scholarship Profile</p>
-
-              <span className={styles.sidebarBadge}>
-                {isApplied ? "APPLIED" : "AVAILABLE"}
-              </span>
-
-            </div>
           </div>
 
           {/* SIDEBAR MENU */}
@@ -438,9 +425,9 @@ export default function ScholarshipDetails() {
           <header className={styles.profileTopbar}>
 
             <div>
-              <span className={styles.profileLabel}>
+              {/* <span className={styles.profileLabel}>
                 SCHOLARSHIP PROFILE
-              </span>
+              </span> */}
 
               <h1>
                 {scholarship.sname || "Scholarship Details"}

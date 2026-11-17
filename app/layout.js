@@ -6,6 +6,7 @@ import Footer from "./components/footer";
 import WhatsAppButton from "./components/WhatsAppButton";
 import JsonLd from "./components/JsonLd";
 import { organizationSchema } from "./structured-data";
+import { AuthProvider } from "./components/AuthProvider";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -67,13 +68,15 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={poppins.className}>
-        <JsonLd data={organizationSchema} />
-        <Navbar />
+        <AuthProvider>
+          <JsonLd data={organizationSchema} />
+          <Navbar />
 
-        {children}
+          {children}
 
-        <Footer />
-        <WhatsAppButton />
+          <Footer />
+          <WhatsAppButton />
+        </AuthProvider>
       </body>
     </html>
   );

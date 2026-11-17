@@ -723,6 +723,12 @@
    USER / LOGIN
 ========================================================= */
 
+.accountArea {
+  position: relative;
+  z-index: 1001;
+  flex: 0 0 auto;
+}
+
 .user {
   flex: 0 0 auto;
 
@@ -765,6 +771,80 @@
 
   box-shadow:
     0 6px 16px rgba(0, 45, 65, 0.22);
+}
+
+.accountMenu {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  z-index: 1002;
+  width: min(250px, calc(100vw - 24px));
+  padding: 8px;
+  border: 1px solid #e1e9ef;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 12px 30px rgba(16, 45, 65, 0.2);
+}
+
+.accountIdentity {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 10px 11px 12px;
+  border-bottom: 1px solid #edf1f4;
+}
+
+.accountIdentity strong {
+  overflow: hidden;
+  color: #173c55;
+  font-size: 13px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.accountIdentity span {
+  overflow: hidden;
+  color: #718493;
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.accountMenuLink,
+.accountMenuLogout {
+  display: flex;
+  width: 100%;
+  min-height: 39px;
+  align-items: center;
+  padding: 0 11px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: #38586e;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.16s ease, color 0.16s ease;
+}
+
+.accountMenuLink:hover,
+.accountMenuLogout:hover {
+  background: #f0f7fb;
+  color: #086f9d;
+}
+
+.accountMenuLogout {
+  border-top: 1px solid #edf1f4;
+  border-radius: 0 0 5px 5px;
+  color: #a64b4b;
+}
+
+.accountMenuLogout:hover {
+  background: #fff6f5;
+  color: #a52e2e;
 }
 
 

@@ -23,6 +23,7 @@ export default function Scholarships() {
   const [filterFor, setFilterFor] = useState("");
   const [filterCategory, setFilterCategory] = useState("");
   const [filterLocation, setFilterLocation] = useState("");
+  const [filterType, setFilterType] = useState("");
 
   /* ==========================================
      FETCH SCHOLARSHIPS
@@ -81,6 +82,9 @@ export default function Scholarships() {
 
   const handleSearch = () => {
     const filtered = scholarships.filter((item) => {
+      const itemType = String(
+        item?.scholarshipType || ""
+      ).trim();
       const itemFor = String(
         item?.scholarshipFor || ""
       ).trim();
@@ -98,7 +102,8 @@ export default function Scholarships() {
         (!filterCategory ||
           itemCategory === filterCategory) &&
         (!filterLocation ||
-          itemLocation === filterLocation)
+          itemLocation === filterLocation) &&
+        (!filterType || itemType === filterType)
       );
     });
 
@@ -114,6 +119,7 @@ export default function Scholarships() {
     setFilterFor("");
     setFilterCategory("");
     setFilterLocation("");
+    setFilterType("");
 
     setFilteredScholarships([...scholarships]);
     setCurrentPage(1);
@@ -170,7 +176,7 @@ export default function Scholarships() {
 
       <div className={styles.titleBanner}>
 
-        <p className={styles.bannerEyebrow}>FUND YOUR FUTURE</p>
+        <p className={styles.bannerEyebrow}>FIND YOUR FUTURE</p>
 
         <h1 className={styles.scholarshipsTitle}>
           Way Abroad Scholarships
@@ -248,6 +254,20 @@ export default function Scholarships() {
               </button>
 
             </div>
+
+            {/* SCHOLARSHIP TYPE */}
+            <select
+              value={filterType}
+              onChange={(e) => setFilterType(e.target.value)}
+            >
+              <option value="">Filter by Type</option>
+
+              {getUnique("scholarshipType").map((value) => (
+                <option key={String(value)} value={String(value)}>
+                  {String(value)}
+                </option>
+              ))}
+            </select>
 
             {/* FOR */}
 

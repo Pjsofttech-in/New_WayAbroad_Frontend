@@ -4,13 +4,15 @@
 }
 
 .blogLayout {
-  width: calc(100% - 16px); /* keeps 12px on both sides */
+  width: calc(100% - 48px);
   max-width: 1450px;
-  margin: 0 auto; /* keeps the layout centered */
-  padding: 20px 0 80px;
+  margin: 0 auto;
+  padding: 24px 0 60px;
+
   display: grid;
   grid-template-columns: minmax(0, 1fr) 340px;
-  gap: 24px;
+  gap: 28px;
+
   align-items: start;
   box-sizing: border-box;
 }

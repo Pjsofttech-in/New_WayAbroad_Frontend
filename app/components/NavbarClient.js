@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 import {
   Menu,
@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 
 import styles from "./Navbar.module.css";
+import { useAuth } from "./AuthProvider";
 
 const LoginModal = dynamic(() => import("./LoginModal"), {
   ssr: false,
@@ -39,12 +40,21 @@ export default function NavbarClient({
   countryLoadError,
 }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const { status, isAuthenticated, user, logout, refreshAuth } = useAuth();
 
   const [menu, setMenu] = useState(false);
   const [companyOpen, setCompanyOpen] = useState(false);
   const [studyAbroadOpen, setStudyAbroadOpen] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
   const [authMode, setAuthMode] = useState("login");
+  const [accountMenuOpen, setAccountMenuOpen] = useState(false);
+  const accountAreaRef = useRef(null);
+
+  const displayName =
+    [user?.firstName, user?.lastName].filter(Boolean).join(" ") ||
+    user?.email ||
+    "Student Account";
 
   useEffect(() => {
     const openAuthModal = (event) => {
@@ -61,10 +71,49 @@ export default function NavbarClient({
     };
   }, []);
 
+  useEffect(() => {
+    if (!accountMenuOpen) {
+      return undefined;
+    }
+
+    const handlePointerDown = (event) => {
+      if (!accountAreaRef.current?.contains(event.target)) {
+        setAccountMenuOpen(false);
+      }
+    };
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        setAccountMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("pointerdown", handlePointerDown);
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [accountMenuOpen]);
+
+  useEffect(() => {
+    setAccountMenuOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    setAccountMenuOpen(false);
+
+    if (isAuthenticated) {
+      setLoginOpen(false);
+      setAuthMode("login");
+    }
+  }, [isAuthenticated]);
+
   const closeMenus = () => {
     setMenu(false);
     setCompanyOpen(false);
     setStudyAbroadOpen(false);
+    setAccountMenuOpen(false);
   };
 
   const getHref = (item) => {
@@ -135,10 +184,27 @@ export default function NavbarClient({
     }
   };
 
-  const handleLoginClick = () => {
+  const handleProfileClick = () => {
     closeMenus();
+
+    if (status === "loading") {
+      refreshAuth();
+      return;
+    }
+
+    if (isAuthenticated) {
+      setAccountMenuOpen((previous) => !previous);
+      return;
+    }
+
     setAuthMode("login");
     setLoginOpen(true);
+  };
+
+  const handleLogout = () => {
+    logout();
+    setAccountMenuOpen(false);
+    router.replace("/");
   };
 
   const handleCloseModal = () => {
@@ -351,19 +417,57 @@ export default function NavbarClient({
             className={styles.counselling}
             onClick={handleCounsellingClick}
           >
-            <CalendarDays size={16} strokeWidth={2.2} />
             <span>Book Counselling</span>
           </Link>
         </nav>
 
-        <button
-          type="button"
-          className={styles.user}
-          onClick={handleLoginClick}
-          aria-label="Open Login"
-        >
-          <UserRound size={19} strokeWidth={2} />
-        </button>
+        <div className={styles.accountArea} ref={accountAreaRef}>
+          <button
+            type="button"
+            className={styles.user}
+            onClick={handleProfileClick}
+            aria-label={
+              isAuthenticated ? "Open student account menu" : "Open Login"
+            }
+            aria-haspopup={isAuthenticated ? "menu" : undefined}
+            aria-expanded={isAuthenticated ? accountMenuOpen : undefined}
+            aria-controls={
+              isAuthenticated && accountMenuOpen ? "student-account-menu" : undefined
+            }
+          >
+            <UserRound size={19} strokeWidth={2} />
+          </button>
+
+          {isAuthenticated && accountMenuOpen && (
+            <div
+              id="student-account-menu"
+              className={styles.accountMenu}
+              role="menu"
+              aria-label="Student account"
+            >
+              <div className={styles.accountIdentity}>
+                <strong>{displayName}</strong>
+                {user?.email && <span>{user.email}</span>}
+              </div>
+              <Link
+                href="/student/dashboard"
+                className={styles.accountMenuLink}
+                role="menuitem"
+                onClick={() => setAccountMenuOpen(false)}
+              >
+                Student dashboard
+              </Link>
+              <button
+                type="button"
+                className={styles.accountMenuLogout}
+                role="menuitem"
+                onClick={handleLogout}
+              >
+                Log out
+              </button>
+            </div>
+          )}
+        </div>
 
         <button
           type="button"

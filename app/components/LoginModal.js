@@ -1,10 +1,13 @@
+
 "use client";
 
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { X } from "lucide-react";
 
 import styles from "./LoginModal.module.css";
+import { useAuth } from "./AuthProvider";
 
 import {
   loginUser,
@@ -17,6 +20,8 @@ export default function LoginModal({
   onClose,
   initialMode = "login",
 }) {
+  const router = useRouter();
+  const { login } = useAuth();
   const [mode, setMode] = useState(initialMode);
 
   /* ================= LOGIN FORM STATE ================= */
@@ -48,10 +53,9 @@ export default function LoginModal({
   /* ================= STATUS STATES ================= */
 
   const [loading, setLoading] = useState(false);
-
   const [message, setMessage] = useState("");
-
   const [error, setError] = useState("");
+  const loginSubmitting = useRef(false);
 
   /* ================= UPDATE MODE ================= */
 
@@ -140,31 +144,61 @@ export default function LoginModal({
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
 
+    if (loginSubmitting.current) {
+      return;
+    }
+
+    loginSubmitting.current = true;
     setLoading(true);
     setMessage("");
     setError("");
 
     try {
       const response = await loginUser({
-        email: loginForm.email,
+        email: loginForm.email.trim(),
         password: loginForm.password,
       });
 
-      console.log("Login Response:", response);
+      const responseBody = response?.data ?? response;
+      const result = responseBody?.data ?? responseBody;
+      const user = result?.user ?? result;
+      const token =
+        result?.token ?? responseBody?.token ?? response?.token;
+
+      if (typeof token !== "string" || !token.trim()) {
+        throw new Error(
+          result?.message ||
+            result?.massage ||
+            "Login succeeded but the server did not return an authentication token."
+        );
+      }
+
+      login(token, user);
 
       setMessage("Login successful!");
 
-      setTimeout(() => {
+      if (typeof onClose === "function") {
         onClose();
-      }, 1000);
+      }
+
+      // Redirect to student dashboard
+      router.push("/student/dashboard");
+
     } catch (err) {
-      console.error("Login Error:", err);
+      const loginError =
+        err?.response?.data?.message ||
+        err?.response?.data?.massage ||
+        err?.message ||
+        "Login failed. Please check your email and password.";
 
       setError(
-        err.message ||
-          "Login failed. Please check your email and password."
+        err?.status === 401
+          ? "Invalid email or password. Please try again."
+          : loginError
       );
+
     } finally {
+      loginSubmitting.current = false;
       setLoading(false);
     }
   };
@@ -176,8 +210,6 @@ export default function LoginModal({
 
     setMessage("");
     setError("");
-
-    /* Check Terms */
 
     if (!signupForm.agreeTerms) {
       setError(
@@ -192,29 +224,18 @@ export default function LoginModal({
     try {
       await submitFormSubmission({
         formType: "SIGNUP",
-
         name: signupForm.name,
-
         email: signupForm.email,
-
         phoneNumber: signupForm.phone,
 
-        continentId: Number(
-          signupForm.continentId
-        ),
-
-        courseId: Number(
-          signupForm.courseId
-        ),
+        continentId: Number(signupForm.continentId),
+        courseId: Number(signupForm.courseId),
 
         password: signupForm.password,
 
         createdByEmail: null,
-
         role: null,
-
         branchCode: null,
-
         status: "NEW",
       });
 
@@ -222,8 +243,7 @@ export default function LoginModal({
         "Your signup request has been submitted successfully!"
       );
 
-      /* Clear Signup Form */
-
+      // Clear signup form
       setSignupForm({
         name: "",
         email: "",
@@ -235,6 +255,7 @@ export default function LoginModal({
         contactPermission: false,
         marketingPermission: false,
       });
+
     } catch (err) {
       console.error("Signup Error:", err);
 
@@ -242,6 +263,7 @@ export default function LoginModal({
         err.message ||
           "Signup failed. Please try again."
       );
+
     } finally {
       setLoading(false);
     }
@@ -257,9 +279,7 @@ export default function LoginModal({
       >
         <div
           className={styles.loginModal}
-          onClick={(e) =>
-            e.stopPropagation()
-          }
+          onClick={(e) => e.stopPropagation()}
         >
           <button
             type="button"
@@ -275,6 +295,7 @@ export default function LoginModal({
           </h2>
 
           <form onSubmit={handleLoginSubmit}>
+
             {/* EMAIL */}
 
             <label>Email</label>
@@ -303,12 +324,8 @@ export default function LoginModal({
 
             {/* REMEMBER / FORGOT */}
 
-            <div
-              className={styles.loginOptions}
-            >
-              <label
-                className={styles.remember}
-              >
+            <div className={styles.loginOptions}>
+              <label className={styles.remember}>
                 <input type="checkbox" />
 
                 <span>
@@ -331,9 +348,7 @@ export default function LoginModal({
               className={styles.loginButton}
               disabled={loading}
             >
-              {loading
-                ? "Logging in..."
-                : "Login"}
+              {loading ? "Logging in..." : "Login"}
             </button>
 
             {/* SUCCESS MESSAGE */}
@@ -350,11 +365,7 @@ export default function LoginModal({
 
             {/* SWITCH TO SIGNUP */}
 
-            <p
-              className={
-                styles.switchText
-              }
-            >
+            <p className={styles.switchText}>
               Don't have an account?{" "}
 
               <button
@@ -364,6 +375,7 @@ export default function LoginModal({
                 Sign up
               </button>
             </p>
+
           </form>
         </div>
       </div>
@@ -379,10 +391,9 @@ export default function LoginModal({
     >
       <div
         className={styles.signupModal}
-        onClick={(e) =>
-          e.stopPropagation()
-        }
+        onClick={(e) => e.stopPropagation()}
       >
+
         {/* CLOSE BUTTON */}
 
         <button
@@ -395,35 +406,31 @@ export default function LoginModal({
         </button>
 
         <div className={styles.container}>
+
           {/* ================= LEFT SIDE ================= */}
 
           <div className={styles.leftSide}>
+
             <Image
               src="/images/signup-image.jpg"
               alt="Study Abroad"
               width={800}
               height={534}
               sizes="(max-width: 600px) 300px, 320px"
-              className={
-                styles.accountImage
-              }
+              className={styles.accountImage}
             />
 
             <h2>
               Create your Wayabroad account
             </h2>
 
-            <p
-              className={styles.subtitle}
-            >
+            <p className={styles.subtitle}>
               One account for all your study abroad needs.
               <br />
               Sign up today.
             </p>
 
-            <ul
-              className={styles.benefits}
-            >
+            <ul className={styles.benefits}>
               <li>
                 ✓ Access your personalised dashboard.
               </li>
@@ -437,170 +444,124 @@ export default function LoginModal({
               </li>
             </ul>
 
-            <p
-              className={styles.note}
-            >
+            <p className={styles.note}>
               Note: Creating an account won't result in a call;
               you'll only be contacted after submitting a successful
               enquiry form.
             </p>
+
           </div>
 
           {/* ================= RIGHT SIDE ================= */}
 
           <div className={styles.rightSide}>
-            <h2
-              className={
-                styles.signupTitle
-              }
-            >
+
+            <h2 className={styles.signupTitle}>
               Create an account
             </h2>
 
-            <form
-              onSubmit={
-                handleSignupSubmit
-              }
-            >
-              {/* ================= NAME ================= */}
+            <form onSubmit={handleSignupSubmit}>
+
+              {/* NAME */}
 
               <input
                 type="text"
                 name="name"
                 placeholder="Enter your Name"
                 value={signupForm.name}
-                onChange={
-                  handleSignupChange
-                }
+                onChange={handleSignupChange}
                 required
               />
 
-              {/* ================= PHONE ================= */}
+              {/* PHONE */}
 
               <input
                 type="tel"
                 name="phone"
                 placeholder="Mobile Number"
                 value={signupForm.phone}
-                onChange={
-                  handleSignupChange
-                }
+                onChange={handleSignupChange}
                 required
               />
 
-              {/* ================= EMAIL ================= */}
+              {/* EMAIL */}
 
               <input
                 type="email"
                 name="email"
                 placeholder="Enter your Email"
-                value={
-                  signupForm.email
-                }
-                onChange={
-                  handleSignupChange
-                }
+                value={signupForm.email}
+                onChange={handleSignupChange}
                 required
               />
 
-              {/* ================= PASSWORD ================= */}
+              {/* PASSWORD */}
 
               <input
                 type="password"
                 name="password"
                 placeholder="Enter your Password"
-                value={
-                  signupForm.password
-                }
-                onChange={
-                  handleSignupChange
-                }
+                value={signupForm.password}
+                onChange={handleSignupChange}
                 required
               />
 
-              {/* ================= CONTINENT ================= */}
+              {/* CONTINENT */}
 
               <select
                 name="continentId"
-                value={
-                  signupForm.continentId
-                }
-                onChange={
-                  handleSignupChange
-                }
+                value={signupForm.continentId}
+                onChange={handleSignupChange}
                 required
               >
-                <option
-                  value=""
-                  disabled
-                >
+                <option value="" disabled>
                   Select Continent*
                 </option>
 
-                {continents.map(
-                  (continent) => (
-                    <option
-                      key={continent.id}
-                      value={continent.id}
-                    >
-                      {
-                        continent.continentname
-                      }
-                    </option>
-                  )
-                )}
+                {continents.map((continent) => (
+                  <option
+                    key={continent.id}
+                    value={continent.id}
+                  >
+                    {continent.continentname}
+                  </option>
+                ))}
               </select>
 
-              {/* ================= COURSE ================= */}
+              {/* COURSE */}
 
               <select
                 name="courseId"
-                value={
-                  signupForm.courseId
-                }
-                onChange={
-                  handleSignupChange
-                }
+                value={signupForm.courseId}
+                onChange={handleSignupChange}
                 required
               >
-                <option
-                  value=""
-                  disabled
-                >
+                <option value="" disabled>
                   Select Course*
                 </option>
 
-                {courses.map(
-                  (course) => (
-                    <option
-                      key={course.id}
-                      value={course.id}
-                    >
-                      {course.courseName}
-                    </option>
-                  )
-                )}
+                {courses.map((course) => (
+                  <option
+                    key={course.id}
+                    value={course.id}
+                  >
+                    {course.courseName}
+                  </option>
+                ))}
               </select>
 
-              {/* ================= CHECKBOXES ================= */}
+              {/* CHECKBOXES */}
 
-              <div
-                className={
-                  styles.checkboxes
-                }
-              >
+              <div className={styles.checkboxes}>
+
                 {/* TERMS */}
 
                 <label>
                   <input
                     type="checkbox"
                     name="agreeTerms"
-                    checked={
-                      signupForm.agreeTerms
-                    }
-                    onChange={
-                      handleSignupChange
-                    }
+                    checked={signupForm.agreeTerms}
+                    onChange={handleSignupChange}
                   />
 
                   <span>
@@ -614,12 +575,8 @@ export default function LoginModal({
                   <input
                     type="checkbox"
                     name="contactPermission"
-                    checked={
-                      signupForm.contactPermission
-                    }
-                    onChange={
-                      handleSignupChange
-                    }
+                    checked={signupForm.contactPermission}
+                    onChange={handleSignupChange}
                   />
 
                   <span>
@@ -634,12 +591,8 @@ export default function LoginModal({
                   <input
                     type="checkbox"
                     name="marketingPermission"
-                    checked={
-                      signupForm.marketingPermission
-                    }
-                    onChange={
-                      handleSignupChange
-                    }
+                    checked={signupForm.marketingPermission}
+                    onChange={handleSignupChange}
                   />
 
                   <span>
@@ -647,15 +600,14 @@ export default function LoginModal({
                     Wayabroad
                   </span>
                 </label>
+
               </div>
 
-              {/* ================= CREATE ACCOUNT ================= */}
+              {/* CREATE ACCOUNT */}
 
               <button
                 type="submit"
-                className={
-                  styles.signupButton
-                }
+                className={styles.signupButton}
                 disabled={loading}
               >
                 {loading
@@ -675,13 +627,9 @@ export default function LoginModal({
                 <p>{error}</p>
               )}
 
-              {/* ================= SWITCH TO LOGIN ================= */}
+              {/* SWITCH TO LOGIN */}
 
-              <p
-                className={
-                  styles.signupSwitch
-                }
-              >
+              <p className={styles.signupSwitch}>
                 Already have an account?{" "}
 
                 <button
@@ -691,6 +639,7 @@ export default function LoginModal({
                   Sign in
                 </button>
               </p>
+
             </form>
           </div>
         </div>
