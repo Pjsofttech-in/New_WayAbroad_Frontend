@@ -1,5 +1,9 @@
 
-import { getScholarshipById } from "../../services/api";
+import {
+  createScholarshipSlug,
+  getScholarshipById,
+  getScholarshipBySlug,
+} from "../../services/api";
 import {
   brandedMetadataTitle,
   canonicalMetadata,
@@ -9,14 +13,16 @@ import {
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
-  const id = Array.isArray(slug) ? slug[0] : slug;
+  const routeSlug = Array.isArray(slug) ? slug[0] : slug;
 
   const fallbackTitle = "Study Abroad Scholarship";
   const fallbackDescription =
     "Review this study abroad scholarship's details, eligibility, study location and available funding information before enquiring through Wayabroad.";
 
   try {
-    const response = await getScholarshipById(id);
+    const response = /^\d+$/.test(String(routeSlug))
+      ? await getScholarshipById(routeSlug)
+      : await getScholarshipBySlug(routeSlug);
 
     const scholarship =
       response?.data?.scholarship ??
@@ -39,7 +45,11 @@ export async function generateMetadata({ params }) {
 
     return {
       ...canonicalMetadata(
-        `/scholarship/${encodeURIComponent(id || "")}`
+        `/scholarship/${
+          createScholarshipSlug(
+            scholarship?.sname || scholarship?.name || routeSlug
+          )
+        }`
       ),
       title: brandedMetadataTitle(title),
       description: description || fallbackDescription,
@@ -52,7 +62,7 @@ export async function generateMetadata({ params }) {
 
     return {
       ...canonicalMetadata(
-        `/scholarship/${encodeURIComponent(id || "")}`
+        `/scholarship/${encodeURIComponent(routeSlug || "")}`
       ),
       title: brandedMetadataTitle(fallbackTitle),
       description: fallbackDescription,

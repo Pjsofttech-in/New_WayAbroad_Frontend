@@ -474,7 +474,15 @@ export default function CourseFinder() {
         })
         .filter(Boolean);
 
-      setCourses(courseList);
+      const uniqueCourses = new Map();
+      courseList.forEach((course) => {
+        const key = course.id.toLowerCase();
+        if (!uniqueCourses.has(key)) {
+          uniqueCourses.set(key, course);
+        }
+      });
+
+      setCourses(Array.from(uniqueCourses.values()));
     } catch (err) {
       console.error("Failed to load course names:", err);
       setCourses([]);
@@ -2102,6 +2110,26 @@ const makeSet = (items) =>
             emptyLabel: "College",
           })}
 
+          {renderMultiSelect({
+            name: "streamName",
+            label: "Stream",
+            searchType: "stream",
+            items: streams,
+            getValue: (item) => item.name,
+            getLabel: (item) => item.name,
+            emptyLabel: "Stream",
+          })}
+
+          {renderMultiSelect({
+            name: "courseId",
+            label: "Course",
+            searchType: "course",
+            items: courses,
+            getValue: (item) => item.id,
+            getLabel: (item) => getName(item, "course"),
+            emptyLabel: "Course",
+          })}
+
           {/* More Filters — last in the row */}
           <button
             type="button"
@@ -2129,28 +2157,6 @@ const makeSet = (items) =>
               className={styles.advancedFilters}
               id="advanced-course-filters"
             >
-              {/* Stream */}
-              {renderMultiSelect({
-                name: "streamName",
-                label: "Stream",
-                searchType: "stream",
-                items: streams,
-                getValue: (item) => item.name,
-                getLabel: (item) => item.name,
-                emptyLabel: "Stream",
-              })}
-
-              {/* Course */}
-              {renderMultiSelect({
-                name: "courseId",
-                label: "Course",
-                searchType: "course",
-                items: courses,
-                getValue: (item) => item.id,
-                getLabel: (item) => getName(item, "course"),
-                emptyLabel: "Course",
-              })}
-
               {/* Scholarship */}
               <FormControl className={styles.horizontalFilter}>
                 <InputLabel>Scholarship</InputLabel>

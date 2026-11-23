@@ -1027,12 +1027,12 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  gap: 20px;
+  gap: 10px;
   width: 100%;
   max-width: 1500px;
-  min-height: 310px;
+  min-height: 220px;
   margin: 0 auto 24px;
-  padding: 34px 54px;
+  padding: 10px 54px;
   overflow: hidden;
   border: 1px solid #b9ddff;
   border-radius: 26px;
@@ -1054,14 +1054,14 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  min-height: 52px;
-  padding: 8px 22px;
+  min-height: 20px;
+  padding: 8px 15px;
   border: 2px solid #8bc8ff;
   border-radius: 20px;
   color: #12366d;
   background: rgba(255, 255, 255, 0.78);
-  font-size: 20px;
-  font-weight: 650;
+  font-size: 10px;
+  font-weight: 600;
   transition: background 180ms ease, border-color 180ms ease,
     transform 180ms ease;
 }
@@ -1085,9 +1085,9 @@
 }
 
 .titleAccent {
-  width: 10px;
-  min-width: 10px;
-  height: 72px;
+  width: 8px;
+  min-width: 8px;
+  height: 62px;
   border-radius: 8px;
   background: #1687f8;
   box-shadow: 0 2px 6px rgba(22, 135, 248, 0.2);
@@ -1126,14 +1126,14 @@
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  min-height: 58px;
-  margin-left: 32px;
-  padding: 9px 24px;
+  min-height: 48px;
+  margin-left: 28px;
+  padding: 9px 20px;
   border-radius: 999px;
   color: #164b91;
   background: rgba(194, 225, 255, 0.8);
-  font-size: 20px;
-  font-weight: 700;
+  font-size: 15px;
+  font-weight: 650;
   letter-spacing: 0.02em;
 }
 
@@ -1409,97 +1409,219 @@
   overflow-wrap: anywhere;
 }
 
-/* =====================================================
+
+/* =====================================
    RELATED JOBS SIDEBAR
-===================================================== */
+===================================== */
 
 .relatedJobs {
   position: sticky;
   top: 20px;
   min-width: 0;
   padding: 22px;
-  border: 1px solid #e0e7ef;
-  border-radius: 15px;
-  background: #fff;
-  box-shadow: 0 6px 22px rgba(15, 35, 60, 0.045);
+  border: 1px solid #e2eaf3;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 8px 28px rgba(15, 35, 60, 0.05);
 }
 
 .relatedJobs > h2 {
-  margin: 0 0 8px;
-  color: #0b1b38;
+  margin: 0 0 18px;
+  color: #10234a;
   font-size: 21px;
   font-weight: 750;
+  letter-spacing: -0.4px;
 }
 
 .relatedSubtitle {
-  margin: 0 0 20px;
+  margin: 0;
   color: #64748b;
   font-size: 13px;
   line-height: 1.6;
 }
 
+/* =====================================
+   RELATED JOBS LIST
+===================================== */
+
 .relatedJobsList {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
 }
 
+/* =====================================
+   JOB CARD
+===================================== */
+
 .relatedJobCard {
-  padding: 16px;
+  position: relative;
+  padding: 17px;
   border: 1px solid #e2eaf2;
-  border-radius: 11px;
-  background: #fff;
-  transition: border-color 180ms ease, box-shadow 180ms ease,
-    transform 180ms ease;
+  border-radius: 13px;
+  background: #ffffff;
+  transition:
+    border-color 200ms ease,
+    box-shadow 200ms ease,
+    transform 200ms ease;
 }
 
 .relatedJobCard:hover {
-  transform: translateY(-2px);
-  border-color: #a9d8ff;
-  box-shadow: 0 6px 16px rgba(15, 35, 60, 0.05);
+  transform: translateY(-3px);
+  border-color: #93c5fd;
+  box-shadow: 0 10px 25px rgba(15, 100, 190, 0.09);
 }
 
+/* JOB TITLE */
+
 .relatedJobCard h3 {
-  margin: 0 0 8px;
-  color: #10203c;
-  font-size: 15px;
-  font-weight: 700;
-  line-height: 1.5;
+  margin: 0 0 7px;
+  color: #10234a;
+  font-size: 16px;
+  font-weight: 750;
+  line-height: 1.45;
   overflow-wrap: anywhere;
 }
 
-.relatedJobCard p {
-  margin: 0 0 12px;
+/* SECTOR */
+
+.relatedJobCard .relatedJobSector {
+  margin: 0 0 13px;
   color: #64748b;
-  font-size: 13px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.5;
 }
 
-.relatedJobCard > span {
-  display: block;
-  margin-top: 8px;
+/* LOCATION */
+
+.relatedJobLocation {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  margin: 0 0 11px;
   color: #52637d;
   font-size: 12px;
   line-height: 1.5;
   overflow-wrap: anywhere;
 }
 
-.relatedJobCard button {
-  width: 100%;
-  min-height: 39px;
-  margin-top: 15px;
-  padding: 9px 12px;
-  border: 0;
-  border-radius: 8px;
-  color: #fff;
-  background: #087cf5;
-  font-size: 13px;
+/* SALARY */
+
+.relatedJobSalary {
+  margin: 12px 0;
+  color: #1558a5;
+  font-size: 14px;
+  font-weight: 750;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+/* =====================================
+   JOB INFORMATION BADGES
+===================================== */
+
+.relatedJobBadges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin: 13px 0;
+}
+
+.relatedJobBadges span {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 9px;
+  border: 1px solid #dbeafe;
+  border-radius: 6px;
+  color: #1d5fa7;
+  background: #eff6ff;
+  font-size: 10px;
   font-weight: 650;
-  transition: background 160ms ease;
+  line-height: 1.4;
+}
+
+/* OPENINGS */
+
+.relatedJobOpenings {
+  margin: 10px 0 0;
+  padding-top: 10px;
+  border-top: 1px solid #edf1f6;
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 550;
+}
+
+/* =====================================
+   VIEW JOB BUTTON
+===================================== */
+
+.relatedJobCard button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 41px;
+  margin-top: 15px;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 8px;
+  color: #ffffff;
+  background: linear-gradient(110deg, #087cf5, #0866d5);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
 }
 
 .relatedJobCard button:hover {
-  background: #0069df;
+  background: linear-gradient(110deg, #0669d8, #0755b5);
+  box-shadow: 0 5px 13px rgba(8, 124, 245, 0.2);
 }
+
+.relatedJobCard button:active {
+  transform: scale(0.98);
+}
+
+/* =====================================
+   RESPONSIVE DESIGN
+===================================== */
+
+@media (max-width: 900px) {
+  .relatedJobs {
+    position: static;
+    padding: 18px;
+  }
+
+  .relatedJobsList {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+}
+
+@media (max-width: 600px) {
+  .relatedJobs {
+    padding: 16px;
+  }
+
+  .relatedJobs > h2 {
+    font-size: 19px;
+  }
+
+  .relatedJobsList {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .relatedJobCard {
+    padding: 15px;
+  }
+}
+
 
 /* =====================================================
    APPLY FOR THIS JOB

@@ -17,9 +17,10 @@
 
 .horizontalFilters {
   display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-template-columns: minmax(240px, 2fr) repeat(7, minmax(100px, 1fr)) max-content;
   gap: 5px;
   width: 100%;
+  min-width: 0;
   padding: 5px;
   box-sizing: border-box;
   border: 1px solid #d9dee7;
@@ -100,9 +101,9 @@
 ===================================================== */
 
 .filterSearch {
-  flex: 1 1 180px;
-  min-width: 180px;
-  max-width: 240px;
+  width: 100%;
+  min-width: 0;
+  max-width: none;
 }
 
 .filterSearch input {
@@ -524,13 +525,14 @@
 .horizontalFilters {
   display: grid;
   grid-template-columns:
-    minmax(160px, 1.6fr) /* Search */
-    repeat(5, minmax(90px, 1fr)) /* Country, State, City, University, College */
+    minmax(200px, 1.8fr) /* Search */
+    repeat(7, minmax(90px, 1fr)) /* Country through Course */
     auto; /* More Filters */
 
   align-items: center;
   gap: 8px;
   width: 100%;
+  min-width: 0;
   padding: 12px;
   border: 1px solid #e3eaf2;
   border-radius: 12px;
@@ -548,6 +550,7 @@
 }
 
 .filterSearch {
+  grid-column: auto;
   width: 100%;
   min-width: 0;
 }
@@ -662,16 +665,14 @@
 
 .advancedFilters {
   grid-column: 1 / -1;
-  display: flex;
-  flex-wrap: nowrap;
-  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  align-items: start;
   gap: 9px;
   width: 100%;
   padding-top: 12px;
   margin-top: 4px;
-  /* grid-template-columns: repeat(6, minmax(0, 1fr)); */
   border-top: 1px solid #e8edf3;
-  overflow-x: auto;
 }
 
 .selectedFilters {
@@ -871,18 +872,12 @@
 
 /* Medium screens */
 @media (max-width: 1200px) {
-  .horizontalFilters {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .filterSearch {
-    grid-column: 1 / -1;
-  }
-
   .filterToggle {
     justify-self: start;
   }
+}
 
+@media (max-width: 960px) {
   .advancedFilters {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -891,7 +886,7 @@
 /* Tablets and smaller screens */
 @media (max-width: 768px) {
   .horizontalFilters {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 8px;
     padding: 10px;
   }
@@ -901,7 +896,6 @@
   }
 
   .filterToggle {
-    grid-column: 1 / -1;
     justify-self: start;
   }
 
@@ -913,23 +907,15 @@
 /* Mobile */
 @media (max-width: 480px) {
   .horizontalFilters {
-    grid-template-columns: minmax(0, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .filterSearch,
-  .filterToggle,
-  .advancedFilters {
-    grid-column: 1;
+  .filterSearch {
+    grid-column: 1 / -1;
   }
 
   .advancedFilters {
     grid-template-columns: minmax(0, 1fr);
-  }
-}
-
-@media (max-width: 960px) {
-  .advancedFilters {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
@@ -940,12 +926,10 @@
   }
 
   .horizontalFilters {
-    grid-template-columns: minmax(0, 1fr) auto;
     gap: 8px;
     padding: 14px;
   }
 
-  .filterSearch,
   .advancedFilters {
     grid-column: 1 / -1;
   }

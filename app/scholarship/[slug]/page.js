@@ -6,7 +6,9 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 
 import {
+  createScholarshipSlug,
   getScholarshipById,
+  getScholarshipBySlug,
   getAllScholarships,
   getScholarshipLocations,
   submitScholarshipLead,
@@ -18,7 +20,7 @@ export default function ScholarshipDetails() {
   const params = useParams();
   const router = useRouter();
 
-  const id = params?.slug;
+  const slug = params?.slug;
 
   const [scholarship, setScholarship] = useState(null);
   const [scholarships, setScholarships] = useState([]);
@@ -60,7 +62,7 @@ export default function ScholarshipDetails() {
   ========================================= */
 
   useEffect(() => {
-    if (!id) return;
+    if (!slug) return;
 
     let isMounted = true;
 
@@ -68,7 +70,9 @@ export default function ScholarshipDetails() {
       try {
         setLoading(true);
 
-        const response = await getScholarshipById(id);
+        const response = /^\d+$/.test(String(slug))
+          ? await getScholarshipById(slug)
+          : await getScholarshipBySlug(slug);
 
         const result =
           response?.data?.scholarship ??
@@ -80,13 +84,21 @@ export default function ScholarshipDetails() {
 
         setScholarship(result);
 
+        const canonicalSlug = createScholarshipSlug(
+          result?.sname || result?.name
+        );
+        if (/^\d+$/.test(String(slug)) && canonicalSlug) {
+          router.replace(`/scholarship/${canonicalSlug}`);
+        }
+
         setLeadForm((prev) => ({
           ...prev,
           scholarship: result?.sname || "",
         }));
 
-        const appliedStatus =
-          localStorage.getItem(`applied_${id}`);
+        const appliedStatus = localStorage.getItem(
+          `applied_${result?.id ?? slug}`
+        );
 
         setIsApplied(appliedStatus === "true");
       } catch (error) {
@@ -107,7 +119,7 @@ export default function ScholarshipDetails() {
     return () => {
       isMounted = false;
     };
-  }, [id]);
+  }, [slug, router]);
 
   /* =========================================
      FETCH OTHER SCHOLARSHIPS
@@ -239,7 +251,10 @@ export default function ScholarshipDetails() {
       setShowModal(false);
       setIsApplied(true);
 
-      localStorage.setItem(`applied_${id}`, "true");
+      localStorage.setItem(
+        `applied_${scholarship?.id ?? slug}`,
+        "true"
+      );
 
       setLeadForm({
         name: "",
@@ -553,17 +568,6 @@ export default function ScholarshipDetails() {
 
             </div>
 
-            {scholarship.link && (
-              <a
-                href={scholarship.link}
-                target="_blank"
-                rel="noreferrer"
-                className={styles.officialLink}
-              >
-                Visit Official Website →
-              </a>
-            )}
-
           </section>
 
           {/* =====================================
@@ -797,13 +801,17 @@ export default function ScholarshipDetails() {
               {scholarships
                 .filter(
                   (item) =>
-                    String(item.id) !== String(id)
+                    String(item.id) !== String(scholarship?.id)
                 )
                 .slice(0, 6)
                 .map((item, index) => (
                   <Link
                     key={item.id}
-                    href={`/scholarship/${item.id}`}
+                    href={`/scholarship/${
+                      createScholarshipSlug(
+                        item?.sname || item?.name
+                      ) || item.id
+                    }`}
                     className={styles.popularCard}
                   >
 

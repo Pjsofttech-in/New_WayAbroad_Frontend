@@ -199,8 +199,36 @@ export async function getAllScholarships() {
   return get("/getAll");
 }
 
+export function createScholarshipSlug(name) {
+  return String(name || "")
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
 export async function getScholarshipById(id) {
   return get(`/getById/${encodeURIComponent(id)}`);
+}
+
+export async function getScholarshipBySlug(slug) {
+  const response = await getAllScholarships();
+  const scholarships =
+    response?.data?.scholarships ??
+    response?.data ??
+    response?.scholarships ??
+    response;
+  const scholarship = Array.isArray(scholarships)
+    ? scholarships.find(
+        (item) =>
+          createScholarshipSlug(item?.sname || item?.name) === slug
+      )
+    : null;
+
+  return scholarship?.id
+    ? getScholarshipById(scholarship.id)
+    : null;
 }
 
 export async function getScholarshipLocations() {

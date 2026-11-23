@@ -14,7 +14,10 @@ import {
   getAllJobRoles,
   getAllJobWorkTypes,
 } from "../services/api";
-import { getCountryName } from "../jobfinder/job-utils";
+import {
+  createJobSlug,
+  getCountryName,
+} from "../jobfinder/job-utils";
 
 const JOBS_PER_PAGE = 9;
 
@@ -213,9 +216,7 @@ function matchesSelectedCountry(job, selectedCountry) {
   const acceptedNames = getCountryAliases(selectedCountry);
 
   if (jobCountry) {
-    return acceptedNames.some(
-      (name) => jobCountry === name || jobCountry.includes(name)
-    );
+    return acceptedNames.includes(jobCountry);
   }
 
   return false;
@@ -276,11 +277,7 @@ function getLocationsForCountry(locations, selectedCountry) {
       return false;
     }
 
-    return acceptedNames.some(
-      (name) =>
-        locationCountry === name ||
-        locationCountry.includes(name)
-    );
+    return acceptedNames.includes(locationCountry);
   });
 }
 
@@ -321,12 +318,15 @@ function SearchableFilter({ label, value, options = [], onChange }) {
       };
     }),
   ];
+
   const visibleOptions = filterOptions.filter((option) =>
     option.label.toLowerCase().includes(query.trim().toLowerCase())
   );
+
   const selectedOption = filterOptions.find(
     (option) => option.value === value
   );
+
   const selectedIndex = Math.max(
     filterOptions.findIndex((option) => option.value === value),
     0
@@ -362,6 +362,7 @@ function SearchableFilter({ label, value, options = [], onChange }) {
   const handleKeyDown = (event) => {
     if (event.key === "ArrowDown") {
       event.preventDefault();
+
       if (!open) {
         setOpen(true);
         setQuery("");
@@ -427,6 +428,7 @@ function SearchableFilter({ label, value, options = [], onChange }) {
         }}
         onKeyDown={handleKeyDown}
       />
+
       <span className={styles.filterChevron} aria-hidden="true" />
 
       {open && (
@@ -823,7 +825,13 @@ export default function JobSearchHeader() {
       return;
     }
 
-    router.push(`/jobfinder/${encodeURIComponent(String(job.id))}`);
+    const slug = createJobSlug(
+      job.jobTitle || job.title || job.position
+    );
+
+    router.push(
+      `/jobfinder/${slug || encodeURIComponent(String(job.id))}`
+    );
   };
 
   /* =========================================
@@ -1054,6 +1062,7 @@ export default function JobSearchHeader() {
                 const saved = savedJobIds.includes(job.id);
                 const skills = getSkills(job);
                 const companyName = getCompanyName(job);
+
                 const cardSubtitle =
                   companyName || getCountryName(job) || "Career opportunity";
 

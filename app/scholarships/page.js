@@ -4,7 +4,10 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { FaSlidersH } from "react-icons/fa";
 
-import { getAllScholarships } from "../services/api";
+import {
+  createScholarshipSlug,
+  getAllScholarships,
+} from "../services/api";
 
 import styles from "./scholarships.module.css";
 
@@ -496,7 +499,11 @@ export default function Scholarships() {
                       >
 
                         <Link
-                          href={`/scholarship/${item.id}`}
+                          href={`/scholarship/${
+                            createScholarshipSlug(
+                              item?.sname || item?.name
+                            ) || item.id
+                          }`}
                           className={
                             styles.applyBtn
                           }

@@ -253,6 +253,8 @@ export function Select({
     }
 
     if (child.type === MenuItem) {
+      const childKey = `${child.key ?? "option"}-${index}`;
+
       // Custom menu content, such as the search field
       if (child.props.value === undefined) {
         return (
@@ -274,7 +276,7 @@ export function Select({
 
       return (
         <div
-          key={child.key ?? index}
+          key={childKey}
           className={cx(
             "cf-menu-option",
             selected && "is-selected",
@@ -294,7 +296,7 @@ export function Select({
     }
 
     return React.cloneElement(child, {
-      key: child.key ?? index,
+      key: `${child.key ?? "child"}-${index}`,
     });
   };
 

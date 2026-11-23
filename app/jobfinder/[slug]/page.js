@@ -2,9 +2,19 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
+
 import styles from "../jobfinder.module.css";
-import { getJobById, getAllJobs, applyForJob } from "../../services/api";
-import { getCountryName } from "../job-utils";
+
+import {
+  getJobById,
+  getAllJobs,
+  applyForJob,
+} from "../../services/api";
+
+import {
+  createJobSlug,
+  getCountryName,
+} from "../job-utils";
 
 const EMPTY_APPLICATION = {
   applicantName: "",
@@ -25,7 +35,10 @@ function unwrapResponse(response) {
 export default function JobDetailsPage() {
   const params = useParams();
   const router = useRouter();
-  const jobId = Array.isArray(params.slug) ? params.slug[0] : params.slug;
+
+  const jobSlug = Array.isArray(params.slug)
+    ? params.slug[0]
+    : params.slug;
 
   const [job, setJob] = useState(null);
   const [relatedJobs, setRelatedJobs] = useState([]);
@@ -40,9 +53,26 @@ export default function JobDetailsPage() {
         setLoading(true);
         setError("");
 
+        const isLegacyId = /^\d+$/.test(String(jobSlug));
+        const jobsPromise = getAllJobs().catch(() => []);
         const [jobResponse, jobsResponse] = await Promise.all([
-          getJobById(jobId),
-          getAllJobs().catch(() => []),
+          isLegacyId
+            ? getJobById(jobSlug)
+            : jobsPromise.then((jobs) => {
+                const matchingJob = jobs.find(
+                  (item) =>
+                    createJobSlug(
+                      item?.jobTitle || item?.title || item?.position
+                    ) === jobSlug
+                );
+
+                if (!matchingJob?.id) {
+                  throw new Error("Job details were not found.");
+                }
+
+                return getJobById(matchingJob.id);
+              }),
+          jobsPromise,
         ]);
 
         const jobData = unwrapResponse(jobResponse);
@@ -59,6 +89,13 @@ export default function JobDetailsPage() {
         if (!cancelled) {
           setJob(jobData);
 
+          const canonicalSlug = createJobSlug(
+            jobData.jobTitle || jobData.title || jobData.position
+          );
+          if (isLegacyId && canonicalSlug) {
+            router.replace(`/jobfinder/${canonicalSlug}`);
+          }
+
           const list = Array.isArray(jobsData) ? jobsData : [];
 
           setRelatedJobs(
@@ -66,7 +103,8 @@ export default function JobDetailsPage() {
               .filter(
                 (item) =>
                   item &&
-                  String(item.id) !== String(jobData.id ?? jobId) &&
+                  String(item.id) !==
+                    String(jobData.id ?? jobSlug) &&
                   item.active !== false
               )
               .slice(0, 4)
@@ -76,7 +114,9 @@ export default function JobDetailsPage() {
         console.error("Job details API failed:", err);
 
         if (!cancelled) {
-          setError(err.message || "Unable to load job details.");
+          setError(
+            err.message || "Unable to load job details."
+          );
         }
       } finally {
         if (!cancelled) {
@@ -85,7 +125,7 @@ export default function JobDetailsPage() {
       }
     }
 
-    if (jobId) {
+    if (jobSlug) {
       loadPage();
     } else {
       setError("Job ID is missing.");
@@ -95,37 +135,209 @@ export default function JobDetailsPage() {
     return () => {
       cancelled = true;
     };
-  }, [jobId]);
+  }, [jobSlug, router]);
 
-  const formatSalary = (selectedJob) => {
+  // Get value from string, number, or object
+  const getNamedValue = (value, fields) => {
     if (
-      selectedJob.salary == null ||
-      selectedJob.salary === ""
+      typeof value === "string" ||
+      typeof value === "number"
     ) {
+      return String(value);
+    }
+
+    for (const field of fields) {
+      if (value?.[field] != null && value[field] !== "") {
+        return String(value[field]);
+      }
+    }
+
+    return "";
+  };
+
+  // Location
+  const getLocationValue = (selectedJob) =>
+    getNamedValue(selectedJob.location, [
+      "locationName",
+      "name",
+      "location",
+      "city",
+      "title",
+    ]) ||
+    selectedJob.locationName ||
+    selectedJob.city ||
+    "";
+
+  // Job Type
+  const getJobTypeValue = (selectedJob) =>
+    getNamedValue(selectedJob.jobType, [
+      "jobTypeName",
+      "typeName",
+      "name",
+      "title",
+    ]) ||
+    selectedJob.jobTypeName ||
+    selectedJob.typeName ||
+    "";
+
+  // Education
+  const getEducationValue = (selectedJob) =>
+    getNamedValue(selectedJob.education, [
+      "educationName",
+      "name",
+      "education",
+      "title",
+    ]) ||
+    selectedJob.educationName ||
+    "";
+
+  // Sector
+  const getSectorValue = (selectedJob) =>
+    getNamedValue(selectedJob.sector, [
+      "sectorName",
+      "name",
+      "sector",
+      "title",
+    ]) ||
+    selectedJob.sectorName ||
+    "";
+
+  // Work Type (NEW)
+  const getWorkTypeValue = (selectedJob) =>
+    getNamedValue(selectedJob.workType, [
+      "workTypeName",
+      "name",
+      "typeName",
+      "title",
+    ]) ||
+    selectedJob.workTypeName ||
+    "";
+
+  // Experience Level (NEW)
+  const getExperienceLevelValue = (selectedJob) =>
+    getNamedValue(selectedJob.experienceLevel, [
+      "experienceLevelName",
+      "name",
+      "levelName",
+      "title",
+    ]) ||
+    selectedJob.experienceLevelName ||
+    selectedJob.experience ||
+    selectedJob.experienceRequired ||
+    "";
+
+  // Job Role
+  const getRoleValue = (selectedJob) =>
+    getNamedValue(selectedJob.jobRole, [
+      "jobRoleName",
+      "roleName",
+      "name",
+      "role",
+      "title",
+    ]) ||
+    getNamedValue(selectedJob.role, [
+      "roleName",
+      "jobRoleName",
+      "name",
+      "role",
+      "title",
+    ]) ||
+    selectedJob.jobRoleName ||
+    selectedJob.roleName ||
+    "";
+
+  // Required Skills
+  const getSkillsValue = (selectedJob) => {
+    const skills = selectedJob.skills ?? selectedJob.skill;
+
+    if (Array.isArray(skills)) {
+      return skills.filter(Boolean).join(", ");
+    }
+
+    return typeof skills === "string" ? skills : "";
+  };
+
+  // Salary Formatting
+  const formatSalary = (selectedJob) => {
+    if (!selectedJob) {
       return "Salary not specified";
     }
 
-    const amount = Number(selectedJob.salary);
+    const currency =
+      selectedJob.currencyName ||
+      selectedJob.currency?.name ||
+      selectedJob.currency?.code ||
+      selectedJob.currencyCode ||
+      "";
 
-    if (!Number.isFinite(amount)) {
-      return String(selectedJob.salary);
+    const minAmount =
+      selectedJob.salaryFrom ??
+      selectedJob.salaryMin ??
+      selectedJob.minSalary ??
+      selectedJob.minimumSalary;
+
+    const maxAmount =
+      selectedJob.salaryTo ??
+      selectedJob.salaryMax ??
+      selectedJob.maxSalary ??
+      selectedJob.maximumSalary;
+
+    const formatAmount = (amount) => {
+      const numericAmount = Number(amount);
+
+      if (!Number.isFinite(numericAmount)) {
+        return String(amount);
+      }
+
+      return `${
+        currency ? `${currency} ` : ""
+      }${numericAmount.toLocaleString("en-IN")}`;
+    };
+
+    let formattedSalary = "";
+
+    if (
+      minAmount != null &&
+      minAmount !== "" &&
+      maxAmount != null &&
+      maxAmount !== ""
+    ) {
+      formattedSalary = `${formatAmount(
+        minAmount
+      )} - ${formatAmount(maxAmount)}`;
+    } else if (
+      selectedJob.salary != null &&
+      selectedJob.salary !== ""
+    ) {
+      formattedSalary = formatAmount(selectedJob.salary);
+    } else {
+      return "Salary not specified";
     }
 
-    return `${
-      selectedJob.currencyName
-        ? `${selectedJob.currencyName} `
-        : ""
-    }${amount.toLocaleString("en-IN")}`;
+    const period =
+      selectedJob.salaryPeriodName ||
+      selectedJob.salaryPeriod ||
+      selectedJob.payPeriod ||
+      selectedJob.frequency ||
+      "";
+
+    return period
+      ? `${formattedSalary} Per ${period}`
+      : formattedSalary;
   };
 
+  // Loading State
   if (loading) {
     return (
       <main className={styles.page}>
-        <p className={styles.infoMessage}>Loading job details...</p>
+        <p className={styles.infoMessage}>
+          Loading job details...
+        </p>
       </main>
     );
   }
 
+  // Error State
   if (error || !job) {
     return (
       <main className={styles.page}>
@@ -138,6 +350,7 @@ export default function JobDetailsPage() {
 
   return (
     <main className={styles.page}>
+      {/* HEADER */}
       <header className={styles.detailsHeader}>
         <button
           type="button"
@@ -149,62 +362,98 @@ export default function JobDetailsPage() {
         </button>
 
         <div className={styles.headerTitleRow}>
-          <span className={styles.titleAccent} aria-hidden="true" />
+          <span
+            className={styles.titleAccent}
+            aria-hidden="true"
+          />
+
           <h1>{job.jobTitle || "Job Details"}</h1>
         </div>
 
         <div className={styles.detailsBadge}>
-          <span className={styles.badgeIcon} aria-hidden="true">
+          <span
+            className={styles.badgeIcon}
+            aria-hidden="true"
+          >
             <svg viewBox="0 0 24 24">
-              <rect x="3" y="7" width="18" height="14" rx="2" />
+              <rect
+                x="3"
+                y="7"
+                width="18"
+                height="14"
+                rx="2"
+              />
               <path d="M8 7V4h8v3M3 12h18" />
             </svg>
           </span>
+
           <span>JOB DETAILS</span>
         </div>
 
-        <div className={styles.headerDecoration} aria-hidden="true">
+        <div
+          className={styles.headerDecoration}
+          aria-hidden="true"
+        >
           <svg viewBox="0 0 500 300" fill="none">
             <path
               className={styles.heroWave}
               d="M0 258c83-7 125-91 242-75 87 12 111 68 258 43v74H0z"
             />
+
             <path
               className={styles.heroBuilding}
               d="M367 149h38v92h-38zm48-16h33v108h-33zm-95 48h39v60h-39"
             />
+
             <path
               className={styles.heroCrane}
               d="M304 78h164m-133 0 50-25 46 25m-66 0 20 18 20-18m-20 0v144m-43-144v26h107V78m-88 26v14m45-14v14m-45 0h45m-26 0-19 104m26-104 19 104m-37-104h28"
             />
-            <path className={styles.heroHook} d="M335 104v31m0 0-7 8m7-8 7 8" />
+
+            <path
+              className={styles.heroHook}
+              d="M335 104v31m0 0-7 8m7-8 7 8"
+            />
+
             <path
               className={styles.heroHelmet}
               d="M284 228c2-42 24-67 57-67s55 25 57 67l-10 8h-94z"
             />
+
             <path
               className={styles.heroHelmetDetail}
               d="M303 224c2-28 15-46 38-52m-30 58h61m-61-10h61m-52-43 9 14m36-14-9 14"
             />
+
             <path
               className={styles.heroCone}
               d="m407 235 24-65 24 65z"
             />
-            <path className={styles.heroConeStripe} d="m417 208 28 0m-34 18h40" />
-            <path className={styles.heroGround} d="M275 240h192" />
+
+            <path
+              className={styles.heroConeStripe}
+              d="m417 208 28 0m-34 18h40"
+            />
+
+            <path
+              className={styles.heroGround}
+              d="M275 240h192"
+            />
           </svg>
         </div>
       </header>
 
+      {/* JOB DETAILS LAYOUT */}
       <div className={styles.jobDetailsLayout}>
         <article className={styles.detailsModal}>
           <div className={styles.detailsContent}>
             {/* JOB INFORMATION CARDS */}
-
             <div className={styles.detailsFacts}>
               <div>
                 <span>Location :</span>
-                <strong>{job.locationName || "Not specified"}</strong>
+                <strong>
+                  {getLocationValue(job) || "Not specified"}
+                </strong>
               </div>
 
               <div>
@@ -214,96 +463,187 @@ export default function JobDetailsPage() {
 
               <div>
                 <span>Job type :</span>
-                <strong>{job.jobTypeName || "Not specified"}</strong>
+                <strong>
+                  {getJobTypeValue(job) || "Not specified"}
+                </strong>
+              </div>
+
+              {/* NEW: WORK TYPE */}
+              <div>
+                <span>Work type :</span>
+                <strong>
+                  {getWorkTypeValue(job) || "Not specified"}
+                </strong>
+              </div>
+
+              {/* NEW: EXPERIENCE LEVEL */}
+              <div>
+                <span>Experience level :</span>
+                <strong>
+                  {getExperienceLevelValue(job) ||
+                    "Not specified"}
+                </strong>
               </div>
 
               <div>
                 <span>Openings :</span>
-                <strong>{job.openings ?? "Not specified"}</strong>
+                <strong>
+                  {job.openings ?? "Not specified"}
+                </strong>
               </div>
 
               <div>
                 <span>Education :</span>
-                <strong>{job.educationName || "Not specified"}</strong>
+                <strong>
+                  {getEducationValue(job) || "Not specified"}
+                </strong>
               </div>
 
               <div>
                 <span>Sector :</span>
-                <strong>{job.sectorName || "Not specified"}</strong>
+                <strong>
+                  {getSectorValue(job) || "Not specified"}
+                </strong>
               </div>
 
               <div>
                 <span>Role :</span>
-                <strong>{job.jobRoleName || "Not specified"}</strong>
+                <strong>
+                  {getRoleValue(job) || "Not specified"}
+                </strong>
               </div>
-
             </div>
 
             {/* REQUIRED SKILLS */}
             <section className={styles.detailSection}>
               <h2>Required Skills</h2>
+
               <p className={styles.description}>
-                {job.skill || "Not specified"}
+                {getSkillsValue(job) || "Not specified"}
               </p>
             </section>
 
             {/* ABOUT THE JOB */}
             <section className={styles.detailSection}>
               <h2>About the Job</h2>
+
               <p className={styles.description}>
-                {job.description || "No job description has been provided."}
+                {job.description ||
+                  "No job description has been provided."}
               </p>
             </section>
 
             {/* APPLICATION FORM */}
-            <JobApplicationForm jobId={job.id ?? jobId} />
+            <JobApplicationForm
+              jobId={job.id ?? jobSlug}
+            />
           </div>
         </article>
 
+        {/* RELATED JOBS */}
         <aside className={styles.relatedJobs}>
           <h2>Related Jobs</h2>
 
-          <p className={styles.relatedSubtitle}>
-            Explore other opportunities
-          </p>
-
           {relatedJobs.length > 0 ? (
             <div className={styles.relatedJobsList}>
-              {relatedJobs.map((relatedJob) => (
-                <article
-                  className={styles.relatedJobCard}
-                  key={relatedJob.id}
-                >
-                  <h3>
-                    {relatedJob.jobTitle || "Untitled Job"}
-                  </h3>
+              {relatedJobs.map((relatedJob) => {
+                const location = getLocationValue(relatedJob);
+                const country = getCountryName(relatedJob);
+                const jobType = getJobTypeValue(relatedJob);
+                const workType = getWorkTypeValue(relatedJob);
+                const experience =
+                  getExperienceLevelValue(relatedJob);
+                const education = getEducationValue(relatedJob);
+                const sector = getSectorValue(relatedJob);
 
-                  <p>
-                    {relatedJob.sectorName ||
-                      getCountryName(relatedJob) ||
-                      "Career opportunity"}
-                  </p>
-
-                  <span>
-                    {relatedJob.locationName || "Location not specified"}
-                  </span>
-
-                  <span>{formatSalary(relatedJob)}</span>
-
-                  <button
-                    type="button"
-                    onClick={() =>
-                      router.push(
-                        `/jobfinder/${encodeURIComponent(
-                          String(relatedJob.id)
-                        )}`
-                      )
-                    }
+                return (
+                  <article
+                    className={styles.relatedJobCard}
+                    key={relatedJob.id}
                   >
-                    View Job →
-                  </button>
-                </article>
-              ))}
+                    {/* JOB TITLE */}
+                    <h3>
+                      {relatedJob.jobTitle || "Untitled Job"}
+                    </h3>
+
+                    {/* SECTOR */}
+                    {sector && (
+                      <p className={styles.relatedJobSector}>
+                        {sector}
+                      </p>
+                    )}
+
+                    {/* LOCATION */}
+                    {(location || country) && (
+                      <div className={styles.relatedJobLocation}>
+                        <span>📍</span>
+                        <span>
+                          {[location, country]
+                            .filter(Boolean)
+                            .filter(
+                              (value, index, array) =>
+                                array.findIndex(
+                                  (item) =>
+                                    item.toLowerCase() ===
+                                    value.toLowerCase()
+                                ) === index
+                            )
+                            .join(", ")}
+                        </span>
+                      </div>
+                    )}
+
+                    {/* SALARY */}
+                    <div className={styles.relatedJobSalary}>
+                      {formatSalary(relatedJob)}
+                    </div>
+
+                    {/* JOB INFORMATION BADGES */}
+                    <div className={styles.relatedJobBadges}>
+                      {jobType && (
+                        <span>{jobType}</span>
+                      )}
+
+                      {workType && (
+                        <span>{workType}</span>
+                      )}
+
+                      {experience && (
+                        <span>{experience}</span>
+                      )}
+
+                      {education && (
+                        <span>{education}</span>
+                      )}
+                    </div>
+
+                    {/* OPENINGS */}
+                    {relatedJob.openings != null && (
+                      <p className={styles.relatedJobOpenings}>
+                        {relatedJob.openings} Openings
+                      </p>
+                    )}
+
+                    {/* VIEW JOB BUTTON */}
+                    <button
+                      type="button"
+                      onClick={() =>
+                        router.push(
+                          `/jobfinder/${
+                            createJobSlug(
+                              relatedJob.jobTitle ||
+                                relatedJob.title ||
+                                relatedJob.position
+                            ) || encodeURIComponent(String(relatedJob.id))
+                          }`
+                        )
+                      }
+                    >
+                      View Job →
+                    </button>
+                  </article>
+                );
+              })}
             </div>
           ) : (
             <p className={styles.relatedSubtitle}>
@@ -316,9 +656,18 @@ export default function JobDetailsPage() {
   );
 }
 
+// =====================================
+// JOB APPLICATION FORM
+// =====================================
+
 function JobApplicationForm({ jobId }) {
-  const [showApplicationForm, setShowApplicationForm] = useState(false);
-  const [application, setApplication] = useState({ ...EMPTY_APPLICATION });
+  const [showApplicationForm, setShowApplicationForm] =
+    useState(false);
+
+  const [application, setApplication] = useState({
+    ...EMPTY_APPLICATION,
+  });
+
   const [resume, setResume] = useState(null);
   const [message, setMessage] = useState("");
   const [success, setSuccess] = useState(false);
@@ -344,13 +693,21 @@ function JobApplicationForm({ jobId }) {
 
     if (!/\.(pdf|doc|docx)$/i.test(file.name)) {
       event.target.value = "";
-      setMessage("Please upload a PDF, DOC, or DOCX resume.");
+
+      setMessage(
+        "Please upload a PDF, DOC, or DOCX resume."
+      );
+
       return;
     }
 
     if (file.size > 5 * 1024 * 1024) {
       event.target.value = "";
-      setMessage("Your resume must be 5 MB or smaller.");
+
+      setMessage(
+        "Your resume must be 5 MB or smaller."
+      );
+
       return;
     }
 
@@ -377,13 +734,21 @@ function JobApplicationForm({ jobId }) {
       return;
     }
 
-    const applicantName = application.applicantName.trim();
+    const applicantName =
+      application.applicantName.trim();
+
     const email = application.email.trim();
+
     const phone = application.phone.trim();
-    const coverLetter = application.coverLetter.trim();
+
+    const coverLetter =
+      application.coverLetter.trim();
 
     if (!applicantName || !email || !phone) {
-      setMessage("Please fill in your name, email, and phone number.");
+      setMessage(
+        "Please fill in your name, email, and phone number."
+      );
+
       return;
     }
 
@@ -407,14 +772,22 @@ function JobApplicationForm({ jobId }) {
       });
 
       setSuccess(true);
-      setMessage("Your application has been submitted successfully!");
+
+      setMessage(
+        "Your application has been submitted successfully!"
+      );
+
       setApplication({ ...EMPTY_APPLICATION });
       setResume(null);
     } catch (err) {
-      console.error("Application submission failed:", err);
+      console.error(
+        "Application submission failed:",
+        err
+      );
 
       setMessage(
-        err.message || "Unable to submit your application. Please try again."
+        err.message ||
+          "Unable to submit your application. Please try again."
       );
     } finally {
       setSubmitting(false);
@@ -444,7 +817,9 @@ function JobApplicationForm({ jobId }) {
       {message && !showApplicationForm && (
         <p
           className={
-            success ? styles.successMessage : styles.errorMessage
+            success
+              ? styles.successMessage
+              : styles.errorMessage
           }
           role="status"
         >
@@ -474,7 +849,9 @@ function JobApplicationForm({ jobId }) {
               ×
             </button>
 
-            <h2 id="applicationModalTitle">Apply for this Job</h2>
+            <h2 id="applicationModalTitle">
+              Apply for this Job
+            </h2>
 
             <p>
               Enter your details and upload your resume to apply.
@@ -483,7 +860,9 @@ function JobApplicationForm({ jobId }) {
             {message && (
               <p
                 className={
-                  success ? styles.successMessage : styles.errorMessage
+                  success
+                    ? styles.successMessage
+                    : styles.errorMessage
                 }
                 role="status"
               >
@@ -497,6 +876,7 @@ function JobApplicationForm({ jobId }) {
             >
               <label>
                 Full Name *
+
                 <input
                   type="text"
                   name="applicantName"
@@ -509,6 +889,7 @@ function JobApplicationForm({ jobId }) {
 
               <label>
                 Email Address *
+
                 <input
                   type="email"
                   name="email"
@@ -521,6 +902,7 @@ function JobApplicationForm({ jobId }) {
 
               <label>
                 Phone Number *
+
                 <input
                   type="tel"
                   name="phone"
@@ -533,6 +915,7 @@ function JobApplicationForm({ jobId }) {
 
               <label>
                 Cover Letter
+
                 <textarea
                   name="coverLetter"
                   value={application.coverLetter}
@@ -544,6 +927,7 @@ function JobApplicationForm({ jobId }) {
 
               <label>
                 Upload Resume (PDF, DOC, or DOCX) *
+
                 <input
                   type="file"
                   accept=".pdf,.doc,.docx"
